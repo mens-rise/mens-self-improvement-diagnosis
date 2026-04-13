@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Men's Rise｜男磨き診断ツール</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .top-badge {
+      display: inline-block;
+      padding: 4px 16px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      border-radius: 20px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+      font-family: var(--font-serif);
+    }
+    .top-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+    .top-stat {
+      text-align: center;
+    }
+    .top-stat-num {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--white);
+      font-family: var(--font-serif);
+    }
+    .top-stat-label {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      letter-spacing: 0.05em;
+    }
+    .section-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-left: 4px;
+      text-transform: uppercase;
+    }
+    .top-footer-cta {
+      text-align: center;
+      padding: 32px 0 16px;
+    }
+    .top-footer-cta p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+    .top-footer-cta p strong {
+      color: var(--gold);
+    }
+    .recommend-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--gold);
+      color: var(--bg);
+      border-radius: 4px;
+      font-size: 0.55rem;
+      font-weight: 700;
+      margin-left: 8px;
+      vertical-align: middle;
+      letter-spacing: 0.05em;
+    }
+    .top-line {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 16px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <script src="js/icons.js"></script>
+  <div class="page-wrapper">
+    <header class="header">
+      <div class="container header-inner">
+        <img src="images/logo-white.png" alt="Men's Rise" class="header-logo-img" onerror="this.parentElement.innerHTML='<span class=header-logo>Men\\'s Rise</span>'">
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="top-hero">
+        <span class="top-badge">FREE DIAGNOSIS</span>
+        <h1 class="top-title">男磨き診断ツール</h1>
+        <p class="top-copy">
+          あなたに最適な男磨きの方法を、<br>
+          5つの診断で見つけよう。
+        </p>
+        <div class="top-stats">
+          <div class="top-stat">
+            <div class="top-stat-num">5</div>
+            <div class="top-stat-label">診断数</div>
+          </div>
+          <div class="top-stat">
+            <div class="top-stat-num">2min</div>
+            <div class="top-stat-label">各所要時間</div>
+          </div>
+          <div class="top-stat">
+            <div class="top-stat-num">Free</div>
+            <div class="top-stat-label">利用料金</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">— まずはここから —</div>
+
+      <div class="diagnosis-grid">
+        <a href="shindan5-phase.html" class="diagnosis-card">
+          <span class="diagnosis-card-icon icon-svg icon-md" id="icon-phase"></span>
+          <div class="diagnosis-card-content">
+            <div class="diagnosis-card-title">
+              男磨きフェーズ診断
+              <span class="recommend-badge">RECOMMEND</span>
+            </div>
+            <div class="diagnosis-card-desc">今のあなたに必要なことがわかる</div>
+          </div>
+          <span class="diagnosis-card-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="section-label">— カテゴリ別診断 —</div>
+
+      <div class="diagnosis-grid">
+        <a href="shindan1-kintore.html" class="diagnosis-card">
+          <span class="diagnosis-card-icon icon-svg icon-md" id="icon-kintore"></span>
+          <div class="diagnosis-card-content">
+            <div class="diagnosis-card-title">筋トレ診断</div>
+            <div class="diagnosis-card-desc">骨格タイプ別の最適トレーニング</div>
+          </div>
+          <span class="diagnosis-card-arrow">→</span>
+        </a>
+
+        <a href="shindan2-hada.html" class="diagnosis-card">
+          <span class="diagnosis-card-icon icon-svg icon-md" id="icon-hada"></span>
+          <div class="diagnosis-card-content">
+            <div class="diagnosis-card-title">肌質診断</div>
+            <div class="diagnosis-card-desc">肌タイプ別スキンケア＋商品提案</div>
+          </div>
+          <span class="diagnosis-card-arrow">→</span>
+        </a>
+
+        <a href="shindan3-kamigata.html" class="diagnosis-card">
+          <span class="diagnosis-card-icon icon-svg icon-md" id="icon-kamigata"></span>
+          <div class="diagnosis-card-content">
+            <div class="diagnosis-card-title">髪型診断</div>
+            <div class="diagnosis-card-desc">顔型×印象タイプで似合う髪型</div>
+          </div>
+          <span class="diagnosis-card-arrow">→</span>
+        </a>
+
+        <a href="shindan4-fashion.html" class="diagnosis-card">
+          <span class="diagnosis-card-icon icon-svg icon-md" id="icon-fashion"></span>
+          <div class="diagnosis-card-content">
+            <div class="diagnosis-card-title">ファッション診断</div>
+            <div class="diagnosis-card-desc">体型別コーデ＋季節別提案</div>
+          </div>
+          <span class="diagnosis-card-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="top-footer-cta">
+        <div class="top-line"></div>
+        <p>
+          全ての診断結果の<strong>完全版</strong>が<br>
+          無料の個別説明会で受け取れます
+        </p>
+        <a href="https://info.opt--in.com/page/OenZEyCyYPQH?ftid=tD53IsLSjGP9" class="cta-btn" target="_blank" rel="noopener">
+          無料で完全版を受け取る
+        </a>
+      </div>
+    </main>
+
+    <footer class="footer">© Men's Rise</footer>
+  </div>
+  <script>
+    document.getElementById('icon-phase').innerHTML = MR_ICONS.phase;
+    document.getElementById('icon-kintore').innerHTML = MR_ICONS.kintore;
+    document.getElementById('icon-hada').innerHTML = MR_ICONS.hada;
+    document.getElementById('icon-kamigata').innerHTML = MR_ICONS.kamigata;
+    document.getElementById('icon-fashion').innerHTML = MR_ICONS.fashion;
+  </script>
+</body>
+</html>

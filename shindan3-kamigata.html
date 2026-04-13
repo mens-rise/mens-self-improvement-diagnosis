@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>髪型診断 | Men's Rise</title>
+  <meta name="description" content="あなたの顔型×印象タイプから似合う髪型を提案します。6つの質問に答えるだけの簡単診断。">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script>
+    new QuizEngine({
+      iconSvg: MR_ICONS.kamigata,
+      title: '顔型別<br>似合うヘアスタイル診断',
+      description: 'あなたの顔型×印象タイプから<br>似合う髪型を提案します',
+      meta: '所要時間：約2分 ｜ 全6問',
+
+      questions: [
+        {
+          id: 'faceShape',
+          text: '顔の形は？',
+          hint: 'おでこの生え際〜顎の縦の長さと、頬骨の横幅を比べてみて',
+          options: [
+            { label: '卵型', value: 'oval' },
+            { label: '丸顔', value: 'round' },
+            { label: '面長', value: 'long' },
+            { label: 'ベース型', value: 'square' },
+            { label: '逆三角形', value: 'inverted' }
+          ]
+        },
+        {
+          id: 'childAdult',
+          text: '子供顔？大人顔？',
+          hint: '3つのチェックで判定します',
+          type: 'sub-questions',
+          subQuestions: [
+            { label: '①輪郭', options: [{ label: '丸っこい', value: 'A' }, { label: '縦に長い', value: 'B' }] },
+            { label: '②顎', options: [{ label: '短くて丸い', value: 'A' }, { label: '長くてシャープ', value: 'B' }] },
+            { label: '③目の位置', options: [{ label: '顔の真ん中より下', value: 'A' }, { label: '真ん中か上', value: 'B' }] }
+          ]
+        },
+        {
+          id: 'cuteHandsome',
+          text: 'かわいい系？かっこいい系？',
+          hint: '3つのチェックで判定します',
+          type: 'sub-questions',
+          subQuestions: [
+            { label: '①目の形', options: [{ label: '丸い', value: 'A' }, { label: '切れ長', value: 'B' }] },
+            { label: '②頬', options: [{ label: 'ふっくら丸み', value: 'A' }, { label: '骨っぽく角張ってる', value: 'B' }] },
+            { label: '③眉の形', options: [{ label: 'カーブしたアーチ型', value: 'A' }, { label: '直線的で角張ってる', value: 'B' }] }
+          ]
+        },
+        {
+          id: 'hairType',
+          text: '髪質は？',
+          options: [
+            { label: 'くせ毛', value: 'curly' },
+            { label: '直毛', value: 'straight' }
+          ]
+        },
+        {
+          id: 'forehead',
+          text: 'おでこの広さは？',
+          options: [
+            { label: '広い', value: 'wide' },
+            { label: '普通', value: 'normal' },
+            { label: '狭い', value: 'narrow' }
+          ]
+        },
+        {
+          id: 'vibe',
+          text: '目指す雰囲気は？',
+          options: [
+            { label: '韓国系', value: 'korean' },
+            { label: 'ナチュラル', value: 'natural' },
+            { label: 'ワイルド', value: 'wild' },
+            { label: 'ビジネス', value: 'business' }
+          ]
+        }
+      ],
+
+      calcResult: function(answers) {
+        // Q2: 子供顔 vs 大人顔
+        var childAdultArr = answers.childAdult;
+        var aCountCA = childAdultArr.filter(function(v) { return v === 'A'; }).length;
+        var childOrAdult = aCountCA >= 2 ? 'child' : 'adult';
+
+        // Q3: かわいい系 vs かっこいい系
+        var cuteHandsomeArr = answers.cuteHandsome;
+        var aCountCH = cuteHandsomeArr.filter(function(v) { return v === 'A'; }).length;
+        var cuteOrCool = aCountCH >= 2 ? 'cute' : 'cool';
+
+        // 印象タイプ
+        var impressionType;
+        if (childOrAdult === 'adult' && cuteOrCool === 'cool') {
+          impressionType = 'かっこいい大人';
+        } else if (childOrAdult === 'adult' && cuteOrCool === 'cute') {
+          impressionType = 'かわいい大人';
+        } else if (childOrAdult === 'child' && cuteOrCool === 'cool') {
+          impressionType = 'かっこいい少年';
+        } else {
+          impressionType = 'かわいい少年';
+        }
+
+        return {
+          faceShape: answers.faceShape,
+          impressionType: impressionType,
+          hairType: answers.hairType,
+          forehead: answers.forehead,
+          vibe: answers.vibe
+        };
+      },
+
+      renderResult: function(result, answers) {
+        var faceShapeNames = {
+          oval: '卵型',
+          round: '丸顔',
+          long: '面長',
+          square: 'ベース型',
+          inverted: '逆三角形'
+        };
+
+        var faceData = {
+          oval: {
+            direction: 'バランスが良く何でも似合う。前髪を上げてもOK、重めマッシュもOK。',
+            recommended: ['センターパート', 'ナチュラルマッシュ', 'アップバング'],
+            avoid: '特になし（何でもいける）',
+            celebs: '佐藤健、竹内涼真'
+          },
+          round: {
+            direction: '縦ラインを意識。トップにボリュームを出し、サイドをタイトに。',
+            recommended: ['アップバング', 'ツーブロック×マッシュ', 'センターパート'],
+            avoid: '前髪パッツン、横に広がるスタイル',
+            celebs: '菅田将暉、ムロツヨシ'
+          },
+          long: {
+            direction: '横にボリュームを持たせて縦の長さを中和する。',
+            recommended: ['横にボリュームのあるマッシュ', 'ちょい上げセンターパート', 'パーマ'],
+            avoid: '前髪完全に上げるアップバング、サイド刈り上げツーブロック',
+            celebs: '佐藤健、坂口健太郎'
+          },
+          square: {
+            direction: 'エラをカバー。サイドにボリュームをつけすぎず、トップでひし形シルエットを作る。',
+            recommended: ['マッシュ（耳周りを少し長めに）', 'センターパート', 'パーマ'],
+            avoid: 'サイド刈り上げ、前髪なしでエラ丸出し',
+            celebs: '山田孝之、松田翔太'
+          },
+          inverted: {
+            direction: '顎のシャープさを活かしつつ、トップのボリュームは控えめに。',
+            recommended: ['ナチュラルマッシュ', '重めバング', 'パーマ'],
+            avoid: 'トップだけボリュームを出す（逆三角が強調）',
+            celebs: '小栗旬、岡田将生'
+          }
+        };
+
+        var fd = faceData[result.faceShape];
+        var shapeName = faceShapeNames[result.faceShape];
+
+        var html = '';
+
+        // Result header
+        html += '<div class="result-header">';
+        html += '<div class="result-label">YOUR STYLE</div>';
+        html += '<div class="result-type">' + shapeName + ' × ' + result.impressionType + ' タイプ</div>';
+        html += '</div>';
+
+        // Direction card
+        html += QuizEngine.resultCard('DIRECTION ─ 似合う方向性', '<p>' + fd.direction + '</p>');
+
+        // Recommended styles
+        var recHtml = '<ul class="check-list">';
+        for (var i = 0; i < fd.recommended.length; i++) {
+          recHtml += '<li>' + fd.recommended[i] + '</li>';
+        }
+        recHtml += '</ul>';
+        html += QuizEngine.resultCard('RECOMMEND ─ おすすめスタイル', recHtml);
+
+        // Avoid styles
+        html += QuizEngine.resultCard('AVOID ─ 避けたいスタイル', '<p>' + fd.avoid + '</p>');
+
+        // Celebs
+        html += QuizEngine.resultCard('CELEB ─ 同じ顔型の芸能人', '<p>' + fd.celebs + '</p>');
+
+        // Styling product recommendations
+        var products = getProductRecommendations(result);
+        var prodHtml = '';
+        for (var p = 0; p < products.length; p++) {
+          prodHtml += '<div class="result-highlight">';
+          prodHtml += '<strong>' + products[p].name + '</strong><br>';
+          prodHtml += '<span style="font-size:0.8rem;font-weight:400;">' + products[p].desc + '</span><br>';
+          prodHtml += '<a href="' + products[p].url + '" target="_blank" rel="noopener" style="font-size:0.75rem;color:var(--text-muted);word-break:break-all;">' + products[p].url + '</a>';
+          prodHtml += '</div>';
+        }
+        html += QuizEngine.resultCard('STYLING ─ おすすめスタイリング剤', prodHtml);
+
+        // Forehead tips
+        var foreheadTip = '';
+        if (result.forehead === 'wide') {
+          foreheadTip = '前髪で隠すスタイルがおすすめ。重めバングやマッシュ系で額をカバーすると小顔効果も。';
+        } else if (result.forehead === 'narrow') {
+          foreheadTip = 'アップバングで額を見せるスタイルが◎。おでこが狭いからこそ上げた方がバランスが取れる。';
+        } else {
+          foreheadTip = 'おでこの広さは標準的。上げても下ろしてもバランスが取りやすい。好みで選んでOK。';
+        }
+        html += QuizEngine.resultCard('FOREHEAD TIP ─ おでこ別アドバイス', '<p>' + foreheadTip + '</p>');
+
+        // Gated content
+        html += QuizEngine.gatedBlock('あなた専用のヘアスタイル完全ガイド', '\
+          <table class="menu-table">\
+            <tr>\
+              <th>内容</th>\
+              <th>詳細</th>\
+            </tr>\
+            <tr>\
+              <td><strong>美容院オーダー方法</strong></td>\
+              <td>あなたの顔型に合わせた具体的な伝え方</td>\
+            </tr>\
+            <tr>\
+              <td><strong>全スタイルカタログ</strong></td>\
+              <td>顔型×印象タイプ別の厳選スタイル集</td>\
+            </tr>\
+            <tr>\
+              <td><strong>パーマの要否アドバイス</strong></td>\
+              <td>あなたの髪質・顔型に合った判断</td>\
+            </tr>\
+          </table>\
+        ');
+
+        return html;
+      }
+    });
+
+    function getProductRecommendations(result) {
+      var products = [];
+      var vibe = result.vibe;
+      var hairType = result.hairType;
+      var faceShape = result.faceShape;
+
+      // Determine likely style category
+      var isShortStyle = (vibe === 'wild' || vibe === 'business');
+      var isCenterPart = (vibe === 'korean' || vibe === 'natural');
+      var isPermStyle = (hairType === 'curly' || faceShape === 'long' || faceShape === 'square' || faceShape === 'inverted');
+      var isMashStyle = (faceShape === 'round' || faceShape === 'oval' || faceShape === 'inverted');
+
+      if (isPermStyle && hairType === 'curly') {
+        // パーマ・ダメージ毛
+        products.push({
+          name: '中野モデニカ 4番',
+          desc: 'パーマ・くせ毛に最適。ウェット感を出しながら束感キープ。',
+          url: 'https://nakano-online.com/shop/g/g12960/'
+        });
+      }
+
+      if (isCenterPart && vibe === 'korean') {
+        // センターパート × ツヤ系
+        products.push({
+          name: 'モデニカ ナチュラルJ',
+          desc: 'センターパートに最適。自然なツヤと軽いセット力。',
+          url: 'https://nakano-online.com/shop/g/g13306/'
+        });
+      } else if (isCenterPart && vibe === 'natural') {
+        // センターパート × マット
+        products.push({
+          name: 'アリミノメン ハードバーム',
+          desc: 'マットな質感でナチュラルなセンターパートに。',
+          url: 'https://www.arimino.co.jp/products/men/hard_balm/'
+        });
+      }
+
+      if (isMashStyle && !isShortStyle && products.length < 2) {
+        // マッシュ系
+        products.push({
+          name: '中野モデニカ 6番',
+          desc: 'マット仕上げで馴染み良し。マッシュ系スタイルに最適。',
+          url: 'https://nakano-online.com/shop/g/g12961/'
+        });
+      }
+
+      if (isShortStyle && vibe === 'wild') {
+        // 短髪×ツヤ系
+        products.push({
+          name: 'アリミノメン グリース',
+          desc: 'ツヤ感のある短髪スタイルに。ワイルドな束感。',
+          url: 'https://www.arimino.co.jp/products/men/freeze_keep_grease/'
+        });
+      }
+
+      if (isShortStyle && vibe === 'business') {
+        // 短髪系
+        products.push({
+          name: '中野モデニカ 8番',
+          desc: 'ハードなセット力。ビジネスシーンの短髪スタイルに。',
+          url: 'https://nakano-online.com/shop/g/g12962/'
+        });
+      }
+
+      // Fallback: ensure at least 1 product
+      if (products.length === 0) {
+        products.push({
+          name: '中野モデニカ 6番',
+          desc: 'マット仕上げで馴染み良し。迷ったらまずこれ。',
+          url: 'https://nakano-online.com/shop/g/g12961/'
+        });
+      }
+
+      // Limit to 2 products
+      return products.slice(0, 2);
+    }
+  </script>
+</body>
+</html>

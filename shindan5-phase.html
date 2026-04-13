@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>男磨きフェーズ診断 | Men's Rise</title>
+  <meta name="description" content="今のあなたに本当に必要なことがわかる。6つの質問に答えるだけで、男磨きのフェーズを診断します。">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script>
+    new QuizEngine({
+      iconSvg: MR_ICONS.phase,
+      title: '男磨きフェーズ診断',
+      description: '今のあなたに本当に必要なことがわかる。<br>6つの質問に答えるだけ。',
+      meta: '所要時間：約1分 ｜ 全6問',
+
+      questions: [
+        {
+          id: 'history',
+          text: '男磨き歴はどれくらい？',
+          options: [
+            { label: 'これから始める', value: 'beginner' },
+            { label: '半年未満', value: 'half' },
+            { label: '半年〜1年', value: 'oneyear' },
+            { label: '1年以上', value: 'veteran' }
+          ]
+        },
+        {
+          id: 'worry',
+          text: '今の一番の悩みは？',
+          options: [
+            { label: '外見に自信がない', value: 'looks' },
+            { label: '女性と話せない', value: 'communication' },
+            { label: '何から始めていいかわからない', value: 'lost' },
+            { label: 'やってるのに変わらない', value: 'plateau' }
+          ]
+        },
+        {
+          id: 'habit',
+          text: '毎日続けてる習慣はある？',
+          options: [
+            { label: '筋トレ', value: 'gym' },
+            { label: 'スキンケア', value: 'skin' },
+            { label: '読書', value: 'reading' },
+            { label: '特にない', value: 'none' }
+          ]
+        },
+        {
+          id: 'confidence',
+          text: '自分に自信はある？',
+          options: [
+            { label: '全然ない', value: 'zero' },
+            { label: '少しだけ', value: 'little' },
+            { label: 'まあまあ', value: 'moderate' },
+            { label: 'ある', value: 'yes' }
+          ]
+        },
+        {
+          id: 'peers',
+          text: '周りに男磨きしてる仲間は？',
+          options: [
+            { label: 'いない', value: 'none' },
+            { label: '1〜2人', value: 'few' },
+            { label: 'いる', value: 'yes' }
+          ]
+        },
+        {
+          id: 'change',
+          text: '今の生活で一番変えたいことは？',
+          options: [
+            { label: '見た目', value: 'looks' },
+            { label: '恋愛', value: 'love' },
+            { label: '人間関係', value: 'relations' },
+            { label: '仕事', value: 'work' },
+            { label: '全部', value: 'all' }
+          ]
+        }
+      ],
+
+      calcResult: function(answers) {
+        var history = answers.history;
+        var worry = answers.worry;
+        var habit = answers.habit;
+        var confidence = answers.confidence;
+        var peers = answers.peers;
+
+        // Phase 1: なんかモテたい期
+        if (history === 'beginner' &&
+            (worry === 'lost' || worry === 'looks') &&
+            (confidence === 'zero' || confidence === 'little') &&
+            habit === 'none') {
+          return 1;
+        }
+
+        // Phase 2: 外見改造期
+        if ((history === 'beginner' || history === 'half') &&
+            habit !== 'none' &&
+            (confidence === 'little' || confidence === 'moderate')) {
+          return 2;
+        }
+
+        // Phase 3: テクニック収集期
+        if ((history === 'half' || history === 'oneyear') &&
+            worry === 'plateau' &&
+            confidence === 'moderate') {
+          return 3;
+        }
+
+        // Phase 4: 自信迷子期
+        if ((history === 'oneyear' || history === 'veteran') &&
+            worry === 'plateau' &&
+            (confidence === 'zero' || confidence === 'little')) {
+          return 4;
+        }
+
+        // Phase 5: 本質到達期
+        if (history === 'veteran' &&
+            (confidence === 'moderate' || confidence === 'yes') &&
+            peers === 'yes') {
+          return 5;
+        }
+
+        // Fallback logic
+        if (history === 'beginner') {
+          return 1;
+        }
+        if (history === 'half') {
+          return 2;
+        }
+        if (history === 'oneyear') {
+          if (worry === 'plateau') {
+            return (confidence === 'moderate' || confidence === 'yes') ? 3 : 4;
+          }
+          return 2;
+        }
+        if (history === 'veteran') {
+          return (confidence === 'moderate' || confidence === 'yes') ? 5 : 4;
+        }
+
+        return 2;
+      },
+
+      renderResult: function(phase, answers) {
+        var data = {
+          1: {
+            type: '\u2460 \u306a\u3093\u304b\u30e2\u30c6\u305f\u3044\u671f',
+            feature: '\u6f20\u7136\u3068\u3057\u305f\u4e0d\u6e80\u304c\u3042\u308b\u3002\u4f55\u304b\u3089\u59cb\u3081\u3066\u3044\u3044\u304b\u308f\u304b\u3089\u306a\u3044\u3002',
+            message: '\u307e\u305a\u5916\u898b\u306e1\u3064\u3092\u5909\u3048\u308d\u3002\u7709\u6bdb\u304b\u9ed2\u30d1\u30f3\u30c4\u3002\u305d\u3053\u304b\u3089\u59cb\u307e\u308b\u3002',
+            action: '\u7709\u6bdb\u30b5\u30ed\u30f3\u3078\u884c\u3051\u3002\u4eca\u3059\u3050\u4e88\u7d04\u3057\u308d\u3002',
+            nextDiagnosis: '\u2192 \u307e\u305a\u306f\u808c\u8cea\u8a3a\u65ad\u30fb\u7b4b\u30c8\u30ec\u8a3a\u65ad\u304b\u3089\u3084\u3063\u3066\u307f\u308d',
+            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u30b9\u30bf\u30fc\u30c8\u30c0\u30c3\u30b7\u30e5\u30d7\u30e9\u30f3</strong></p><ul><li>Week 1: \u7709\u6bdb\u30b5\u30ed\u30f3\u4e88\u7d04\u30fb\u30b9\u30ad\u30f3\u30b1\u30a2\u958b\u59cb</li><li>Week 2: \u9ed2\u30d1\u30f3\u30c4\u8cfc\u5165\u30fb\u7b4b\u30c8\u30ec\u958b\u59cb</li><li>Week 3-4: \u7f8e\u5bb9\u5ba4\u4e88\u7d04\u30fb\u5168\u8eab\u30b3\u30fc\u30c7\u898b\u76f4\u3057</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+          },
+          2: {
+            type: '\u2461 \u5916\u898b\u6539\u9020\u671f',
+            feature: '\u670d\u30fb\u9aea\u30fb\u808c\u306b\u76ee\u899a\u3081\u59cb\u3081\u305f\u6bb5\u968e\u3002\u4eca\u304c\u4e00\u756a\u4f38\u3073\u308b\u6642\u671f\u3002',
+            message: '\u4ed6\u306e\u8a3a\u65ad\u3092\u5168\u90e8\u3084\u3063\u3066\u3001\u81ea\u5206\u5c02\u7528\u306e\u30ed\u30fc\u30c9\u30de\u30c3\u30d7\u3092\u4f5c\u308c\u3002',
+            action: '\u30ab\u30c3\u30c84,000\u5186\u4ee5\u4e0a\u306e\u30e1\u30f3\u30ba\u7f8e\u5bb9\u5ba4\u3078\u884c\u3051\u3002',
+            nextDiagnosis: '\u2192 \u30d5\u30a1\u30c3\u30b7\u30e7\u30f3\u8a3a\u65ad\u3092\u3084\u308c',
+            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u5916\u898b\u6539\u9020\u30ed\u30fc\u30c9\u30de\u30c3\u30d7</strong></p><ul><li>Month 1: \u30d8\u30a2\u30b9\u30bf\u30a4\u30eb\u78ba\u7acb\u30fb\u30b9\u30ad\u30f3\u30b1\u30a2\u30eb\u30fc\u30c6\u30a3\u30f3\u5316</li><li>Month 2: \u30ef\u30fc\u30c9\u30ed\u30fc\u30d6\u69cb\u7bc9\u30fb\u4f53\u578b\u6539\u5584\u958b\u59cb</li><li>Month 3: \u30c8\u30fc\u30bf\u30eb\u30b3\u30fc\u30c7\u5b8c\u6210\u30fb\u5199\u771f\u64ae\u5f71</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+          },
+          3: {
+            type: '\u2462 \u30c6\u30af\u30cb\u30c3\u30af\u53ce\u96c6\u671f',
+            feature: '\u77e5\u8b58\u306f\u5897\u3048\u305f\u304c\u7a7a\u56de\u308a\u3057\u3066\u3044\u308b\u3002',
+            message: '\u60c5\u5831\u306f\u3082\u3046\u5341\u5206\u3002\u8db3\u308a\u306a\u3044\u306e\u306f\u5b9f\u8df5\u3068\u74b0\u5883\u3002\u884c\u52d5\u91cf\u3092\u5897\u3084\u3059\u4ed5\u7d44\u307f\u3092\u4f5c\u308c\u3002',
+            action: '3\u30f6\u6708\u5f8c\u306e\u81ea\u5206\u304c\u3069\u3046\u306a\u308b\u304b\u3001\u4eca\u3059\u3050\u5ba3\u8a00\u3057\u308d\u3002',
+            nextDiagnosis: '\u2192 \u7b4b\u30c8\u30ec\u8a3a\u65ad\u3092\u3084\u308c',
+            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u30d6\u30ec\u30a4\u30af\u30b9\u30eb\u30fc\u30d7\u30e9\u30f3</strong></p><ul><li>\u884c\u52d5\u8a08\u753b: \u9031\u55983\u56de\u306e\u5b9f\u8df5\u30bf\u30b9\u30af\u8a2d\u8a08</li><li>\u74b0\u5883\u8a2d\u8a08: \u540c\u3058\u30d5\u30a7\u30fc\u30ba\u306e\u4ef2\u9593\u3068\u3064\u306a\u304c\u308b</li><li>3\u30f6\u6708\u5f8c\u306e\u76ee\u6a19\u8a2d\u5b9a\u30fb\u9032\u6357\u7ba1\u7406</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+          },
+          4: {
+            type: '\u2463 \u81ea\u4fe1\u8ff7\u5b50\u671f',
+            feature: '\u3084\u3063\u3066\u308b\u306e\u306b\u5909\u308f\u3089\u306a\u3044\u3002\u5916\u898b\u306f\u5909\u308f\u3063\u305f\u304c\u81ea\u4fe1\u304c\u306a\u3044\u3002',
+            message: '\u5916\u898b\u306f\u571f\u53f0\u3002\u6b21\u306f\"\u5728\u308a\u65b9\"\u3002\u81ea\u5206\u3068\u306e\u7d04\u675f\u3092\u5b88\u308b\u7fd2\u6163\u3092\u59cb\u3081\u308d\u3002',
+            action: '\u30e2\u30c1\u30d9\u30fc\u30b7\u30e7\u30f3\u306b\u983c\u308b\u306a\u3002\u5c0f\u3055\u306a\u81ea\u5206\u3068\u306e\u6bce\u65e5\u306e\u7d04\u675f\u30925\u3064\u4f5c\u3063\u3066\u5b88\u308c\u3002',
+            nextDiagnosis: '\u2192 \u3082\u3046\u4e00\u5ea6\u7b4b\u30c8\u30ec\u8a3a\u65ad\u3092\u3084\u308c',
+            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u81ea\u4fe1\u69cb\u7bc9\u30d7\u30e9\u30f3</strong></p><ul><li>\u6bce\u65e5\u306e5\u3064\u306e\u7d04\u675f\u8a2d\u8a08\u30b5\u30dd\u30fc\u30c8</li><li>\u30de\u30a4\u30f3\u30c9\u30bb\u30c3\u30c8\u6539\u5584\u30ef\u30fc\u30af</li><li>\u884c\u52d5\u8a18\u9332\u30fb\u632f\u308a\u8fd4\u308a\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+          },
+          5: {
+            type: '\u2464 \u672c\u8cea\u5230\u9054\u671f',
+            feature: '\u81ea\u5206\u8ef8\u3067\u52d5\u3051\u3066\u3044\u308b\u3002\u8a00\u3046\u3053\u3068\u306a\u3057\u3002',
+            message: '\u76ee\u306e\u524d\u306e\u3084\u308b\u3079\u304d\u3053\u3068\u3092\u7a4d\u307f\u4e0a\u3052\u308d\u3002',
+            action: '\u4eca\u306e\u30da\u30fc\u30b9\u3092\u5d29\u3059\u306a\u3002\u7a4d\u307f\u4e0a\u3052\u308d\u3002',
+            nextDiagnosis: '\u2192 \u7b4b\u30c8\u30ec\u8a3a\u65ad\u3067\u73fe\u72b6\u30c1\u30a7\u30c3\u30af',
+            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u30cd\u30af\u30b9\u30c8\u30b9\u30c6\u30fc\u30b8\u30d7\u30e9\u30f3</strong></p><ul><li>\u73fe\u72b6\u7dad\u6301\u30fb\u3055\u3089\u306a\u308b\u6210\u9577\u306e\u305f\u3081\u306e\u30ed\u30fc\u30c9\u30de\u30c3\u30d7</li><li>\u5f8c\u8f29\u3078\u306e\u30e1\u30f3\u30bf\u30ea\u30f3\u30b0\u6a5f\u4f1a</li><li>\u30cf\u30a4\u30ec\u30d9\u30eb\u306a\u4ef2\u9593\u74b0\u5883\u3078\u306e\u62db\u5f85</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u9650\u5b9a\u30b3\u30df\u30e5\u30cb\u30c6\u30a3\u306e\u3054\u6848\u5185</li></ul>'
+          }
+        };
+
+        var d = data[phase];
+
+        var html = '';
+
+        // Result header
+        html += '<div class="result-header">';
+        html += '<div class="result-label">YOUR PHASE</div>';
+        html += '<div class="result-type">' + d.type + '</div>';
+        html += '</div>';
+
+        // Feature card
+        html += QuizEngine.resultCard('あなたの特徴', d.feature);
+
+        // Message highlight
+        html += '<div class="result-highlight">' + d.message + '</div>';
+
+        // Today's action card
+        html += QuizEngine.resultCard('今日やるべきこと', d.action);
+
+        // Next diagnosis card
+        html += QuizEngine.resultCard('次にやるべき診断', d.nextDiagnosis);
+
+        // Gated section
+        html += QuizEngine.gatedBlock('あなた専用のロードマップ', d.gatedContent);
+
+        return html;
+      }
+    });
+  </script>
+</body>
+</html>

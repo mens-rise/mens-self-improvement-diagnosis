@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>筋トレ診断 | Men's Rise</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script src="js/icons.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script>
+    new QuizEngine({
+      iconSvg: MR_ICONS.kintore,
+      title: '骨格×体型に合った<br>筋トレ診断',
+      description: 'あなたの骨格タイプを診断して<br>最適なトレーニングを提案します',
+      meta: '所要時間：約2分 ｜ 全5問',
+
+      questions: [
+        {
+          id: 'wrist',
+          text: '手首テスト',
+          hint: '利き手じゃない方の手首を親指と中指で囲んでみて',
+          options: [
+            { label: '余裕で重なる', value: 'overlap' },
+            { label: 'ちょうど触れ合う', value: 'touch' },
+            { label: '全く届かない', value: 'gap' }
+          ]
+        },
+        {
+          id: 'metabolism',
+          text: '食事と体重の関係は？',
+          options: [
+            { label: '食べても太れない', value: 'fast' },
+            { label: '食べたら太るがすぐ戻せる', value: 'normal' },
+            { label: '食べたら太って落ちにくい', value: 'slow' }
+          ]
+        },
+        {
+          id: 'experience',
+          text: '筋トレ経験は？',
+          options: [
+            { label: '未経験', value: 'none' },
+            { label: '半年未満', value: 'beginner' },
+            { label: '半年〜1年', value: 'intermediate' },
+            { label: '1年以上', value: 'advanced' }
+          ]
+        },
+        {
+          id: 'gym',
+          text: 'ジム環境は？',
+          options: [
+            { label: 'ジム通い', value: 'gym' },
+            { label: '自宅のみ', value: 'home' }
+          ]
+        },
+        {
+          id: 'frequency',
+          text: '週何回トレーニングできそう？',
+          options: [
+            { label: '週2回', value: 'two' },
+            { label: '週3回', value: 'three' },
+            { label: '週4回以上', value: 'four' }
+          ]
+        }
+      ],
+
+      calcResult: function(answers) {
+        const wrist = answers.wrist;
+        const metabolism = answers.metabolism;
+        let type = 'ecto'; // default: lean toward 痩せ型
+
+        if (wrist === 'overlap') {
+          type = 'ecto';
+        } else if (wrist === 'gap') {
+          type = 'endo';
+        } else if (wrist === 'touch' && metabolism === 'normal') {
+          type = 'meso';
+        } else if (wrist === 'touch' && metabolism === 'fast') {
+          type = 'ecto';
+        } else if (wrist === 'touch' && metabolism === 'slow') {
+          type = 'endo';
+        }
+
+        // Specific overrides
+        if (wrist === 'overlap' && metabolism === 'fast') type = 'ecto';
+        if (wrist === 'touch' && metabolism === 'normal') type = 'meso';
+        if (wrist === 'gap' && metabolism === 'slow') type = 'endo';
+
+        return {
+          type: type,
+          gym: answers.gym,
+          frequency: answers.frequency,
+          experience: answers.experience
+        };
+      },
+
+      renderResult: function(result, answers) {
+        const data = {
+          ecto: {
+            name: '痩せ型（エクトモルフ）',
+            feature: '代謝が良すぎて太りにくい。筋肉もつきにくいが、一度筋肉がつけば脂肪に邪魔されずカットが綺麗に出る。',
+            strategy: '「短時間・高重量」。種目を絞って大きい筋肉を一気に動かす。ジム滞在は60分以内。ダラダラやるな。',
+            action: 'まずバーベルスクワットを8回×3セットやれ。足は体で一番デカい筋肉。成長ホルモンが出る。',
+            food: '高炭水化物・中タンパク・中脂質。とにかく食え。1日4〜5食。糖質制限は絶対NG。'
+          },
+          meso: {
+            name: '筋肉質型（メソモルフ）',
+            feature: '少し鍛えたらすぐ筋肉がつく。脂肪も落としやすい。才能ある体。油断すると太るので注意。',
+            strategy: '「部位分割法（リーンバルク）」。週3回で部位を分けてトレーニング。',
+            action: 'まずベンチプレスを10回×3セットやれ。胸を育てろ。',
+            food: '高タンパク・中炭水化物・低〜中脂質。PFCバランス管理。タンパク質は体重×2g。'
+          },
+          endo: {
+            name: 'がっしり型（エンドモルフ）',
+            feature: '力は強いが脂肪で筋肉が隠れている。パワーはある。脂肪さえ落とせばすぐにかっこいい体になるポテンシャル。',
+            strategy: '「消費カロリーを増やす」。セット間休憩短く密度高く。筋トレ後に有酸素20分。',
+            action: 'まずスミスベンチプレスを10回×3セットやれ。そのあと有酸素20分。',
+            food: '高タンパク・低脂質・低炭水化物。食事管理が成功の8割。夜の白米を半分or抜く。'
+          }
+        };
+
+        const d = data[result.type];
+
+        let html = '';
+
+        // Result header
+        html += `
+          <div class="result-header">
+            <div class="result-label">YOUR TYPE</div>
+            <div class="result-type">${d.name}</div>
+          </div>
+        `;
+
+        // Free content cards
+        html += QuizEngine.resultCard('YOUR FEATURE ─ 特徴', `<p>${d.feature}</p>`);
+
+        html += QuizEngine.resultCard('STRATEGY ─ 戦略', `<p><strong>${d.strategy}</strong></p>`);
+
+        html += QuizEngine.resultCard('TODAY\'S ACTION ─ 今日やること', `<p>${d.action}</p>`);
+
+        html += QuizEngine.resultCard('FOOD ─ 食事の方向性', `
+          <div class="result-highlight">${d.food}</div>
+        `);
+
+        // Gated content
+        html += QuizEngine.gatedBlock('あなた専用の完全版メニュー', `
+          <table class="menu-table">
+            <tr>
+              <th>内容</th>
+              <th>詳細</th>
+            </tr>
+            <tr>
+              <td><strong>週間メニュー表</strong></td>
+              <td>全種目・重量・セット数を網羅</td>
+            </tr>
+            <tr>
+              <td><strong>食事テンプレ</strong></td>
+              <td>あなたのタイプに合った1週間分</td>
+            </tr>
+            <tr>
+              <td><strong>サプリ推薦</strong></td>
+              <td>おすすめプロテイン＆サプリ</td>
+            </tr>
+            <tr>
+              <td><strong>最短ロードマップ</strong></td>
+              <td>あなたの体型に合う理想の体へ</td>
+            </tr>
+          </table>
+        `);
+
+        return html;
+      }
+    });
+  </script>
+</body>
+</html>

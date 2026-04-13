@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>肌質診断 | Men's Rise</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script src="js/icons.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script>
+    new QuizEngine({
+      iconSvg: MR_ICONS.hada,
+      title: '肌質タイプ別<br>スキンケア診断',
+      description: 'あなたの肌質を診断して<br>最適なケア方法を提案します',
+      meta: '所要時間：約2分 ｜ 全6問',
+
+      questions: [
+        {
+          id: 'wash',
+          text: '洗顔後、何もつけずに10分経つと？',
+          hint: '洗顔後タオルで拭き、10分間何もせず待ってみて',
+          options: [
+            { label: '全体がつっぱる', value: 'tight' },
+            { label: 'Tゾーンだけテカる', value: 't-zone' },
+            { label: '全体がテカる', value: 'oily' },
+            { label: '特に変化なし', value: 'normal' }
+          ]
+        },
+        {
+          id: 'acne',
+          text: 'ニキビはできやすい？',
+          options: [
+            { label: 'よくできる', value: 'often' },
+            { label: 'たまにできる', value: 'sometimes' },
+            { label: 'ほとんどない', value: 'rarely' }
+          ]
+        },
+        {
+          id: 'redness',
+          text: '肌の赤みやかゆみは？',
+          options: [
+            { label: 'よくある', value: 'often' },
+            { label: 'たまにある', value: 'sometimes' },
+            { label: 'ない', value: 'none' }
+          ]
+        },
+        {
+          id: 'sting',
+          text: '化粧水をつけるとヒリヒリする？',
+          options: [
+            { label: 'よくする', value: 'often' },
+            { label: 'たまにする', value: 'sometimes' },
+            { label: 'しない', value: 'never' }
+          ]
+        },
+        {
+          id: 'current',
+          text: '現在のスキンケアは？',
+          options: [
+            { label: '何もしてない', value: 'nothing' },
+            { label: '洗顔のみ', value: 'wash' },
+            { label: '洗顔+化粧水', value: 'basic' },
+            { label: 'フルセット', value: 'full' }
+          ]
+        },
+        {
+          id: 'budget',
+          text: '月のスキンケア予算は？',
+          options: [
+            { label: '3,000円以内', value: 'low' },
+            { label: '5,000円以内', value: 'mid' },
+            { label: '1万円以内', value: 'high' },
+            { label: 'こだわらない', value: 'unlimited' }
+          ]
+        }
+      ],
+
+      calcResult: function(answers) {
+        const wash = answers.wash;
+        const acne = answers.acne;
+        const redness = answers.redness;
+        const sting = answers.sting;
+
+        let type = 'normal';
+
+        // Primary rules
+        if (sting === 'often' && redness === 'often') {
+          type = 'sensitive';
+        } else if (wash === 'tight' && acne !== 'often' && sting !== 'often') {
+          type = 'dry';
+        } else if (wash === 'oily' && (acne === 'often' || acne === 'sometimes') && redness !== 'often') {
+          type = 'oily';
+        } else if (wash === 't-zone') {
+          type = 'combination';
+        } else if (wash === 'normal' && redness !== 'often' && sting !== 'often') {
+          type = 'normal';
+        } else {
+          // Default fallback chain
+          if (sting === 'often') {
+            type = 'sensitive';
+          } else if (wash === 'tight') {
+            type = 'dry';
+          } else if (wash === 'oily') {
+            type = 'oily';
+          } else if (wash === 't-zone') {
+            type = 'combination';
+          } else {
+            type = 'normal';
+          }
+        }
+
+        return {
+          type: type,
+          budget: answers.budget
+        };
+      },
+
+      renderResult: function(result, answers) {
+        const data = {
+          normal: {
+            name: '普通肌',
+            subtitle: 'バランス型',
+            feature: '皮脂と水分のバランスが取れている。肌トラブルが少ない。季節の変わり目に揺らぐ程度。',
+            care: '朝夜の洗顔・保湿を習慣化。洗顔のしすぎ注意。紫外線対策を徹底。',
+            firstBuy: '<a href="https://www.amazon.co.jp/dp/B001JF0MQC" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿化粧水II</a>（2,090円）— セラミド配合で肌バリア維持',
+            budgetProducts: {
+              low: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B06VX4FB9W" target="_blank" rel="noopener" style="color:var(--gold);">ちふれ 濃厚クリーム</a>(990円)',
+              mid: '<a href="https://www.amazon.co.jp/dp/B001JF0MQC" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿化粧水II</a>(2,090円) + <a href="https://www.amazon.co.jp/dp/B001JF0MRG" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿フェイスクリーム</a>(2,970円)'
+            }
+          },
+          dry: {
+            name: '乾燥肌',
+            subtitle: '保湿命タイプ',
+            feature: '洗顔後につっぱる、カサつく。乾燥が一番肌トラブルに繋がるので保湿が最重要。',
+            care: '「保湿重視」。アミノ酸系洗顔＋セラミド化粧水＋保湿クリーム。',
+            firstBuy: '<a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>（1,980円）— セラミド配合で乾燥肌の基本。コスパも◎',
+            budgetProducts: {
+              low: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>(1,980円)',
+              mid: '<a href="https://www.amazon.co.jp/dp/B0FL761H75" target="_blank" rel="noopener" style="color:var(--gold);">ミノンアミノモイスト モイストチャージローションII</a>(2,200円) + <a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>(1,980円)'
+            }
+          },
+          oily: {
+            name: '脂性肌',
+            subtitle: 'テカリ制御タイプ',
+            feature: '顔全体がテカる。毛穴が目立ちやすい。ニキビができやすい。',
+            care: '石鹸系成分の洗顔。オイルフリー・アルコールフリーの保湿。生活習慣改善が重要。洗顔は朝夜2回まで。',
+            firstBuy: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>（1,780円）— 皮脂対策＋保湿のバランス',
+            budgetProducts: {
+              low: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>(1,780円) + <a href="https://www.amazon.co.jp/dp/B00122NBVA" target="_blank" rel="noopener" style="color:var(--gold);">キュレル クリーム</a>(550円)',
+              mid: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>(1,780円) + <a href="https://www.amazon.co.jp/dp/B007MWYV90" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア保湿ジェル</a>(2,090円)'
+            }
+          },
+          combination: {
+            name: '混合肌',
+            subtitle: '部位別ケアタイプ',
+            feature: 'Tゾーンはテカるが頬や口周りは乾燥。季節で変わる。日本人に最も多い。',
+            care: '「部位別ケア」。Tゾーンのみ泡洗顔。保湿は必須（乾燥が主原因）。',
+            firstBuy: '<a href="https://www.amazon.co.jp/dp/B0GFCYGLMK" target="_blank" rel="noopener" style="color:var(--gold);">IHADA 薬用ローション</a>（1,800円）— 肌荒れ防止＋保湿',
+            budgetProducts: {
+              low: '<a href="https://www.amazon.co.jp/dp/B0GFCYGLMK" target="_blank" rel="noopener" style="color:var(--gold);">IHADA 薬用ローション</a>(1,800円) + <a href="https://www.amazon.co.jp/dp/B00122NBVA" target="_blank" rel="noopener" style="color:var(--gold);">キュレル クリーム</a>(550円)',
+              mid: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B075996DM4" target="_blank" rel="noopener" style="color:var(--gold);">キュレル エイジングケアシリーズ</a>(3,080円)'
+            }
+          },
+          sensitive: {
+            name: '敏感肌',
+            subtitle: '低刺激シンプルタイプ',
+            feature: 'スキンケアを使っても赤み、痒みが出る。化粧水でヒリヒリ。季節の変わり目に荒れやすい。',
+            care: 'クレンジング・洗顔を優しい成分に。スキンケアはシンプルに。絶対に擦らない。',
+            firstBuy: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 化粧水</a>（1,100円）— 低刺激で敏感肌でも安心',
+            recommended: [
+              { category: 'クレンジング', item: 'お日様で作ったクレンジングオイル' },
+              { category: '洗顔', item: 'ニベア弱酸性泡洗顔' },
+              { category: '化粧水', item: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂</a>' },
+              { category: '美容液', item: 'Trube' },
+              { category: 'クリーム', item: 'メタトロンコントアBクリーム' }
+            ]
+          }
+        };
+
+        const d = data[result.type];
+        const budget = result.budget;
+        let html = '';
+
+        // Result header
+        html += `
+          <div class="result-header">
+            <div class="result-label">YOUR SKIN TYPE</div>
+            <div class="result-type">${d.name}</div>
+            <div class="result-subtitle">${d.subtitle}</div>
+          </div>
+        `;
+
+        // Feature
+        html += QuizEngine.resultCard('YOUR FEATURE ─ 肌の特徴', `<p>${d.feature}</p>`);
+
+        // Care strategy
+        html += QuizEngine.resultCard('CARE ─ ケア方針', `<p><strong>${d.care}</strong></p>`);
+
+        // First buy with highlight
+        html += QuizEngine.resultCard('FIRST BUY ─ まずこの1品買え', `
+          <div class="result-highlight">${d.firstBuy}</div>
+        `);
+
+        // Budget-appropriate products
+        if (result.type === 'sensitive') {
+          // Sensitive skin: show recommended lineup
+          let recHTML = '<p style="font-size:0.85rem; margin-bottom:12px;">敏感肌向けおすすめライン：</p>';
+          recHTML += '<ul class="check-list">';
+          d.recommended.forEach(function(r) {
+            recHTML += `<li><strong>${r.category}：</strong>${r.item}</li>`;
+          });
+          recHTML += '</ul>';
+          html += QuizEngine.resultCard('RECOMMENDED ─ おすすめアイテム', recHTML);
+        } else {
+          // Other types: show budget-matched products
+          let budgetLabel = '';
+          let budgetContent = '';
+
+          if (budget === 'low') {
+            budgetLabel = '3,000円以内プラン';
+            budgetContent = d.budgetProducts.low;
+          } else if (budget === 'mid') {
+            budgetLabel = '5,000円以内プラン';
+            budgetContent = d.budgetProducts.mid;
+          } else if (budget === 'high' || budget === 'unlimited') {
+            budgetLabel = '5,000円以内プラン';
+            budgetContent = d.budgetProducts.mid;
+          } else {
+            budgetLabel = '3,000円以内プラン';
+            budgetContent = d.budgetProducts.low;
+          }
+
+          html += QuizEngine.resultCard('PRODUCTS ─ ' + budgetLabel, `
+            <div class="result-highlight">${budgetContent}</div>
+          `);
+        }
+
+        // Gated content
+        html += QuizEngine.gatedBlock('あなた専用の完全版スキンケア', `
+          <table class="menu-table">
+            <tr>
+              <th>内容</th>
+              <th>詳細</th>
+            </tr>
+            <tr>
+              <td><strong>朝夜フルルーティン</strong></td>
+              <td>朝・夜それぞれの完全ステップ</td>
+            </tr>
+            <tr>
+              <td><strong>悩み別追加ケア</strong></td>
+              <td>ニキビ・毛穴・シミなど個別対策</td>
+            </tr>
+            <tr>
+              <td><strong>予算別商品リスト完全版</strong></td>
+              <td>全価格帯のおすすめ商品一覧</td>
+            </tr>
+          </table>
+        `);
+
+        return html;
+      }
+    });
+  </script>
+</body>
+</html>

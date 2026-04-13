@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ファッション診断 | Men's Rise</title>
+  <meta name="description" content="あなたの体型に合わせた最適なコーデを提案します。6つの質問に答えるだけで、スタイルアップファッションを診断。">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script>
+    new QuizEngine({
+      iconSvg: MR_ICONS.fashion,
+      title: '体型別<br>スタイルアップファッション診断',
+      description: 'あなたの体型に合わせた<br>最適なコーデを提案します',
+      meta: '所要時間：約2分 ｜ 全6問',
+
+      questions: [
+        {
+          id: 'height',
+          text: '身長は？',
+          options: [
+            { label: '〜165cm', value: 'short' },
+            { label: '165〜170cm', value: 'medium' },
+            { label: '170cm〜', value: 'tall' }
+          ]
+        },
+        {
+          id: 'bodyType',
+          text: '体型は？',
+          options: [
+            { label: '細身', value: 'slim' },
+            { label: '普通', value: 'normal' },
+            { label: 'ぽっちゃり', value: 'chubby' },
+            { label: 'がっしり', value: 'muscular' }
+          ]
+        },
+        {
+          id: 'budget',
+          text: '月のファッション予算は？',
+          options: [
+            { label: '5,000円以内', value: 'low' },
+            { label: '1万円以内', value: 'mid' },
+            { label: '3万円以内', value: 'high' },
+            { label: 'こだわらない', value: 'unlimited' }
+          ]
+        },
+        {
+          id: 'season',
+          text: '今の季節は？',
+          hint: 'コーデ提案に使います',
+          options: [
+            { label: '春', value: 'spring' },
+            { label: '夏', value: 'summer' },
+            { label: '秋', value: 'autumn' },
+            { label: '冬', value: 'winter' }
+          ]
+        },
+        {
+          id: 'style',
+          text: '普段の服装は？',
+          options: [
+            { label: 'ほぼ考えてない', value: 'none' },
+            { label: 'なんとなく選んでる', value: 'casual' },
+            { label: 'ある程度こだわってる', value: 'conscious' }
+          ]
+        },
+        {
+          id: 'trouble',
+          text: '何に一番困ってる？',
+          options: [
+            { label: '何買えばいいかわからない', value: 'what' },
+            { label: '組み合わせがわからない', value: 'combine' },
+            { label: 'サイズ感がわからない', value: 'size' },
+            { label: 'ダサく見える', value: 'look' }
+          ]
+        }
+      ],
+
+      calcResult: function(answers) {
+        var height = answers.height;
+        var bodyType = answers.bodyType;
+        var category;
+
+        if (height === 'short' && (bodyType === 'slim' || bodyType === 'normal')) {
+          category = 'short_slim';
+        } else if (height === 'short' && (bodyType === 'chubby' || bodyType === 'muscular')) {
+          category = 'short_big';
+        } else if (height === 'medium') {
+          category = 'medium_all';
+        } else if (height === 'tall' && bodyType === 'slim') {
+          category = 'tall_slim';
+        } else if (height === 'tall' && (bodyType === 'normal' || bodyType === 'chubby' || bodyType === 'muscular')) {
+          category = 'tall_normal';
+        }
+
+        return {
+          category: category,
+          season: answers.season,
+          budget: answers.budget,
+          trouble: answers.trouble,
+          height: height,
+          bodyType: bodyType
+        };
+      },
+
+      renderResult: function(result, answers) {
+        // --- Category data ---
+        var categoryData = {
+          short_slim: {
+            type: '〜165cm × 細身〜普通',
+            silhouette: 'I〜Yライン',
+            keyItem: '短丈・身幅広めのシャツやブルゾン',
+            reason: '腰位置を上げて足長効果、上半身にボリュームを足して華奢感を中和。',
+            ng: '細身のアイテムで線の細さを強調すること。着丈の長い服。',
+            fixedItems: '黒スラックス ＋ コインローファー（黒）',
+            firstBuy: 'センタープレスのワイドストレートスラックス — 今のトレンド感＋足長効果'
+          },
+          short_big: {
+            type: '〜165cm × ぽっちゃり〜がっしり',
+            silhouette: 'Yライン',
+            keyItem: 'リラックスフィットのテーラードジャケット（チャコール）',
+            reason: 'ゆったりシルエットで体のラインを拾いにくい。Yライン作りも簡単。',
+            ng: '薄手のニットやジャージ素材で体のラインを出すこと。過度なショート丈。',
+            fixedItems: '黒スラックス ＋ コインローファー（黒）',
+            firstBuy: 'リラックスフィットのテーラードジャケット — 体型カバー＋品格'
+          },
+          medium_all: {
+            type: '165〜170cm × 全体型',
+            silhouette: 'I〜Yライン',
+            keyItem: 'ボックスシルエットのスウェット or レギュラーカラーコットンブロードシャツ',
+            reason: '身幅広め・肩落ちで体のラインを気にせず着られる。ハリ素材で清潔感。',
+            ng: 'トレンドにないロゴデザインやテーパードの強いパンツ。',
+            fixedItems: '黒スラックス ＋ コインローファー（黒）',
+            firstBuy: 'センタープレスのワイドストレートスラックス — トレンド感＋万能'
+          },
+          tall_slim: {
+            type: '170cm〜 × 細身',
+            silhouette: 'A〜Yライン',
+            keyItem: 'バレルレッグ or カーブシルエットパンツ',
+            reason: '曲線で立体感を作ることでシルエットに今っぽさをプラス。',
+            ng: '細身のアイテムで作るIラインコーデ。丈が短い（8分丈以下）パンツ。',
+            fixedItems: '黒スラックス ＋ コインローファー（黒）',
+            firstBuy: 'バレルレッグパンツ — 体の線を拾わず今っぽいシルエット'
+          },
+          tall_normal: {
+            type: '170cm〜 × 普通〜がっしり',
+            silhouette: 'Yライン',
+            keyItem: 'ロングコート（春なら薄手ベージュ系ステンカラーコート）',
+            reason: '身長がある方は面積の大きいアイテムが映える。上質で品のあるアイテム。',
+            ng: '上下オーバーサイズ。挑戦時は着丈短め＋暗め色。',
+            fixedItems: '黒スラックス ＋ コインローファー（黒）',
+            firstBuy: 'コインローファー（黒）— 上品さをプラスできる汎用性の高いアイテム'
+          }
+        };
+
+        // --- Coordinate data ---
+        var coordData = {
+          short_slim: {
+            spring: [
+              { cat: 'アウター', name: '短丈コットンブレザー', color: 'ネイビー' },
+              { cat: 'インナー', name: 'オックスフォードシャツ', color: '白' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            summer: [
+              { cat: 'トップス', name: 'オーバーサイズ半袖BDシャツ', color: 'サックスブルー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            autumn: [
+              { cat: 'トップス', name: 'Vネックニットベスト', color: 'ベージュ' },
+              { cat: 'インナー', name: 'オックスフォードシャツ', color: '白' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            winter: [
+              { cat: 'アウター', name: 'MA-1フライトジャケット', color: 'カーキ' },
+              { cat: 'インナー', name: 'ケーブルニット', color: 'クリーム' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ]
+          },
+          short_big: {
+            spring: [
+              { cat: 'アウター', name: 'リラックスフィットテーラードジャケット', color: 'チャコール' },
+              { cat: 'インナー', name: 'コットンブロードシャツ', color: '薄めのブルー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            summer: [
+              { cat: 'トップス', name: 'リネン混オープンカラーシャツ', color: 'ベージュ' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            autumn: [
+              { cat: 'アウター', name: 'リラックスフィットテーラードジャケット', color: 'ダークネイビー' },
+              { cat: 'インナー', name: 'Vネックニット', color: 'グレー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            winter: [
+              { cat: 'アウター', name: 'チェスターコート', color: 'ダークグレー' },
+              { cat: 'インナー', name: 'ミドルゲージニット', color: 'ワインレッド' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ]
+          },
+          medium_all: {
+            spring: [
+              { cat: 'トップス', name: 'レギュラーカラーコットンブロードシャツ', color: 'カーキ' },
+              { cat: 'インナー', name: '白Tシャツ', color: '白' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            summer: [
+              { cat: 'トップス', name: '半袖ワークシャツ', color: '薄めのブルー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            autumn: [
+              { cat: 'アウター', name: 'ミリタリージャケット', color: 'オリーブ' },
+              { cat: 'インナー', name: 'ワッフルヘンリーネックT', color: '黒' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            winter: [
+              { cat: 'トップス', name: 'Vネッククルーネックニット', color: 'ネイビー' },
+              { cat: 'インナー', name: 'コットンブロードシャツ', color: '白' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ]
+          },
+          tall_slim: {
+            spring: [
+              { cat: 'トップス', name: 'ボックスシルエットスウェット', color: '黒' },
+              { cat: 'ボトムス', name: 'バレルレッグチノパンツ', color: 'ベージュ' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            summer: [
+              { cat: 'トップス', name: 'オーバーサイズ半袖BDシャツ', color: 'ベージュ' },
+              { cat: 'ボトムス', name: 'カーブシルエットデニム', color: '紺' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            autumn: [
+              { cat: 'トップス', name: 'Vネックニット', color: 'ブラウン' },
+              { cat: 'ボトムス', name: 'バレルレッグチノパンツ', color: 'ベージュ' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            winter: [
+              { cat: 'アウター', name: 'ダッフルコート', color: 'ブラウン' },
+              { cat: 'インナー', name: 'ローゲージニット', color: 'カーキ' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ]
+          },
+          tall_normal: {
+            spring: [
+              { cat: 'アウター', name: '薄手ステンカラーコート', color: 'ベージュ' },
+              { cat: 'インナー', name: 'オックスフォードシャツ', color: '薄めのブルー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            summer: [
+              { cat: 'トップス', name: 'コットンブロードBDシャツ', color: '薄めのブルー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            autumn: [
+              { cat: 'アウター', name: 'ナイロンZIPジャケット', color: 'ブラウン' },
+              { cat: 'インナー', name: 'Vネックニット', color: 'ネイビー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ],
+            winter: [
+              { cat: 'アウター', name: 'チェスターコート', color: 'ネイビー' },
+              { cat: 'インナー', name: 'タートルネックニット', color: 'グレー' },
+              { cat: 'ボトムス', name: '黒スラックス', color: '黒' },
+              { cat: 'シューズ', name: 'コインローファー', color: '黒' }
+            ]
+          }
+        };
+
+        // --- Color mapping ---
+        var colorMap = {
+          '黒': '#1a1a1a',
+          '白': '#ffffff',
+          'ネイビー': '#1b2a4a',
+          'ダークネイビー': '#0f1d33',
+          'ベージュ': '#d4b896',
+          'カーキ': '#5c6b4e',
+          'オリーブ': '#5c6b4e',
+          'グレー': '#808080',
+          'ダークグレー': '#404040',
+          'チャコール': '#333333',
+          'ブラウン': '#6b4226',
+          'クリーム': '#f5f0e1',
+          'サックスブルー': '#6b9bc3',
+          '薄めのブルー': '#7ba7cc',
+          'ワインレッド': '#722f37',
+          '紺': '#1b2a4a'
+        };
+
+        // --- Season labels ---
+        var seasonLabels = {
+          spring: '春コーデ',
+          summer: '夏コーデ',
+          autumn: '秋コーデ',
+          winter: '冬コーデ'
+        };
+
+        var d = categoryData[result.category];
+        var season = result.season;
+
+        var html = '';
+
+        // Result header
+        html += '<div class="result-header">';
+        html += '<div class="result-label">YOUR STYLE TYPE</div>';
+        html += '<div class="result-type">' + d.type + '</div>';
+        html += '</div>';
+
+        // Silhouette card
+        html += QuizEngine.resultCard('SILHOUETTE ─ シルエット', '<p><strong>' + d.silhouette + '</strong></p>');
+
+        // Key item card
+        html += QuizEngine.resultCard('KEY ITEM ─ キーアイテム', '<p><strong>' + d.keyItem + '</strong></p><p style="margin-top:8px; font-size:0.85rem; color:#666;">' + d.reason + '</p>');
+
+        // NG card
+        html += QuizEngine.resultCard('NG ─ 避けるべきこと', '<div class="result-highlight" style="border-left-color: #ef4444;">' + d.ng + '</div>');
+
+        // Fixed items card
+        html += QuizEngine.resultCard('FIXED ITEMS ─ 固定アイテム', '<p><strong>' + d.fixedItems + '</strong></p><p style="margin-top:6px; font-size:0.8rem; color:#999;">この2つはどの体型でも鉄板。まず揃えろ。</p>');
+
+        // First buy card
+        html += QuizEngine.resultCard('FIRST BUY ─ 最初に買うべき1着', '<div class="result-highlight">' + d.firstBuy + '</div>');
+
+        // --- Seasonal coordinate visual card ---
+        var coords = coordData[result.category][season];
+        if (coords) {
+          html += '<div class="coord-visual">';
+          html += '<div class="coord-visual-header">';
+          html += '<span class="coord-visual-title">Coordinate ─ ' + seasonLabels[season] + '</span>';
+          html += '<span class="coord-visual-label">Pattern A</span>';
+          html += '</div>';
+
+          // Silhouette label
+          var silMap = {short_slim:'I〜Y LINE',short_big:'Y LINE',medium_all:'I〜Y LINE',tall_slim:'A〜Y LINE',tall_normal:'Y LINE'};
+          html += '<div class="coord-visual-silhouette">' + (silMap[result.category]||'') + '</div>';
+
+          html += '<div class="coord-stack">';
+          for (var i = 0; i < coords.length; i++) {
+            var item = coords[i];
+            var dotColor = colorMap[item.color] || '#555';
+            html += '<div class="coord-layer">';
+            html += '<span class="coord-layer-tag">' + item.cat + '</span>';
+            html += '<span class="coord-layer-name">' + item.name + '</span>';
+            html += '<span class="coord-layer-swatch" style="background:' + dotColor + ';"></span>';
+            html += '<span class="coord-layer-color-name">' + item.color + '</span>';
+            html += '</div>';
+          }
+          html += '</div>';
+
+          html += '<div class="coord-visual-note">※ 固定アイテム：黒スラックス ＋ コインローファー（黒）</div>';
+          html += '</div>';
+        }
+
+        // --- Theory tips card ---
+        html += QuizEngine.resultCard('THEORY ─ 覚えるべき2つの法則', '<div style="margin-bottom:14px;"><p style="font-weight:700; margin-bottom:4px;">ドレス7 : カジュアル3</p><p style="font-size:0.85rem; color:#666;">全体の7割をドレス（きれいめ）、3割をカジュアルにするとバランスが取れる。黒スラックス＋ローファーで下半身をドレスに固定すれば、トップスで遊べる。</p></div><div><p style="font-weight:700; margin-bottom:4px;">3分割コーデ法</p><p style="font-size:0.85rem; color:#666;">体を「アウター・インナー・ボトムス」の3ブロックに分割して考える。3色以内に収め、1つのブロックだけアクセントにすると簡単にまとまる。</p></div>');
+
+        // --- Gated content ---
+        html += QuizEngine.gatedBlock('あなた専用のファッション完全ガイド', '<table class="menu-table"><tr><th>内容</th><th>詳細</th></tr><tr><td><strong>全季節コピペコーデ</strong></td><td>春夏秋冬すべてのコーデを網羅</td></tr><tr><td><strong>予算別ショッピングリスト</strong></td><td>商品名＋リンク＋価格つき</td></tr><tr><td><strong>体型別NGファッションリスト</strong></td><td>あなたの体型で避けるべきアイテム一覧</td></tr></table>');
+
+        return html;
+      }
+    });
+  </script>
+</body>
+</html>
