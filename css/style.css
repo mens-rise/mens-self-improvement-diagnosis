@@ -184,6 +184,36 @@ body {
   to { opacity: 0; transform: translateY(-20px); }
 }
 
+@keyframes fadeOutDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+/* ======== 戻るボタン ======== */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back-btn:hover {
+  color: var(--gold);
+}
+
+.back-btn svg {
+  flex-shrink: 0;
+}
+
 .question-number {
   display: inline-flex;
   align-items: center;

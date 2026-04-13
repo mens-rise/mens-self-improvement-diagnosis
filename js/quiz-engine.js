@@ -67,6 +67,7 @@ class QuizEngine {
   renderQuestion() {
     const q = this.questions[this.currentQ];
     const progress = ((this.currentQ) / this.questions.length) * 100;
+    const canGoBack = this.currentQ > 0;
 
     let optionsHTML = '';
 
@@ -89,7 +90,9 @@ class QuizEngine {
         <div class="progress-wrapper">
           <div class="container">
             <div class="progress-info">
-              <span class="progress-label">回答中...</span>
+              <span class="progress-label">
+                ${canGoBack ? '<button class="back-btn" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 戻る</button>' : '<span style="opacity:0.3">Q' + (this.currentQ + 1) + '</span>'}
+              </span>
               <span class="progress-count">${this.currentQ + 1} / ${this.questions.length}</span>
             </div>
             <div class="progress-bar">
@@ -116,6 +119,12 @@ class QuizEngine {
         fill.style.width = `${((this.currentQ + 1) / this.questions.length) * 100}%`;
       }
     });
+
+    // 戻るボタン
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => this.prevQuestion());
+    }
 
     // イベントリスナー
     if (q.type === 'sub-questions') {
@@ -209,6 +218,33 @@ class QuizEngine {
         this.renderQuestion();
       }
     }, 300);
+  }
+
+  // ==================== 前の質問に戻る ====================
+  prevQuestion() {
+    if (this.currentQ <= 0) return;
+
+    // 現在の質問の回答をクリア
+    const currentQ = this.questions[this.currentQ];
+    delete this.answers[currentQ.id];
+    delete this.subAnswers[currentQ.id];
+
+    // 前の質問の回答もクリア（再回答させるため）
+    const prevQ = this.questions[this.currentQ - 1];
+    delete this.answers[prevQ.id];
+    delete this.subAnswers[prevQ.id];
+
+    const card = document.getElementById('questionCard');
+    if (card) {
+      card.style.animation = 'none';
+      card.offsetHeight; // reflow
+      card.style.animation = 'fadeOutDown 0.3s ease forwards';
+    }
+
+    setTimeout(() => {
+      this.currentQ--;
+      this.renderQuestion();
+    }, 250);
   }
 
   // ==================== 結果表示 ====================
