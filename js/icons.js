@@ -12,12 +12,16 @@ const MR_ICONS = {
     <line x1="16" y1="32" x2="48" y2="32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
   </svg>`,
 
-  // 肌質 - キラキラ（スパークル）
+  // 肌質 - 美容液ドロップ＋波紋（スキンケア・美容感）
   hada: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32 4L36 24L56 28L36 32L32 52L28 32L8 28L28 24Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    <circle cx="32" cy="28" r="2" fill="currentColor" opacity="0.4"/>
-    <path d="M50 6L52 14L60 16L52 18L50 26L48 18L40 16L48 14Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.6"/>
-    <path d="M14 42L16 48L22 50L16 52L14 58L12 52L6 50L12 48Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.6"/>
+    <path d="M32 4C32 4 26 16 26 22C26 25.3 28.7 28 32 28C35.3 28 38 25.3 38 22C38 16 32 4 32 4Z" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.5"/>
+    <ellipse cx="32" cy="38" rx="8" ry="2.5" stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
+    <ellipse cx="32" cy="38" rx="16" ry="5" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+    <ellipse cx="32" cy="38" rx="24" ry="7.5" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+    <path d="M10 52L12 48L14 52" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+    <path d="M50 50L52 46L54 50" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+    <circle cx="22" cy="56" r="1" fill="currentColor" opacity="0.3"/>
+    <circle cx="44" cy="54" r="1" fill="currentColor" opacity="0.3"/>
   </svg>`,
 
   // 髪型 - はさみ
