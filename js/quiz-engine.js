@@ -90,9 +90,7 @@ class QuizEngine {
         <div class="progress-wrapper">
           <div class="container">
             <div class="progress-info">
-              <span class="progress-label">
-                ${canGoBack ? '<button class="back-btn" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 戻る</button>' : '<span style="opacity:0.3">Q' + (this.currentQ + 1) + '</span>'}
-              </span>
+              <span class="progress-label">回答中...</span>
               <span class="progress-count">${this.currentQ + 1} / ${this.questions.length}</span>
             </div>
             <div class="progress-bar">
@@ -106,6 +104,7 @@ class QuizEngine {
             <h2 class="question-text">${q.text}</h2>
             ${q.hint ? `<p class="question-hint">${q.hint}</p>` : ''}
             ${optionsHTML}
+            ${canGoBack ? '<div style="margin-top:24px;"><button class="back-btn" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 前の質問に戻る</button></div>' : ''}
           </div>
         </main>
         <footer class="footer">© Men's Rise</footer>
