@@ -12,14 +12,14 @@ const MR_ICONS = {
     <line x1="16" y1="32" x2="48" y2="32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
   </svg>`,
 
-  // 肌質 - フェイスケア（顔のシルエット＋キラキラ）
+  // 肌質 - スキンケアボトル（ポンプ式）
   hada: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="32" cy="30" rx="14" ry="18" stroke="currentColor" stroke-width="2"/>
-    <path d="M22 48C22 48 26 54 32 54C38 54 42 48 42 48" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="48" cy="14" r="1.5" fill="currentColor" opacity="0.8"/>
-    <path d="M52 10L54 8M56 14L58 14M52 18L54 20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-    <circle cx="16" cy="18" r="1" fill="currentColor" opacity="0.6"/>
-    <path d="M12 14L10 12M8 18L6 18" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+    <rect x="20" y="24" width="24" height="34" rx="4" stroke="currentColor" stroke-width="2"/>
+    <rect x="26" y="18" width="12" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+    <rect x="30" y="6" width="4" height="12" rx="1" stroke="currentColor" stroke-width="2"/>
+    <path d="M34 6H42C42 6 44 6 44 8V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <rect x="25" y="34" width="14" height="2" rx="1" fill="currentColor" opacity="0.25"/>
+    <rect x="25" y="40" width="14" height="2" rx="1" fill="currentColor" opacity="0.15"/>
   </svg>`,
 
   // 髪型 - はさみ
