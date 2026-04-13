@@ -12,16 +12,13 @@ const MR_ICONS = {
     <line x1="16" y1="32" x2="48" y2="32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
   </svg>`,
 
-  // 肌質 - 美容液ドロップ＋波紋（スキンケア・美容感）
-  hada: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32 4C32 4 26 16 26 22C26 25.3 28.7 28 32 28C35.3 28 38 25.3 38 22C38 16 32 4 32 4Z" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.5"/>
-    <ellipse cx="32" cy="38" rx="8" ry="2.5" stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
-    <ellipse cx="32" cy="38" rx="16" ry="5" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-    <ellipse cx="32" cy="38" rx="24" ry="7.5" stroke="currentColor" stroke-width="1" opacity="0.25"/>
-    <path d="M10 52L12 48L14 52" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
-    <path d="M50 50L52 46L54 50" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
-    <circle cx="22" cy="56" r="1" fill="currentColor" opacity="0.3"/>
-    <circle cx="44" cy="54" r="1" fill="currentColor" opacity="0.3"/>
+  // 肌質 - フェイシャルケア（IconPark outline, Apache 2.0）
+  hada: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="currentColor" stroke-width="3">
+      <path stroke-linejoin="round" d="M10 15.114a3 3 0 0 1 1.991-2.825l11-3.929a3 3 0 0 1 2.018 0l11 3.929A3 3 0 0 1 38 15.114v16.49c0 .885-.39 1.725-1.092 2.264C34.468 35.742 28.434 40 24 40s-10.467-4.257-12.908-6.132A2.84 2.84 0 0 1 10 31.604z"/>
+      <path stroke-linecap="round" d="M10 28c-3.314 0-6-3.11-6-6.947S6.686 16 10 16m28 12c3.314 0 6-3.11 6-6.947S41.314 16 38 16"/>
+      <path stroke-linecap="round" stroke-linejoin="round" d="m16 25l8-4l8 4m-13 6l5-2l5 2"/>
+    </g>
   </svg>`,
 
   // 髪型 - はさみ
