@@ -12,10 +12,14 @@ const MR_ICONS = {
     <line x1="16" y1="32" x2="48" y2="32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
   </svg>`,
 
-  // 肌質 - 水滴（保湿イメージ）
+  // 肌質 - フェイスケア（顔のシルエット＋キラキラ）
   hada: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32 6C32 6 14 28 14 40C14 50 22 58 32 58C42 58 50 50 50 40C50 28 32 6 32 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M24 42C24 42 26 36 32 36C38 36 40 42 40 42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <ellipse cx="32" cy="30" rx="14" ry="18" stroke="currentColor" stroke-width="2"/>
+    <path d="M22 48C22 48 26 54 32 54C38 54 42 48 42 48" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="48" cy="14" r="1.5" fill="currentColor" opacity="0.8"/>
+    <path d="M52 10L54 8M56 14L58 14M52 18L54 20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+    <circle cx="16" cy="18" r="1" fill="currentColor" opacity="0.6"/>
+    <path d="M12 14L10 12M8 18L6 18" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
   </svg>`,
 
   // 髪型 - はさみ
@@ -26,13 +30,14 @@ const MR_ICONS = {
     <line x1="42" y1="46" x2="22" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
   </svg>`,
 
-  // ファッション - ハンガー
+  // ファッション - シャツ（襟付き）
   fashion: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M32 16C36 16 38 14 38 11C38 8 36 6 32 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
-    <path d="M8 44L32 24L56 44" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <line x1="8" y1="44" x2="56" y2="44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <path d="M12 44V54C12 55.1 12.9 56 14 56H50C51.1 56 52 55.1 52 54V44" stroke="currentColor" stroke-width="2"/>
+    <path d="M24 6L20 10L12 8L6 22L16 26L16 56H48V26L54 26L58 22L52 8L44 10L40 6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M24 6C24 6 26 14 32 14C38 14 40 6 40 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="32" y1="14" x2="32" y2="42" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+    <circle cx="32" cy="24" r="1" fill="currentColor" opacity="0.5"/>
+    <circle cx="32" cy="32" r="1" fill="currentColor" opacity="0.5"/>
+    <circle cx="32" cy="40" r="1" fill="currentColor" opacity="0.5"/>
   </svg>`,
 
   // フェーズ - コンパス
