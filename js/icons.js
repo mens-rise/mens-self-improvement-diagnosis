@@ -12,13 +12,11 @@ const MR_ICONS = {
     <line x1="16" y1="32" x2="48" y2="32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
   </svg>`,
 
-  // 肌質 - フェイシャルケア（IconPark outline, Apache 2.0）
-  hada: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g fill="none" stroke="currentColor" stroke-width="3">
-      <path stroke-linejoin="round" d="M10 15.114a3 3 0 0 1 1.991-2.825l11-3.929a3 3 0 0 1 2.018 0l11 3.929A3 3 0 0 1 38 15.114v16.49c0 .885-.39 1.725-1.092 2.264C34.468 35.742 28.434 40 24 40s-10.467-4.257-12.908-6.132A2.84 2.84 0 0 1 10 31.604z"/>
-      <path stroke-linecap="round" d="M10 28c-3.314 0-6-3.11-6-6.947S6.686 16 10 16m28 12c3.314 0 6-3.11 6-6.947S41.314 16 38 16"/>
-      <path stroke-linecap="round" stroke-linejoin="round" d="m16 25l8-4l8 4m-13 6l5-2l5 2"/>
-    </g>
+  // 肌質 - 四芒星キラキラ（美肌・ツヤ感）
+  hada: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M26 2L30 18L46 22L30 26L26 42L22 26L6 22L22 18Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="currentColor" fill-opacity="0.1"/>
+    <path d="M48 30L50 38L58 40L50 42L48 50L46 42L38 40L46 38Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="currentColor" fill-opacity="0.08"/>
+    <path d="M18 46L19.5 50L24 52L19.5 54L18 58L16.5 54L12 52L16.5 50Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="currentColor" fill-opacity="0.06"/>
   </svg>`,
 
   // 髪型 - はさみ
