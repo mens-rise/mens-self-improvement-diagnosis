@@ -25,6 +25,7 @@
       questions: [
         {
           id: 'age',
+          sharedKey: 'age',
           text: '年齢を教えてください',
           type: 'number',
           fields: [
@@ -171,42 +172,62 @@
           1: {
             type: '\u2460 \u306a\u3093\u304b\u30e2\u30c6\u305f\u3044\u671f',
             feature: '\u6f20\u7136\u3068\u3057\u305f\u4e0d\u6e80\u304c\u3042\u308b\u3002\u4f55\u304b\u3089\u59cb\u3081\u3066\u3044\u3044\u304b\u308f\u304b\u3089\u306a\u3044\u3002',
-            message: '\u307e\u305a\u5916\u898b\u306e1\u3064\u3092\u5909\u3048\u308d\u3002\u7709\u6bdb\u304b\u9ed2\u30d1\u30f3\u30c4\u3002\u305d\u3053\u304b\u3089\u59cb\u307e\u308b\u3002',
-            action: '\u7709\u6bdb\u30b5\u30ed\u30f3\u3078\u884c\u3051\u3002\u4eca\u3059\u3050\u4e88\u7d04\u3057\u308d\u3002',
-            nextDiagnosis: '\u2192 \u307e\u305a\u306f\u808c\u8cea\u8a3a\u65ad\u30fb\u7b4b\u30c8\u30ec\u8a3a\u65ad\u304b\u3089\u3084\u3063\u3066\u307f\u308d',
-            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u30b9\u30bf\u30fc\u30c8\u30c0\u30c3\u30b7\u30e5\u30d7\u30e9\u30f3</strong></p><ul><li>Week 1: \u7709\u6bdb\u30b5\u30ed\u30f3\u4e88\u7d04\u30fb\u30b9\u30ad\u30f3\u30b1\u30a2\u958b\u59cb</li><li>Week 2: \u9ed2\u30d1\u30f3\u30c4\u8cfc\u5165\u30fb\u7b4b\u30c8\u30ec\u958b\u59cb</li><li>Week 3-4: \u7f8e\u5bb9\u5ba4\u4e88\u7d04\u30fb\u5168\u8eab\u30b3\u30fc\u30c7\u898b\u76f4\u3057</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+            message: 'まず外見の1つを変えろ。眉毛か黒パンツ。そこから始まる。',
+            action: '眉毛サロンへ行け。今すぐ予約しろ。',
+            nextDiagnosis: '→ まずは肌質診断・筋トレ診断からやってみろ',
+            why: 'まだ行動に移せていない、もしくは何から始めるべきか判断材料が不足している状態。情報はネットにあふれているが、自分にとって「どれが正解か」を見極められていない。まずは1つでも始めることで、自分の傾向が見えてきます。',
+            traps: '<ul><li>YouTubeを見ているだけで満足する</li><li>「お金がないから無理」と諦める</li><li>いきなり高額な商品を買って続かない</li><li>完璧な計画を立ててから始めようとする（結果スタートしない）</li></ul>',
+            nextPhase: '<p><strong>次のフェーズ（②外見改造期）へ進むための条件</strong></p><ul><li>どれか1つを始める（スキンケアでも眉毛でも何でも）</li><li>1週間続ける</li><li>写真を撮る（ビフォー）</li><li>自分の「好き」を言語化する</li></ul>',
+            future: '何から始めるかが明確になり、1つのルーティンが定着している。周りから「なんか変わった？」と言われる最初の段階。',
+            gatedContent: '<p><strong>あなた専用のスタートダッシュプラン</strong></p><ul><li>Week 1: 眉毛サロン予約・スキンケア開始</li><li>Week 2: 黒パンツ購入・筋トレ開始</li><li>Week 3-4: 美容室予約・全身コーデ見直し</li><li>継続サポート・仲間環境のご案内</li></ul>'
           },
           2: {
             type: '\u2461 \u5916\u898b\u6539\u9020\u671f',
-            feature: '\u670d\u30fb\u9aea\u30fb\u808c\u306b\u76ee\u899a\u3081\u59cb\u3081\u305f\u6bb5\u968e\u3002\u4eca\u304c\u4e00\u756a\u4f38\u3073\u308b\u6642\u671f\u3002',
-            message: '\u4ed6\u306e\u8a3a\u65ad\u3092\u5168\u90e8\u3084\u3063\u3066\u3001\u81ea\u5206\u5c02\u7528\u306e\u30ed\u30fc\u30c9\u30de\u30c3\u30d7\u3092\u4f5c\u308c\u3002',
-            action: '\u30ab\u30c3\u30c84,000\u5186\u4ee5\u4e0a\u306e\u30e1\u30f3\u30ba\u7f8e\u5bb9\u5ba4\u3078\u884c\u3051\u3002',
-            nextDiagnosis: '\u2192 \u30d5\u30a1\u30c3\u30b7\u30e7\u30f3\u8a3a\u65ad\u3092\u3084\u308c',
-            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u5916\u898b\u6539\u9020\u30ed\u30fc\u30c9\u30de\u30c3\u30d7</strong></p><ul><li>Month 1: \u30d8\u30a2\u30b9\u30bf\u30a4\u30eb\u78ba\u7acb\u30fb\u30b9\u30ad\u30f3\u30b1\u30a2\u30eb\u30fc\u30c6\u30a3\u30f3\u5316</li><li>Month 2: \u30ef\u30fc\u30c9\u30ed\u30fc\u30d6\u69cb\u7bc9\u30fb\u4f53\u578b\u6539\u5584\u958b\u59cb</li><li>Month 3: \u30c8\u30fc\u30bf\u30eb\u30b3\u30fc\u30c7\u5b8c\u6210\u30fb\u5199\u771f\u64ae\u5f71</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+            feature: '服・髪・肌に目覚め始めた段階。今が一番伸びる時期。',
+            message: '他の診断を全部やって、自分専用のロードマップを作れ。',
+            action: 'カット4,000円以上のメンズ美容室へ行け。',
+            nextDiagnosis: '→ ファッション診断をやれ',
+            why: '行動を始めた段階。ファッション、髪型、スキンケアに興味を持ち、色々試している時期。ここで大事なのは「完璧を目指さない」こと。一気にすべて変えようとすると挫折します。1つずつ、着実に。',
+            traps: '<ul><li>複数のジャンルに同時に手を出して挫折</li><li>他人のやり方をそのままコピーする</li><li>効果が出る前にアイテムを変える</li><li>写真を撮らない（変化が分からない）</li></ul>',
+            nextPhase: '<p><strong>次のフェーズ（③テクニック収集期）へ進むための条件</strong></p><ul><li>3ヶ月以上1つのジャンルを続ける</li><li>最低5人から「変わったね」と言われる</li><li>自分なりのルーティンが固まる</li><li>次に何を学ぶべきか自問できるようになる</li></ul>',
+            future: '外見に自信が持てるようになる。写真に写るのが嫌じゃなくなり、服を買うのが楽しみになる。デートや飲み会で堂々とできる。',
+            gatedContent: '<p><strong>あなた専用の外見改造ロードマップ</strong></p><ul><li>Month 1: ヘアスタイル確立・スキンケアルーティン化</li><li>Month 2: ワードローブ構築・体型改善開始</li><li>Month 3: トータルコーデ完成・写真撮影</li><li>継続サポート・仲間環境のご案内</li></ul>'
           },
           3: {
             type: '\u2462 \u30c6\u30af\u30cb\u30c3\u30af\u53ce\u96c6\u671f',
-            feature: '\u77e5\u8b58\u306f\u5897\u3048\u305f\u304c\u7a7a\u56de\u308a\u3057\u3066\u3044\u308b\u3002',
-            message: '\u60c5\u5831\u306f\u3082\u3046\u5341\u5206\u3002\u8db3\u308a\u306a\u3044\u306e\u306f\u5b9f\u8df5\u3068\u74b0\u5883\u3002\u884c\u52d5\u91cf\u3092\u5897\u3084\u3059\u4ed5\u7d44\u307f\u3092\u4f5c\u308c\u3002',
-            action: '3\u30f6\u6708\u5f8c\u306e\u81ea\u5206\u304c\u3069\u3046\u306a\u308b\u304b\u3001\u4eca\u3059\u3050\u5ba3\u8a00\u3057\u308d\u3002',
-            nextDiagnosis: '\u2192 \u7b4b\u30c8\u30ec\u8a3a\u65ad\u3092\u3084\u308c',
-            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u30d6\u30ec\u30a4\u30af\u30b9\u30eb\u30fc\u30d7\u30e9\u30f3</strong></p><ul><li>\u884c\u52d5\u8a08\u753b: \u9031\u55983\u56de\u306e\u5b9f\u8df5\u30bf\u30b9\u30af\u8a2d\u8a08</li><li>\u74b0\u5883\u8a2d\u8a08: \u540c\u3058\u30d5\u30a7\u30fc\u30ba\u306e\u4ef2\u9593\u3068\u3064\u306a\u304c\u308b</li><li>3\u30f6\u6708\u5f8c\u306e\u76ee\u6a19\u8a2d\u5b9a\u30fb\u9032\u6357\u7ba1\u7406</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+            feature: '知識は増えたが空回りしている。',
+            message: '情報はもう十分。足りないのは実践と環境。行動量を増やす仕組みを作れ。',
+            action: '3ヶ月後の自分がどうなるか、今すぐ宣言しろ。',
+            nextDiagnosis: '→ 筋トレ診断をやれ',
+            why: '情報をたくさん集めたが、実行に移せていない状態。「知識」と「行動」の間に大きな壁がある時期。最も抜け出しにくい罠。情報収集は楽だけど、それだけでは何も変わりません。',
+            traps: '<ul><li>SNSの情報を保存して見返さない</li><li>「いつか始めよう」の繰り返し</li><li>完璧な方法を探し続ける</li><li>行動しない自分を正当化する</li></ul>',
+            nextPhase: '<p><strong>次のフェーズ（④自信迷子期）へ進むための条件</strong></p><ul><li>集めた情報の80%を実行に移す</li><li>「知ってる」を「できる」に変える</li><li>毎日同じ時間に同じ行動を繰り返す</li><li>3ヶ月間、誰かに宣言した目標を追う</li></ul>',
+            future: '知識を行動に変えられるようになる。「やらない言い訳」をしなくなる。時間管理がうまくなる。',
+            gatedContent: '<p><strong>あなた専用のブレイクスループラン</strong></p><ul><li>行動計画: 週3回の実践タスク設計</li><li>環境設計: 同じフェーズの仲間とつながる</li><li>3ヶ月後の目標設定・進捗管理</li><li>継続サポート・仲間環境のご案内</li></ul>'
           },
           4: {
             type: '\u2463 \u81ea\u4fe1\u8ff7\u5b50\u671f',
-            feature: '\u3084\u3063\u3066\u308b\u306e\u306b\u5909\u308f\u3089\u306a\u3044\u3002\u5916\u898b\u306f\u5909\u308f\u3063\u305f\u304c\u81ea\u4fe1\u304c\u306a\u3044\u3002',
-            message: '\u5916\u898b\u306f\u571f\u53f0\u3002\u6b21\u306f\"\u5728\u308a\u65b9\"\u3002\u81ea\u5206\u3068\u306e\u7d04\u675f\u3092\u5b88\u308b\u7fd2\u6163\u3092\u59cb\u3081\u308d\u3002',
-            action: '\u30e2\u30c1\u30d9\u30fc\u30b7\u30e7\u30f3\u306b\u983c\u308b\u306a\u3002\u5c0f\u3055\u306a\u81ea\u5206\u3068\u306e\u6bce\u65e5\u306e\u7d04\u675f\u30925\u3064\u4f5c\u3063\u3066\u5b88\u308c\u3002',
-            nextDiagnosis: '\u2192 \u3082\u3046\u4e00\u5ea6\u7b4b\u30c8\u30ec\u8a3a\u65ad\u3092\u3084\u308c',
-            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u81ea\u4fe1\u69cb\u7bc9\u30d7\u30e9\u30f3</strong></p><ul><li>\u6bce\u65e5\u306e5\u3064\u306e\u7d04\u675f\u8a2d\u8a08\u30b5\u30dd\u30fc\u30c8</li><li>\u30de\u30a4\u30f3\u30c9\u30bb\u30c3\u30c8\u6539\u5584\u30ef\u30fc\u30af</li><li>\u884c\u52d5\u8a18\u9332\u30fb\u632f\u308a\u8fd4\u308a\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u4ef2\u9593\u74b0\u5883\u306e\u3054\u6848\u5185</li></ul>'
+            feature: 'やってるのに変わらない。外見は変わったが自信がない。',
+            message: '外見は土台。次は"在り方"。自分との約束を守る習慣を始めろ。',
+            action: 'モチベーションに頼るな。小さな自分との毎日の約束を5つ作って守れ。',
+            nextDiagnosis: '→ もう一度筋トレ診断をやれ',
+            why: '外見は整ってきたのに、なぜか自信が持てない状態。原因は「自分との約束を守っていないから」。小さな約束を毎日守る習慣が、本物の自信を作ります。',
+            traps: '<ul><li>他人と比較する</li><li>小さな達成を無視する</li><li>「まだ足りない」と自分を責める</li><li>結果だけを見て過程を評価しない</li></ul>',
+            nextPhase: '<p><strong>次のフェーズ（⑤本質到達期）へ進むための条件</strong></p><ul><li>自分との約束を5つ作り、毎日守る</li><li>他人との比較を手放す</li><li>自分の価値観を言語化する</li><li>小さな達成を毎日認める</li></ul>',
+            future: '他人の評価に左右されなくなる。自分の基準で動ける。毎朝起きるのが楽しくなる。',
+            gatedContent: '<p><strong>あなた専用の自信構築プラン</strong></p><ul><li>毎日の5つの約束設計サポート</li><li>マインドセット改善ワーク</li><li>行動記録・振り返りテンプレート</li><li>継続サポート・仲間環境のご案内</li></ul>'
           },
           5: {
             type: '\u2464 \u672c\u8cea\u5230\u9054\u671f',
-            feature: '\u81ea\u5206\u8ef8\u3067\u52d5\u3051\u3066\u3044\u308b\u3002\u8a00\u3046\u3053\u3068\u306a\u3057\u3002',
-            message: '\u76ee\u306e\u524d\u306e\u3084\u308b\u3079\u304d\u3053\u3068\u3092\u7a4d\u307f\u4e0a\u3052\u308d\u3002',
-            action: '\u4eca\u306e\u30da\u30fc\u30b9\u3092\u5d29\u3059\u306a\u3002\u7a4d\u307f\u4e0a\u3052\u308d\u3002',
-            nextDiagnosis: '\u2192 \u7b4b\u30c8\u30ec\u8a3a\u65ad\u3067\u73fe\u72b6\u30c1\u30a7\u30c3\u30af',
-            gatedContent: '<p><strong>\u3042\u306a\u305f\u5c02\u7528\u306e\u30cd\u30af\u30b9\u30c8\u30b9\u30c6\u30fc\u30b8\u30d7\u30e9\u30f3</strong></p><ul><li>\u73fe\u72b6\u7dad\u6301\u30fb\u3055\u3089\u306a\u308b\u6210\u9577\u306e\u305f\u3081\u306e\u30ed\u30fc\u30c9\u30de\u30c3\u30d7</li><li>\u5f8c\u8f29\u3078\u306e\u30e1\u30f3\u30bf\u30ea\u30f3\u30b0\u6a5f\u4f1a</li><li>\u30cf\u30a4\u30ec\u30d9\u30eb\u306a\u4ef2\u9593\u74b0\u5883\u3078\u306e\u62db\u5f85</li><li>\u7d99\u7d9a\u30b5\u30dd\u30fc\u30c8\u30fb\u9650\u5b9a\u30b3\u30df\u30e5\u30cb\u30c6\u30a3\u306e\u3054\u6848\u5185</li></ul>'
+            feature: '自分軸で動けている。言うことなし。',
+            message: '目の前のやるべきことを積み上げろ。',
+            action: '今のペースを崩すな。積み上げろ。',
+            nextDiagnosis: '→ 筋トレ診断で現状チェック',
+            why: '自分軸で動けている状態。何をすべきかが明確で、継続できている。ここまで来たら、あとは積み上げるだけ。停滞を感じたら、また新しい目標を見つけるタイミングです。',
+            traps: '<ul><li>現状維持に満足する</li><li>新しい挑戦を避ける</li><li>後輩を育てない（与える側に回らない）</li><li>謙虚さを失う</li></ul>',
+            nextPhase: '<p><strong>さらなる成長のための条件</strong></p><ul><li>誰かの力になる（教える、支える）</li><li>新しい分野に挑戦する</li><li>経験を発信する</li><li>コミュニティを作る</li></ul>',
+            future: '周りから相談される立場に。人に影響を与えられるようになる。自分の次の目標が自然と見つかる。',
+            gatedContent: '<p><strong>あなた専用のネクストステージプラン</strong></p><ul><li>現状維持・さらなる成長のためのロードマップ</li><li>後輩へのメンタリング機会</li><li>ハイレベルな仲間環境への招待</li><li>継続サポート・限定コミュニティのご案内</li></ul>'
           }
         };
 
@@ -231,6 +252,18 @@
 
         // Next diagnosis card
         html += QuizEngine.resultCard('次にやるべき診断', d.nextDiagnosis);
+
+        // WHY card
+        html += QuizEngine.resultCard('なぜあなたはこのフェーズにいるのか', d.why);
+
+        // Traps card
+        html += QuizEngine.resultCard('このフェーズで陥りがちな罠（NG行動）', d.traps);
+
+        // Next phase conditions card
+        html += QuizEngine.resultCard('次の段階へ進むための条件', d.nextPhase);
+
+        // 3 months future image card
+        html += QuizEngine.resultCard('3ヶ月後の変化イメージ', d.future);
 
         // Gated section
         html += QuizEngine.gatedBlock('あなた専用のロードマップ', d.gatedContent);

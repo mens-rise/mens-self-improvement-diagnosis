@@ -44,6 +44,7 @@
         },
         {
           id: 'body',
+          sharedKey: 'body',
           text: '身長・体重を教えてください',
           hint: 'コーデ提案の精度を上げるために使用します',
           type: 'number',
@@ -326,6 +327,24 @@
           winter: '冬コーデ'
         };
 
+        // --- WHY data (なぜこの体型にこのスタイルか) ---
+        var whyData = {
+          short_slim: '身長が低め＋体の厚みが少ないため、線が細く頼りなく見えやすい。上半身にボリュームを足して、下半身で縦のラインを作ることで、逆算的に身長を高く見せる。',
+          short_big: '身長が低め＋体に厚みがある場合、全体がコンパクトに詰まって見える。ゆったりしたシルエットで体のラインを拾わず、縦方向を強調して引き締まった印象に。',
+          medium_all: '日本人男性の標準的な体型で、最もスタイリングの選択肢が多い。スタンダードなサイジングが合うので、シルエットと色使いでトレンド感を出す。',
+          tall_slim: '身長があり細身の場合、線が細く頼りない印象になりやすい。曲線シルエットのパンツで下半身にボリュームを足し、立体感を演出する。',
+          tall_normal: '身長を活かせる体型。面積の大きいアイテム（ロングコート、ワイドシルエット）が映える。ただしオーバーサイズにしすぎると大柄な印象になりすぎるので注意。'
+        };
+
+        // --- 3ヶ月後の変化イメージ ---
+        var futureData = {
+          short_slim: '線の細い頼りない印象から、バランスの取れたスタイリッシュな印象に。身長-5cmの人と比べて背が高く見える。',
+          short_big: '詰まって見えた印象が、落ち着いた大人っぽい雰囲気に。体型コンプレックスが気にならなくなる。',
+          medium_all: '「なんか変わったな」と周りに気づかれる段階。トレンド感があり、どこに行っても浮かない自然な洗練度。',
+          tall_slim: '頼りなさが消えて、今っぽくスタイリッシュな印象に。ファッション好きと認識される。',
+          tall_normal: '「大人の男」の風格。スーツが似合う土台が整い、ビジネスでもプライベートでも自信を持てる。'
+        };
+
         var d = categoryData[result.category];
         var season = result.season;
 
@@ -384,6 +403,18 @@
 
         // --- Theory tips card ---
         html += QuizEngine.resultCard('THEORY ─ 覚えるべき2つの法則', '<div style="margin-bottom:14px;"><p style="font-weight:700; margin-bottom:4px;">ドレス7 : カジュアル3</p><p style="font-size:0.85rem; color:#666;">全体の7割をドレス（きれいめ）、3割をカジュアルにするとバランスが取れる。黒スラックス＋ローファーで下半身をドレスに固定すれば、トップスで遊べる。</p></div><div><p style="font-weight:700; margin-bottom:4px;">3分割コーデ法</p><p style="font-size:0.85rem; color:#666;">体を「アウター・インナー・ボトムス」の3ブロックに分割して考える。3色以内に収め、1つのブロックだけアクセントにすると簡単にまとまる。</p></div>');
+
+        // --- WHY card (なぜこの体型にこのスタイルか) ---
+        html += QuizEngine.resultCard('WHY ─ なぜあなたの体型にこのスタイルか', '<p style="font-size:0.88rem; line-height:1.75; color:#444;">' + whyData[result.category] + '</p>');
+
+        // --- 予算別ショッピングリスト（優先順位）---
+        html += QuizEngine.resultCard('SHOPPING LIST ─ 予算別ショッピングリスト（優先順位）', '<div style="margin-bottom:14px;"><p style="font-weight:700; margin-bottom:6px; color:#c8102e;">優先順位1（まず買え）</p><ul style="font-size:0.85rem; color:#444; line-height:1.7; padding-left:18px; margin:0;"><li>黒スラックス（ユニクロ or GU「センタープレスワイドストレート」税込2,000〜4,000円）</li><li>コインローファー（ABCマート or ミハマ、黒、税込5,000〜8,000円）</li></ul></div><div style="margin-bottom:14px;"><p style="font-weight:700; margin-bottom:6px; color:#c8102e;">優先順位2（次に買え）</p><ul style="font-size:0.85rem; color:#444; line-height:1.7; padding-left:18px; margin:0;"><li>白無地Tシャツ（ユニクロ「U」クルーネック、1,500円）</li><li>オックスフォードシャツ（ユニクロ、2,990円）</li></ul></div><div><p style="font-weight:700; margin-bottom:6px; color:#c8102e;">優先順位3（慣れてきたら）</p><ul style="font-size:0.85rem; color:#444; line-height:1.7; padding-left:18px; margin:0;"><li>カテゴリ別のキーアイテム（ブレザー／テーラード／ロングコートなど、あなたの体型に合ったキーアイテム）</li></ul></div>');
+
+        // --- NG行動（避けるべきこと）---
+        html += QuizEngine.resultCard('NG ACTIONS ─ 避けるべき行動', '<ul style="font-size:0.85rem; color:#444; line-height:1.8; padding-left:18px; margin:0;"><li>毎シーズンすべてのアイテムを新調する（軸のアイテムを長く使う）</li><li>セールだからと買う（サイズが合わなければ意味なし）</li><li>「ブランド」で選ぶ（シルエットと色で選ぶ）</li><li>サイズ直しをしない（既製品そのままは99%合っていない）</li><li>靴を1足しか持たない（革靴・スニーカー・ローファーの3足は最低持つ）</li></ul>');
+
+        // --- 3ヶ月後の変化イメージ ---
+        html += QuizEngine.resultCard('FUTURE ─ 3ヶ月後の変化イメージ', '<div class="result-highlight"><p style="font-size:0.9rem; line-height:1.75; color:#333; margin:0;">' + futureData[result.category] + '</p></div>');
 
         // --- Gated content ---
         html += QuizEngine.gatedBlock('あなた専用のファッション完全ガイド', '<table class="menu-table"><tr><th>内容</th><th>詳細</th></tr><tr><td><strong>全季節コピペコーデ</strong></td><td>春夏秋冬すべてのコーデを網羅</td></tr><tr><td><strong>予算別ショッピングリスト</strong></td><td>商品名＋リンク＋価格つき</td></tr><tr><td><strong>体型別NGファッションリスト</strong></td><td>あなたの体型で避けるべきアイテム一覧</td></tr></table>');

@@ -152,33 +152,86 @@
             direction: 'バランスが良く何でも似合う。前髪を上げてもOK、重めマッシュもOK。',
             recommended: ['センターパート', 'ナチュラルマッシュ', 'アップバング'],
             avoid: '特になし（何でもいける）',
-            celebs: '佐藤健、竹内涼真'
+            celebs: '佐藤健、竹内涼真',
+            why: '縦横比が理想的で重心のバランスが取れている。どんなシルエットでも顔の形が邪魔しない。だからこそ「自分の好み」や「なりたい印象」で自由に選べるのが最大の強み。',
+            order: '「全体的にレイヤーを入れた、ナチュラルなマッシュでお願いします。前髪は眉の下1cmくらいで、センターパートか下ろすかで悩める感じにしてください。サイドと襟足はやや短めに。」',
+            routineType: 'mash'
           },
           round: {
             direction: '縦ラインを意識。トップにボリュームを出し、サイドをタイトに。',
             recommended: ['アップバング', 'ツーブロック×マッシュ', 'センターパート'],
             avoid: '前髪パッツン、横に広がるスタイル',
-            celebs: '菅田将暉、ムロツヨシ'
+            celebs: '菅田将暉、ムロツヨシ',
+            why: '顔の縦横比がほぼ1:1。横に広く見えやすいので、トップの高さと縦のラインで中和する。サイドをタイトに締めることで、顔の輪郭を引き締めて見せられる。',
+            order: '「トップにボリュームが出るようにレイヤーを入れて、サイドはタイトに刈り上げてください。前髪は重めに残して、スタイリングで上げ下げできる長さにしてほしいです。ツーブロックでお願いします。」',
+            routineType: 'up'
           },
           long: {
             direction: '横にボリュームを持たせて縦の長さを中和する。',
             recommended: ['横にボリュームのあるマッシュ', 'ちょい上げセンターパート', 'パーマ'],
             avoid: '前髪完全に上げるアップバング、サイド刈り上げツーブロック',
-            celebs: '佐藤健、坂口健太郎'
+            celebs: '佐藤健、坂口健太郎',
+            why: '縦の長さが強調されがち。横にボリュームを足し、前髪を下ろすことで顔の縦幅を視覚的に短縮する。パーマで横幅を出すのも有効な戦略。',
+            order: '「横にボリュームが出る重めのマッシュでお願いします。前髪は眉にかかる長さで重めに。サイドはふんわり残して、刈り上げは絶対にしないでください。パーマも相談したいです。」',
+            routineType: 'mash'
           },
           square: {
             direction: 'エラをカバー。サイドにボリュームをつけすぎず、トップでひし形シルエットを作る。',
             recommended: ['マッシュ（耳周りを少し長めに）', 'センターパート', 'パーマ'],
             avoid: 'サイド刈り上げ、前髪なしでエラ丸出し',
-            celebs: '山田孝之、松田翔太'
+            celebs: '山田孝之、松田翔太',
+            why: 'エラが張って下半分が目立つ。サイドにボリュームを持たせて顔の上下でひし形を作り、視線を中央に集める。耳周りに髪を残すことでエラをカバーできる。',
+            order: '「耳周りに少し長さを残したマッシュで、トップにレイヤーを入れてひし形シルエットにしてください。前髪はやや重めで、サイドが顔を覆う感じに。エラをカバーしたいです。」',
+            routineType: 'mash'
           },
           inverted: {
             direction: '顎のシャープさを活かしつつ、トップのボリュームは控えめに。',
             recommended: ['ナチュラルマッシュ', '重めバング', 'パーマ'],
             avoid: 'トップだけボリュームを出す（逆三角が強調）',
-            celebs: '小栗旬、岡田将生'
+            celebs: '小栗旬、岡田将生',
+            why: 'おでこが広くアゴがシャープ。トップに高さを出しすぎると三角形が強調されるので、前髪でおでこを隠すかトップを抑える。重めバングで上半分の幅を調整するのが定石。',
+            order: '「重めのバングで、前髪はやや厚めにお願いします。トップはボリュームを出しすぎず、全体的にナチュラルなマッシュで。パーマで柔らかさを足すのも検討したいです。」',
+            routineType: 'heavy'
           }
         };
+
+        var routineSteps = {
+          mash: [
+            'タオルドライ（擦らず押さえる）',
+            'ドライヤーでトップから根元を立ち上げる',
+            '全体を軽く乾かす（8割程度）',
+            'スタイリング剤を手のひら全体に広げ、髪の中間から毛先へ',
+            '指で束感を作り、前髪を整える'
+          ],
+          up: [
+            '根元を起こしながらドライヤー',
+            '前髪を後ろに流すように乾かす',
+            'スタイリング剤を根元から付ける',
+            'トップを上に、サイドをタイトに整える',
+            '最後にハードスプレーで固定'
+          ],
+          heavy: [
+            'タオルドライ後、根元を優しく乾かす',
+            '前髪を下ろしたまま形を作る',
+            'スタイリング剤をマット系で軽く揉み込む',
+            '前髪に束感を作りすぎない（自然に）',
+            'サイドは耳にかけない'
+          ]
+        };
+
+        var routineLabels = {
+          mash: 'マッシュ系スタイルの朝のルーティン',
+          up: 'アップバング・ツーブロック系の朝のルーティン',
+          heavy: '重めバング系の朝のルーティン'
+        };
+
+        var ngActions = [
+          'ワックスを髪の根元だけに付ける（束感が出ない）',
+          'ドライヤーを使わず自然乾燥（寝癖＆ボリューム出ない）',
+          '毎日同じ分け目（薄毛の原因）',
+          'スタイリング剤の付けすぎ（重くなる）',
+          '美容院に3ヶ月以上行かない（伸びすぎてシルエット崩壊）'
+        ];
 
         var fd = faceData[result.faceShape];
         var shapeName = faceShapeNames[result.faceShape];
@@ -230,6 +283,32 @@
           foreheadTip = 'おでこの広さは標準的。上げても下ろしてもバランスが取りやすい。好みで選んでOK。';
         }
         html += QuizEngine.resultCard('FOREHEAD TIP ─ おでこ別アドバイス', '<p>' + foreheadTip + '</p>');
+
+        // WHY - なぜこの顔型にこの髪型が似合うのか
+        html += QuizEngine.resultCard('WHY ─ なぜこの髪型が似合うのか', '<p>' + fd.why + '</p>');
+
+        // SALON ORDER - 美容院でのオーダー文言
+        var orderHtml = '<p style="margin-bottom:0.75rem;font-size:0.85rem;color:var(--text-muted);">美容師さんにそのまま伝えればOK。コピーして使ってください。</p>';
+        orderHtml += '<div class="result-highlight">' + fd.order + '</div>';
+        html += QuizEngine.resultCard('SALON ORDER ─ 美容院でのオーダー文言', orderHtml);
+
+        // DAILY STYLING - 毎日のスタイリング手順
+        var steps = routineSteps[fd.routineType];
+        var stepsHtml = '<p style="margin-bottom:0.75rem;font-size:0.85rem;color:var(--text-muted);">' + routineLabels[fd.routineType] + '</p>';
+        stepsHtml += '<ol class="check-list" style="padding-left:1.2rem;">';
+        for (var s = 0; s < steps.length; s++) {
+          stepsHtml += '<li>' + steps[s] + '</li>';
+        }
+        stepsHtml += '</ol>';
+        html += QuizEngine.resultCard('DAILY STYLING ─ 毎日のスタイリング手順', stepsHtml);
+
+        // NG ACTIONS - 避けるべきこと
+        var ngHtml = '<ul class="check-list">';
+        for (var n = 0; n < ngActions.length; n++) {
+          ngHtml += '<li>' + ngActions[n] + '</li>';
+        }
+        ngHtml += '</ul>';
+        html += QuizEngine.resultCard('NG ACTION ─ 避けるべきこと', ngHtml);
 
         // Gated content
         html += QuizEngine.gatedBlock('あなた専用のヘアスタイル完全ガイド', '\

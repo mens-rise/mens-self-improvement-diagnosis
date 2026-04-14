@@ -122,6 +122,22 @@ class QuizEngine {
   // ==================== 質問レンダリング ====================
   renderQuestion() {
     const q = this.questions[this.currentQ];
+
+    // 共有キー付きの質問：すでに他の診断で回答済みならスキップ
+    if (q.sharedKey) {
+      const stored = MRDB.getShared(q.sharedKey);
+      if (stored !== null && stored !== undefined) {
+        this.answers[q.id] = stored;
+        this.currentQ++;
+        if (this.currentQ >= this.questions.length) {
+          this.showResult();
+        } else {
+          this.renderQuestion();
+        }
+        return;
+      }
+    }
+
     const progress = ((this.currentQ) / this.questions.length) * 100;
     const canGoBack = this.currentQ > 0;
 
@@ -243,6 +259,7 @@ class QuizEngine {
         values[input.dataset.key] = parseInt(input.value, 10);
       });
       this.answers[q.id] = values;
+      this.saveSharedIfNeeded(q, values);
       this.nextQuestion();
     });
 
@@ -287,7 +304,9 @@ class QuizEngine {
     });
 
     btn.addEventListener('click', () => {
-      this.answers[q.id] = Array.from(selected);
+      const arr = Array.from(selected);
+      this.answers[q.id] = arr;
+      this.saveSharedIfNeeded(q, arr);
       this.nextQuestion();
     });
   }
@@ -344,9 +363,18 @@ class QuizEngine {
     });
   }
 
+  // ==================== 共有保存ヘルパー ====================
+  saveSharedIfNeeded(q, value) {
+    if (q.sharedKey) {
+      MRDB.saveShared(q.sharedKey, value);
+    }
+  }
+
   // ==================== 選択処理 ====================
   selectOption(qId, value) {
     this.answers[qId] = value;
+    const q = this.questions.find(x => x.id === qId);
+    if (q) this.saveSharedIfNeeded(q, value);
 
     const btns = this.root.querySelectorAll('.option-btn');
     btns.forEach(b => {

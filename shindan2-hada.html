@@ -23,6 +23,7 @@
       questions: [
         {
           id: 'age',
+          sharedKey: 'age',
           text: '年齢を教えてください',
           type: 'number',
           fields: [
@@ -157,7 +158,26 @@
             budgetProducts: {
               low: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B06VX4FB9W" target="_blank" rel="noopener" style="color:var(--gold);">ちふれ 濃厚クリーム</a>(990円)',
               mid: '<a href="https://www.amazon.co.jp/dp/B001JF0MQC" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿化粧水II</a>(2,090円) + <a href="https://www.amazon.co.jp/dp/B001JF0MRG" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿フェイスクリーム</a>(2,970円)'
-            }
+            },
+            why: '皮脂腺の働きと水分保持機能のバランスが取れている恵まれた肌。ストレスや季節の変化にはやや弱い。',
+            morningRoutine: [
+              '①ぬるま湯だけの洗顔',
+              '②化粧水',
+              '③乳液（べたつく日はなし）'
+            ],
+            nightRoutine: [
+              '①クレンジング（日焼け止めを使った日のみ）',
+              '②洗顔',
+              '③化粧水',
+              '④乳液',
+              '⑤クリーム'
+            ],
+            ngActions: [
+              '洗顔のしすぎ（必要な皮脂まで落とす）',
+              '日焼け止めを塗らない日',
+              '遅い時間の食事・飲酒'
+            ],
+            futureVision: '肌トラブルがほぼゼロに。季節の変わり目でも安定。写真映りが良くなる。'
           },
           dry: {
             name: '乾燥肌',
@@ -168,7 +188,27 @@
             budgetProducts: {
               low: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>(1,980円)',
               mid: '<a href="https://www.amazon.co.jp/dp/B0FL761H75" target="_blank" rel="noopener" style="color:var(--gold);">ミノンアミノモイスト モイストチャージローションII</a>(2,200円) + <a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>(1,980円)'
-            }
+            },
+            why: '角質層のセラミドや天然保湿因子(NMF)が不足しがち。バリア機能が弱いので外部刺激を受けやすい。原因は遺伝・加齢・間違った洗顔（熱いお湯、擦りすぎ）が多い。',
+            morningRoutine: [
+              '①ぬるま湯だけで軽く洗う',
+              '②化粧水を2回重ね付け',
+              '③クリームをしっかり'
+            ],
+            nightRoutine: [
+              '①クレンジング',
+              '②アミノ酸系洗顔（泡で優しく）',
+              '③化粧水',
+              '④美容液',
+              '⑤保湿クリーム'
+            ],
+            ngActions: [
+              '熱いお湯での洗顔（天然保湿因子が流れる）',
+              'タオルでゴシゴシ拭く',
+              'スクラブ入り洗顔料',
+              'アルコール入り化粧水'
+            ],
+            futureVision: '洗顔後のつっぱりがなくなり、ひげ剃り後のヒリつきも軽減。小ジワが目立たなくなる。'
           },
           oily: {
             name: '脂性肌',
@@ -179,7 +219,26 @@
             budgetProducts: {
               low: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>(1,780円) + <a href="https://www.amazon.co.jp/dp/B00122NBVA" target="_blank" rel="noopener" style="color:var(--gold);">キュレル クリーム</a>(550円)',
               mid: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>(1,780円) + <a href="https://www.amazon.co.jp/dp/B007MWYV90" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア保湿ジェル</a>(2,090円)'
-            }
+            },
+            why: '皮脂腺の活動が過剰。原因は男性ホルモンの影響、食生活（糖質・脂質過多）、ストレス、睡眠不足。',
+            morningRoutine: [
+              '①石鹸系洗顔（朝夜2回まで）',
+              '②オイルフリー化粧水',
+              '③軽めの乳液'
+            ],
+            nightRoutine: [
+              '①クレンジング',
+              '②洗顔（丁寧に、でも擦らない）',
+              '③化粧水',
+              '④ジェル or 乳液'
+            ],
+            ngActions: [
+              '1日3回以上の洗顔',
+              '皮脂を拭き取りすぎる（かえって分泌を促進）',
+              'オイル入り化粧品',
+              '甘いもの・揚げ物の過剰摂取'
+            ],
+            futureVision: '日中のテカリが半分以下に。毛穴の黒ずみが薄くなり、ニキビの頻度が減る。'
           },
           combination: {
             name: '混合肌',
@@ -190,7 +249,25 @@
             budgetProducts: {
               low: '<a href="https://www.amazon.co.jp/dp/B0GFCYGLMK" target="_blank" rel="noopener" style="color:var(--gold);">IHADA 薬用ローション</a>(1,800円) + <a href="https://www.amazon.co.jp/dp/B00122NBVA" target="_blank" rel="noopener" style="color:var(--gold);">キュレル クリーム</a>(550円)',
               mid: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B075996DM4" target="_blank" rel="noopener" style="color:var(--gold);">キュレル エイジングケアシリーズ</a>(3,080円)'
-            }
+            },
+            why: '日本人男性に最も多い肌質。Tゾーン（額・鼻）は皮脂腺が多く、Uゾーン（頬・口周り）は乾燥しやすい。ホルモンバランスや季節で変動する。',
+            morningRoutine: [
+              '①Tゾーンのみ泡洗顔',
+              '②化粧水（全体）',
+              '③Tゾーンは軽め、Uゾーンはクリームも'
+            ],
+            nightRoutine: [
+              '①クレンジング',
+              '②洗顔（Tゾーン重点）',
+              '③化粧水',
+              '④Uゾーンはクリーム、Tゾーンは乳液'
+            ],
+            ngActions: [
+              '全体を同じケアで済ませる',
+              'Tゾーンを洗いすぎて頬が乾燥',
+              'べたつく保湿クリームを顔全体に塗る'
+            ],
+            futureVision: 'Tゾーンのテカリと頬の乾燥、両方が改善。全体がマットで健康的な質感に。'
           },
           sensitive: {
             name: '敏感肌',
@@ -204,7 +281,27 @@
               { category: '化粧水', item: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂</a>' },
               { category: '美容液', item: 'Trube' },
               { category: 'クリーム', item: 'メタトロンコントアBクリーム' }
-            ]
+            ],
+            why: '肌のバリア機能が慢性的に低下している状態。化粧品の成分に敏感に反応する。生まれつきの場合とストレス・生活習慣での場合がある。',
+            morningRoutine: [
+              '①ぬるま湯だけ（洗顔料なし）',
+              '②低刺激化粧水',
+              '③低刺激クリーム'
+            ],
+            nightRoutine: [
+              '①低刺激クレンジング',
+              '②低刺激洗顔（泡で優しく）',
+              '③化粧水',
+              '④クリーム',
+              '※絶対に擦らない、新商品は1週間テストしてから使う'
+            ],
+            ngActions: [
+              '成分表を見ずに買う',
+              '新商品をいきなり顔全体に塗る',
+              '摩擦（コットン、タオル、手のひらすべて）',
+              '頻繁に製品を変える'
+            ],
+            futureVision: '化粧品を試してもヒリヒリしなくなる。赤みが引いて、安定した肌の状態が続く。'
           }
         };
 
@@ -265,6 +362,36 @@
             <div class="result-highlight">${budgetContent}</div>
           `);
         }
+
+        // WHY - なぜあなたはこの肌質か
+        html += QuizEngine.resultCard('WHY ─ なぜあなたはこの肌質か', `<p>${d.why}</p>`);
+
+        // 朝夜のケアルーティン
+        let routineHTML = '<p style="font-size:0.9rem; margin-bottom:8px;"><strong>朝のケア</strong></p>';
+        routineHTML += '<ul class="check-list">';
+        d.morningRoutine.forEach(function(step) {
+          routineHTML += `<li>${step}</li>`;
+        });
+        routineHTML += '</ul>';
+        routineHTML += '<p style="font-size:0.9rem; margin-top:16px; margin-bottom:8px;"><strong>夜のケア</strong></p>';
+        routineHTML += '<ul class="check-list">';
+        d.nightRoutine.forEach(function(step) {
+          routineHTML += `<li>${step}</li>`;
+        });
+        routineHTML += '</ul>';
+        html += QuizEngine.resultCard('ROUTINE ─ 朝夜のケアルーティン', routineHTML);
+
+        // NG行動
+        let ngHTML = '<p style="font-size:0.85rem; margin-bottom:12px;">以下の行動は肌を悪化させます：</p>';
+        ngHTML += '<ul class="check-list">';
+        d.ngActions.forEach(function(ng) {
+          ngHTML += `<li>✗ ${ng}</li>`;
+        });
+        ngHTML += '</ul>';
+        html += QuizEngine.resultCard('NG ─ 避けるべきこと', ngHTML);
+
+        // 3ヶ月後の変化イメージ
+        html += QuizEngine.resultCard('FUTURE ─ 3ヶ月後の変化イメージ', `<p>${d.futureVision}</p>`);
 
         // Gated content
         html += QuizEngine.gatedBlock('あなた専用の完全版スキンケア', `

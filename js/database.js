@@ -13,6 +13,20 @@ const MRDB = {
     return localStorage.getItem('mr_user_name') || '';
   },
 
+  // 診断間で共有する回答（年齢・身長体重など）
+  saveShared(key, value) {
+    localStorage.setItem(`mr_shared_${key}`, JSON.stringify(value));
+  },
+
+  getShared(key) {
+    try {
+      const raw = localStorage.getItem(`mr_shared_${key}`);
+      return raw === null ? null : JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  },
+
   // 診断結果をGASに送信
   async saveResult(payload) {
     const data = {
