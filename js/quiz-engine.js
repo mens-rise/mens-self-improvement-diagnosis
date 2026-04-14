@@ -123,19 +123,10 @@ class QuizEngine {
   renderQuestion() {
     const q = this.questions[this.currentQ];
 
-    // 共有キー付きの質問：すでに他の診断で回答済みならスキップ
+    // 共有キー付きの質問：前回の回答をプレフィル（スキップはしない）
+    let prefillValue = null;
     if (q.sharedKey) {
-      const stored = MRDB.getShared(q.sharedKey);
-      if (stored !== null && stored !== undefined) {
-        this.answers[q.id] = stored;
-        this.currentQ++;
-        if (this.currentQ >= this.questions.length) {
-          this.showResult();
-        } else {
-          this.renderQuestion();
-        }
-        return;
-      }
+      prefillValue = MRDB.getShared(q.sharedKey);
     }
 
     const progress = ((this.currentQ) / this.questions.length) * 100;
@@ -146,9 +137,31 @@ class QuizEngine {
     if (q.type === 'sub-questions') {
       inputHTML = this.renderSubQuestions(q);
     } else if (q.type === 'number') {
-      inputHTML = this.renderNumberInput(q);
+      inputHTML = this.renderNumberInput(q, prefillValue);
     } else if (q.type === 'multi-select') {
       inputHTML = this.renderMultiSelect(q);
+    } else if (q.type === 'icon-choice') {
+      inputHTML = `<div class="options-list icon-choice-list">
+        ${q.options.map((opt, i) => `
+          <button class="option-btn icon-choice-btn" data-value="${opt.value}" data-index="${i}">
+            <span class="option-choice-icon">${opt.icon || ''}</span>
+            <span class="option-choice-label">
+              <span class="option-choice-title">${opt.label}</span>
+              ${opt.desc ? `<span class="option-choice-desc">${opt.desc}</span>` : ''}
+            </span>
+          </button>
+        `).join('')}
+      </div>`;
+    } else if (q.type === 'image-choice') {
+      inputHTML = `<div class="image-choice-grid">
+        ${q.options.map((opt, i) => `
+          <button class="image-choice-btn" data-value="${opt.value}" data-index="${i}">
+            <div class="image-choice-img" style="background-image:url('${opt.image}')"></div>
+            <div class="image-choice-label">${opt.label}</div>
+            ${opt.desc ? `<div class="image-choice-desc">${opt.desc}</div>` : ''}
+          </button>
+        `).join('')}
+      </div>`;
     } else {
       inputHTML = `<div class="options-list">
         ${q.options.map((opt, i) => `
@@ -193,6 +206,10 @@ class QuizEngine {
       if (fill) {
         fill.style.width = `${((this.currentQ + 1) / this.questions.length) * 100}%`;
       }
+      // フォーカスリセット（選択肢が自動的に光るのを防ぐ）
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
     });
 
     // 戻るボタン
@@ -208,6 +225,10 @@ class QuizEngine {
       this.attachNumberInputListeners(q);
     } else if (q.type === 'multi-select') {
       this.attachMultiSelectListeners(q);
+    } else if (q.type === 'image-choice') {
+      this.root.querySelectorAll('.image-choice-btn').forEach(btn => {
+        btn.addEventListener('click', () => this.selectImageOption(q.id, btn.dataset.value));
+      });
     } else {
       this.root.querySelectorAll('.option-btn').forEach(btn => {
         btn.addEventListener('click', () => this.selectOption(q.id, btn.dataset.value));
@@ -215,21 +236,42 @@ class QuizEngine {
     }
   }
 
+  selectImageOption(qId, value) {
+    this.answers[qId] = value;
+    const q = this.questions.find(x => x.id === qId);
+    if (q) this.saveSharedIfNeeded(q, value);
+    const btns = this.root.querySelectorAll('.image-choice-btn');
+    btns.forEach(b => {
+      if (b.dataset.value === value) b.classList.add('selected');
+      else { b.style.opacity = '0.4'; b.style.pointerEvents = 'none'; }
+    });
+    setTimeout(() => this.nextQuestion(), 400);
+  }
+
   // ==================== 数値入力 ====================
-  renderNumberInput(q) {
+  renderNumberInput(q, prefill) {
+    const fields = q.fields || [{ key: 'value', label: '', suffix: q.suffix || '' }];
     return `
       <div style="display:flex; flex-direction:column; gap:16px; max-width:320px; margin:0 auto;">
-        ${(q.fields || [{ key: 'value', label: '', suffix: q.suffix || '' }]).map(f => `
+        ${fields.map(f => {
+          // プレフィル値を取得
+          let val = '';
+          if (prefill !== null && prefill !== undefined) {
+            if (typeof prefill === 'object') val = prefill[f.key] ?? '';
+            else val = prefill;
+          }
+          return `
           <div>
             ${f.label ? `<label style="display:block; font-size:0.78rem; color:var(--text-secondary); margin-bottom:8px;">${f.label}</label>` : ''}
             <div style="display:flex; align-items:center; gap:8px;">
-              <input type="number" inputmode="numeric" data-key="${f.key}" placeholder="${f.placeholder || ''}"
+              <input type="number" inputmode="numeric" data-key="${f.key}" placeholder="${f.placeholder || ''}" value="${val}"
                 style="flex:1; padding:14px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); color:var(--text); font-family:inherit; font-size:1rem; text-align:center;">
               ${f.suffix ? `<span style="color:var(--text-muted); font-size:0.85rem;">${f.suffix}</span>` : ''}
             </div>
           </div>
-        `).join('')}
-        <button class="start-btn" id="numNextBtn" style="width:100%; margin-top:8px;" disabled>
+          `;
+        }).join('')}
+        <button class="start-btn" id="numNextBtn" style="width:100%; margin-top:8px;">
           次へ →
         </button>
       </div>
@@ -245,6 +287,7 @@ class QuizEngine {
       btn.disabled = !allFilled;
       btn.style.opacity = allFilled ? '1' : '0.4';
     };
+    check(); // 初期状態（プレフィルされていれば有効化される）
 
     inputs.forEach(input => {
       input.addEventListener('input', check);
@@ -254,6 +297,7 @@ class QuizEngine {
     });
 
     btn.addEventListener('click', () => {
+      if (btn.disabled) return;
       const values = {};
       inputs.forEach(input => {
         values[input.dataset.key] = parseInt(input.value, 10);
@@ -262,8 +306,6 @@ class QuizEngine {
       this.saveSharedIfNeeded(q, values);
       this.nextQuestion();
     });
-
-    inputs[0]?.focus();
   }
 
   // ==================== 複数選択 ====================

@@ -55,6 +55,23 @@ const MR_ICONS = {
     <path d="M22 28V20C22 14.5 26.5 10 32 10C37.5 10 42 14.5 42 20V28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
     <circle cx="32" cy="42" r="4" fill="currentColor"/>
     <line x1="32" y1="46" x2="32" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
+
+  // 顔型アイコン（髪型診断用）
+  faceOval: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="32" cy="32" rx="18" ry="24" stroke="currentColor" stroke-width="2"/>
+  </svg>`,
+  faceRound: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="22" stroke="currentColor" stroke-width="2"/>
+  </svg>`,
+  faceLong: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="32" cy="32" rx="14" ry="26" stroke="currentColor" stroke-width="2"/>
+  </svg>`,
+  faceSquare: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18 10 L46 10 Q50 10 50 14 L50 44 Q50 48 46 52 L42 56 L22 56 L18 52 Q14 48 14 44 L14 14 Q14 10 18 10 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  </svg>`,
+  faceInverted: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 14 Q14 10 18 10 L46 10 Q50 10 50 14 L48 32 Q45 48 32 58 Q19 48 16 32 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
   </svg>`
 };
 

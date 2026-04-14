@@ -26,13 +26,14 @@
         {
           id: 'faceShape',
           text: '顔の形は？',
-          hint: 'おでこの生え際〜顎の縦の長さと、頬骨の横幅を比べてみて',
+          hint: '鏡で見るか写真を撮って、輪郭を確認してください。迷ったら「正面の輪郭が一番近いもの」を選びましょう。',
+          type: 'icon-choice',
           options: [
-            { label: '卵型', value: 'oval' },
-            { label: '丸顔', value: 'round' },
-            { label: '面長', value: 'long' },
-            { label: 'ベース型', value: 'square' },
-            { label: '逆三角形', value: 'inverted' }
+            { label: '卵型', desc: '縦横のバランスが良い標準的な輪郭', value: 'oval', icon: MR_ICONS.faceOval },
+            { label: '丸顔', desc: '縦と横の長さがほぼ同じで丸みがある', value: 'round', icon: MR_ICONS.faceRound },
+            { label: '面長', desc: '縦幅が横幅より明らかに長い', value: 'long', icon: MR_ICONS.faceLong },
+            { label: 'ベース型', desc: 'エラが張っていて顎のラインがしっかり', value: 'square', icon: MR_ICONS.faceSquare },
+            { label: '逆三角形', desc: 'おでこが広く顎がシャープに細い', value: 'inverted', icon: MR_ICONS.faceInverted }
           ]
         },
         {
