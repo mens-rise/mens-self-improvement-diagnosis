@@ -12,10 +12,9 @@ const HEADER_HTML = `
     </div>
   </header>`;
 
-const CTA_URL = 'https://info.opt--in.com/page/OenZEyCyYPQH?ftid=tD53IsLSjGP9';
-
 class QuizEngine {
   constructor(config) {
+    this.diagnosisId = config.diagnosisId || 'unknown';
     this.title = config.title;
     this.description = config.description;
     this.icon = config.icon || '';
@@ -34,7 +33,62 @@ class QuizEngine {
   }
 
   init() {
-    this.renderStart();
+    // 名前が未登録ならまず名前入力、登録済みならスタート画面
+    if (!MRDB.getName()) {
+      this.renderNameInput();
+    } else {
+      this.renderStart();
+    }
+  }
+
+  // ==================== 名前入力画面 ====================
+  renderNameInput() {
+    this.root.innerHTML = `
+      <div class="page-wrapper">
+        ${HEADER_HTML}
+        <main class="container start-section">
+          <div class="start-icon-svg">${this.iconSvg || this.icon}</div>
+          <h1 class="start-title">${this.title}</h1>
+          <p class="start-desc">診断をはじめる前に、<br>お名前を教えてください。</p>
+          <div style="width:100%; max-width:320px; margin:24px auto 0;">
+            <input type="text" id="nameInput" placeholder="例：山田 太郎"
+              style="width:100%; padding:14px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); color:var(--text); font-family:inherit; font-size:0.95rem; text-align:center; margin-bottom:16px;"
+              autocomplete="name">
+            <button class="start-btn" id="nameSubmitBtn" style="width:100%;" disabled>
+              診断をはじめる →
+            </button>
+            <p style="font-size:0.65rem; color:var(--text-muted); line-height:1.6; margin-top:16px; text-align:center;">
+              ${CONFIG.PRIVACY_NOTICE}
+            </p>
+          </div>
+        </main>
+        <footer class="footer">© Men's Rise</footer>
+      </div>
+    `;
+
+    const input = document.getElementById('nameInput');
+    const btn = document.getElementById('nameSubmitBtn');
+
+    // 入力があれば有効化
+    input.addEventListener('input', () => {
+      const trimmed = input.value.trim();
+      btn.disabled = trimmed.length < 1;
+      btn.style.opacity = trimmed.length < 1 ? '0.4' : '1';
+    });
+
+    // Enterキーでも送信
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !btn.disabled) btn.click();
+    });
+
+    btn.addEventListener('click', () => {
+      const name = input.value.trim();
+      if (!name) return;
+      MRDB.saveName(name);
+      this.renderStart();
+    });
+
+    input.focus();
   }
 
   // ==================== スタート画面 ====================
@@ -71,12 +125,16 @@ class QuizEngine {
     const progress = ((this.currentQ) / this.questions.length) * 100;
     const canGoBack = this.currentQ > 0;
 
-    let optionsHTML = '';
+    let inputHTML = '';
 
     if (q.type === 'sub-questions') {
-      optionsHTML = this.renderSubQuestions(q);
+      inputHTML = this.renderSubQuestions(q);
+    } else if (q.type === 'number') {
+      inputHTML = this.renderNumberInput(q);
+    } else if (q.type === 'multi-select') {
+      inputHTML = this.renderMultiSelect(q);
     } else {
-      optionsHTML = `<div class="options-list">
+      inputHTML = `<div class="options-list">
         ${q.options.map((opt, i) => `
           <button class="option-btn" data-value="${opt.value}" data-index="${i}">
             <span class="option-icon">${String.fromCharCode(65 + i)}</span>
@@ -105,7 +163,7 @@ class QuizEngine {
             <span class="question-number">${this.currentQ + 1}</span>
             <h2 class="question-text">${q.text}</h2>
             ${q.hint ? `<p class="question-hint">${q.hint}</p>` : ''}
-            ${optionsHTML}
+            ${inputHTML}
             ${canGoBack ? '<div style="margin-top:24px;"><button class="back-btn" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 前の質問に戻る</button></div>' : ''}
           </div>
         </main>
@@ -127,14 +185,111 @@ class QuizEngine {
       backBtn.addEventListener('click', () => this.prevQuestion());
     }
 
-    // イベントリスナー
+    // イベントリスナー（入力タイプ別）
     if (q.type === 'sub-questions') {
       this.attachSubQuestionListeners(q);
+    } else if (q.type === 'number') {
+      this.attachNumberInputListeners(q);
+    } else if (q.type === 'multi-select') {
+      this.attachMultiSelectListeners(q);
     } else {
       this.root.querySelectorAll('.option-btn').forEach(btn => {
         btn.addEventListener('click', () => this.selectOption(q.id, btn.dataset.value));
       });
     }
+  }
+
+  // ==================== 数値入力 ====================
+  renderNumberInput(q) {
+    return `
+      <div style="display:flex; flex-direction:column; gap:16px; max-width:320px; margin:0 auto;">
+        ${(q.fields || [{ key: 'value', label: '', suffix: q.suffix || '' }]).map(f => `
+          <div>
+            ${f.label ? `<label style="display:block; font-size:0.78rem; color:var(--text-secondary); margin-bottom:8px;">${f.label}</label>` : ''}
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="number" inputmode="numeric" data-key="${f.key}" placeholder="${f.placeholder || ''}"
+                style="flex:1; padding:14px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); color:var(--text); font-family:inherit; font-size:1rem; text-align:center;">
+              ${f.suffix ? `<span style="color:var(--text-muted); font-size:0.85rem;">${f.suffix}</span>` : ''}
+            </div>
+          </div>
+        `).join('')}
+        <button class="start-btn" id="numNextBtn" style="width:100%; margin-top:8px;" disabled>
+          次へ →
+        </button>
+      </div>
+    `;
+  }
+
+  attachNumberInputListeners(q) {
+    const inputs = this.root.querySelectorAll('input[type="number"]');
+    const btn = document.getElementById('numNextBtn');
+
+    const check = () => {
+      const allFilled = Array.from(inputs).every(i => i.value.trim() !== '');
+      btn.disabled = !allFilled;
+      btn.style.opacity = allFilled ? '1' : '0.4';
+    };
+
+    inputs.forEach(input => {
+      input.addEventListener('input', check);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !btn.disabled) btn.click();
+      });
+    });
+
+    btn.addEventListener('click', () => {
+      const values = {};
+      inputs.forEach(input => {
+        values[input.dataset.key] = parseInt(input.value, 10);
+      });
+      this.answers[q.id] = values;
+      this.nextQuestion();
+    });
+
+    inputs[0]?.focus();
+  }
+
+  // ==================== 複数選択 ====================
+  renderMultiSelect(q) {
+    return `
+      <div class="options-list">
+        ${q.options.map((opt, i) => `
+          <button class="option-btn multi" data-value="${opt.value}" data-index="${i}">
+            <span class="option-icon">✓</span>
+            <span>${opt.label}</span>
+          </button>
+        `).join('')}
+      </div>
+      <button class="start-btn mt-24" id="multiNextBtn" style="width:100%;" disabled>
+        次へ →
+      </button>
+    `;
+  }
+
+  attachMultiSelectListeners(q) {
+    const selected = new Set();
+    const btn = document.getElementById('multiNextBtn');
+    const max = q.maxSelect || 3;
+
+    this.root.querySelectorAll('.option-btn.multi').forEach(b => {
+      b.addEventListener('click', () => {
+        const val = b.dataset.value;
+        if (selected.has(val)) {
+          selected.delete(val);
+          b.classList.remove('selected');
+        } else if (selected.size < max) {
+          selected.add(val);
+          b.classList.add('selected');
+        }
+        btn.disabled = selected.size === 0;
+        btn.style.opacity = selected.size === 0 ? '0.4' : '1';
+      });
+    });
+
+    btn.addEventListener('click', () => {
+      this.answers[q.id] = Array.from(selected);
+      this.nextQuestion();
+    });
   }
 
   // ==================== サブ質問（顔型診断用） ====================
@@ -225,12 +380,10 @@ class QuizEngine {
   prevQuestion() {
     if (this.currentQ <= 0) return;
 
-    // 現在の質問の回答をクリア
     const currentQ = this.questions[this.currentQ];
     delete this.answers[currentQ.id];
     delete this.subAnswers[currentQ.id];
 
-    // 前の質問の回答もクリア（再回答させるため）
     const prevQ = this.questions[this.currentQ - 1];
     delete this.answers[prevQ.id];
     delete this.subAnswers[prevQ.id];
@@ -238,7 +391,7 @@ class QuizEngine {
     const card = document.getElementById('questionCard');
     if (card) {
       card.style.animation = 'none';
-      card.offsetHeight; // reflow
+      card.offsetHeight;
       card.style.animation = 'fadeOutDown 0.3s ease forwards';
     }
 
@@ -253,14 +406,28 @@ class QuizEngine {
     const result = this.calcResult(this.answers);
     const resultHTML = this.renderResult(result, this.answers);
 
+    // データベースに保存
+    MRDB.saveResult({
+      diagnosisId: this.diagnosisId,
+      answers: this.answers,
+      result: result
+    });
+
+    // ランダムCTA
+    const cta = getRandomCTA();
+
     this.root.innerHTML = `
       <div class="page-wrapper">
         ${HEADER_HTML}
         <main class="container result-section">
           ${resultHTML}
-          <div class="cta-section">
-            <a href="${CTA_URL}" class="cta-btn" target="_blank" rel="noopener">
-              完全版を受け取る（無料）
+          <div class="cta-section" style="margin-top:48px;">
+            <div class="cta-education">
+              <h3 class="cta-education-title">${cta.title}</h3>
+              <p class="cta-education-body">${cta.body}</p>
+            </div>
+            <a href="${CONFIG.CTA_URL}" class="cta-btn" target="_blank" rel="noopener">
+              説明会の詳細をチェックする
             </a>
             <a href="index.html" class="cta-btn-secondary">
               他の診断もやってみる
@@ -275,27 +442,6 @@ class QuizEngine {
   }
 
   // ==================== ユーティリティ ====================
-  static gatedBlock(title, contentHTML) {
-    return `
-      <div class="gated-section">
-        <div class="gated-content">
-          <div class="result-card">
-            <div class="result-card-title">${title}</div>
-            <div class="result-card-body">${contentHTML}</div>
-          </div>
-        </div>
-        <div class="gated-overlay">
-          <div class="gated-icon-svg">${typeof MR_ICONS !== 'undefined' ? MR_ICONS.lock : '🔒'}</div>
-          <div class="gated-title">完全版はこちら</div>
-          <div class="gated-desc">個別説明会に参加すると<br>あなた専用の完全版が受け取れます</div>
-          <a href="${CTA_URL}" class="cta-btn" target="_blank" rel="noopener" style="width: auto; padding: 12px 32px; font-size: 0.85rem;">
-            完全版を受け取る →
-          </a>
-        </div>
-      </div>
-    `;
-  }
-
   static resultCard(title, body) {
     return `
       <div class="result-card">
@@ -303,6 +449,12 @@ class QuizEngine {
         <div class="result-card-body">${body}</div>
       </div>
     `;
+  }
+
+  // 後方互換：既存コードが呼ぶgatedBlockを通常のresultCardに変換（ゲーティング廃止）
+  static gatedBlock(title, contentHTML) {
+    // ゲーティング廃止につき、普通のresultCardとして表示
+    return '';  // 完全非表示
   }
 }
 

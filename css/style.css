@@ -617,6 +617,35 @@ body {
   line-height: 1.6;
 }
 
+/* ======== CTA教育メッセージ ======== */
+.cta-education {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 22px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.cta-education-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.cta-education-body {
+  font-size: 0.85rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+}
+
+.cta-education-body strong {
+  color: var(--gold);
+  font-weight: 700;
+}
+
 /* ======== CTAボタン ======== */
 .cta-section {
   margin: 36px 0;

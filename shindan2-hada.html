@@ -8,16 +8,44 @@
 </head>
 <body>
   <div id="app"></div>
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/cta-variants.js"></script>
   <script src="js/icons.js"></script>
   <script src="js/quiz-engine.js"></script>
   <script>
-    new QuizEngine({
+    new QuizEngine({      diagnosisId: 'hada',
       iconSvg: MR_ICONS.hada,
       title: '肌質タイプ別<br>スキンケア診断',
       description: 'あなたの肌質を診断して<br>最適なケア方法を提案します',
-      meta: '所要時間：約2分 ｜ 全6問',
+      meta: '所要時間：約2分 ｜ 全8問',
 
       questions: [
+        {
+          id: 'age',
+          text: '年齢を教えてください',
+          type: 'number',
+          fields: [
+            { key: 'age', label: '', placeholder: '25', suffix: '歳' }
+          ]
+        },
+        {
+          id: 'skinConcerns',
+          text: '今の肌の悩みは？',
+          hint: '当てはまるものを最大3つまで選んでください',
+          type: 'multi-select',
+          maxSelect: 3,
+          options: [
+            { label: 'ニキビ・吹き出物', value: 'acne' },
+            { label: '毛穴の黒ずみ・開き', value: 'pores' },
+            { label: '乾燥・カサつき', value: 'dryness' },
+            { label: 'テカリ・脂っぽさ', value: 'oiliness' },
+            { label: '赤み・肌荒れ', value: 'redness' },
+            { label: 'シミ・くすみ', value: 'spots' },
+            { label: 'ひげ剃り後のヒリつき', value: 'shaving' },
+            { label: '特になし', value: 'none' }
+          ]
+        },
         {
           id: 'wash',
           text: '洗顔後、何もつけずに10分経つと？',

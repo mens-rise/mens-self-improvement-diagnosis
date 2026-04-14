@@ -10,14 +10,17 @@
 <body>
   <div id="app"></div>
 
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/cta-variants.js"></script>
   <script src="js/icons.js"></script>
   <script src="js/quiz-engine.js"></script>
   <script>
-    new QuizEngine({
+    new QuizEngine({      diagnosisId: 'kamigata',
       iconSvg: MR_ICONS.kamigata,
       title: '顔型別<br>似合うヘアスタイル診断',
       description: 'あなたの顔型×印象タイプから<br>似合う髪型を提案します',
-      meta: '所要時間：約2分 ｜ 全6問',
+      meta: '所要時間：約2分 ｜ 全8問',
 
       questions: [
         {
@@ -79,6 +82,26 @@
             { label: 'ナチュラル', value: 'natural' },
             { label: 'ワイルド', value: 'wild' },
             { label: 'ビジネス', value: 'business' }
+          ]
+        },
+        {
+          id: 'salonFreq',
+          text: '美容院に行く頻度は？',
+          options: [
+            { label: '月1回', value: 'monthly' },
+            { label: '2〜3ヶ月に1回', value: 'bimonthly' },
+            { label: '半年に1回', value: 'semiannual' },
+            { label: 'ほぼ行かない', value: 'rare' }
+          ]
+        },
+        {
+          id: 'salonBudget',
+          text: '美容院の1回の予算は？',
+          options: [
+            { label: '3,000円以内', value: 'low' },
+            { label: '5,000円以内', value: 'mid' },
+            { label: '8,000円以内', value: 'high' },
+            { label: 'こだわらない', value: 'unlimited' }
           ]
         }
       ],

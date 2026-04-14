@@ -8,16 +8,29 @@
 </head>
 <body>
   <div id="app"></div>
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/cta-variants.js"></script>
   <script src="js/icons.js"></script>
   <script src="js/quiz-engine.js"></script>
   <script>
-    new QuizEngine({
+    new QuizEngine({      diagnosisId: 'kintore',
       iconSvg: MR_ICONS.kintore,
       title: '骨格×体型に合った<br>筋トレ診断',
       description: 'あなたの骨格タイプを診断して<br>最適なトレーニングを提案します',
-      meta: '所要時間：約2分 ｜ 全5問',
+      meta: '所要時間：約2分 ｜ 全6問',
 
       questions: [
+        {
+          id: 'body',
+          text: '身長と体重を教えてください',
+          hint: '体型タイプの判定に使用します',
+          type: 'number',
+          fields: [
+            { key: 'height', label: '身長', placeholder: '170', suffix: 'cm' },
+            { key: 'weight', label: '体重', placeholder: '65', suffix: 'kg' }
+          ]
+        },
         {
           id: 'wrist',
           text: '手首テスト',
