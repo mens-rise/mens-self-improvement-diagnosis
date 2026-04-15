@@ -4,7 +4,7 @@
 
 const CONFIG = {
   // CTA先のVSL視聴ページ（個別説明会申込ページと同一）
-  CTA_URL: 'https://info.opt--in.com/page/OenZEyCyYPQH?ftid=tD53IsLSjGP9',
+  CTA_URL: 'https://info.opt--in.com/page/Qy4wMDG59FK5?ftid=1f1G9vBLtuxj',
 
   // Google Apps Script Web App エンドポイント
   // ※デプロイ後、GASのWeb App URLをここに貼り付けてください
