@@ -245,6 +245,51 @@
         html += '<div class="result-type">' + shapeName + ' × ' + result.impressionType + ' タイプ</div>';
         html += '</div>';
 
+        // ── あなたに似合う髪型 写真カード ──
+        var styleData = {
+          oval: {
+            'かっこいい少年': { name: '王道ウルフマッシュ', img: 'images/hair-oval-cool-child.jpg' },
+            'かっこいい大人': { name: '耳掛けセンターパート', img: 'images/hair-oval-cool-adult.png' },
+            'かわいい少年':   { name: '波巻きセンターパート', img: 'images/hair-oval-cute-child.jpg' },
+            'かわいい大人':   { name: 'アップバングショート', img: 'images/hair-oval-cute-adult.jpg' }
+          },
+          round: {
+            'かっこいい少年': { name: 'ショートマッシュ × 無造作パーマ', img: 'images/hair-round-cool-child.jpg' },
+            'かっこいい大人': { name: 'アップバング', img: 'images/hair-round-cool-adult.png' },
+            'かわいい少年':   { name: 'シースルマッシュ', img: 'images/hair-round-cute-child.jpg' },
+            'かわいい大人':   { name: 'コンマフェザー', img: 'images/hair-round-cute-adult.jpg' }
+          },
+          long: {
+            'かっこいい少年': { name: 'ラウンドマッシュ', img: 'images/hair-long-cool-child.jpg' },
+            'かっこいい大人': { name: 'スパイキーショート', img: 'images/hair-long-cool-adult.jpg' },
+            'かわいい少年':   { name: 'シースルマッシュ', img: 'images/hair-long-cute-child.jpg' },
+            'かわいい大人':   { name: 'センターパート', img: 'images/hair-long-cute-adult.jpg' }
+          },
+          // ベース型・逆三角形は面長と同じ傾向（骨格補正の方向性が近い）
+          square: {
+            'かっこいい少年': { name: 'ラウンドマッシュ', img: 'images/hair-long-cool-child.jpg' },
+            'かっこいい大人': { name: 'スパイキーショート', img: 'images/hair-long-cool-adult.jpg' },
+            'かわいい少年':   { name: 'シースルマッシュ', img: 'images/hair-long-cute-child.jpg' },
+            'かわいい大人':   { name: 'センターパート', img: 'images/hair-long-cute-adult.jpg' }
+          },
+          inverted: {
+            'かっこいい少年': { name: 'ラウンドマッシュ', img: 'images/hair-long-cool-child.jpg' },
+            'かっこいい大人': { name: 'スパイキーショート', img: 'images/hair-long-cool-adult.jpg' },
+            'かわいい少年':   { name: 'シースルマッシュ', img: 'images/hair-long-cute-child.jpg' },
+            'かわいい大人':   { name: 'センターパート', img: 'images/hair-long-cute-adult.jpg' }
+          }
+        };
+        var style = styleData[result.faceShape] && styleData[result.faceShape][result.impressionType];
+        if (style) {
+          var photoHtml = '';
+          photoHtml += '<div style="text-align:center;margin-bottom:14px;">';
+          photoHtml += '<img src="' + style.img + '" alt="' + style.name + '" loading="lazy" style="width:100%;max-width:360px;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius-md);display:block;margin:0 auto;filter:contrast(1.06) saturate(1.05);">';
+          photoHtml += '</div>';
+          photoHtml += '<div style="text-align:center;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:4px;">' + style.name + '</div>';
+          photoHtml += '<div style="text-align:center;font-size:0.78rem;color:var(--text-muted);">あなたに一番似合う髪型</div>';
+          html += QuizEngine.resultCard('YOUR HAIRSTYLE ─ あなたに似合う髪型', photoHtml);
+        }
+
         // Direction card
         html += QuizEngine.resultCard('DIRECTION ─ 似合う方向性', '<p>' + fd.direction + '</p>');
 
