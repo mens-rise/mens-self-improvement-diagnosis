@@ -8,7 +8,7 @@ const CONFIG = {
 
   // Google Apps Script Web App エンドポイント
   // ※デプロイ後、GASのWeb App URLをここに貼り付けてください
-  GAS_ENDPOINT: 'https://script.google.com/macros/s/REPLACE_WITH_YOUR_GAS_URL/exec',
+  GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbxsrJ_c3HWIrXhI--GUo29E1F4Aa1EB3Y8jrlk_juv_hCiyp77JwCbhnQSfELv1buGGlQ/exec',
 
   // 管理ダッシュボードのパスワード（admin.htmlで使用）
   ADMIN_PASSWORD: 'mensrise2026',
