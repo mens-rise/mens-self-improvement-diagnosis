@@ -263,11 +263,39 @@
         // WHY card
         html += QuizEngine.resultCard('なぜあなたはこのフェーズにいるのか', d.why);
 
-        // Traps card
-        html += QuizEngine.resultCard('このフェーズで陥りがちな罠（NG行動）', d.traps);
+        // --- ヘルパー: <li> を小カードに整形 ---
+        function itemsToCards(html, markType) {
+          const items = [];
+          html.replace(/<li>([\s\S]*?)<\/li>/g, (_, content) => { items.push(content); return ''; });
+          if (items.length === 0) return html;
+          return items.map((text, i) => {
+            let mark = '';
+            if (markType === 'ng') {
+              mark = '<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:rgba(231,76,60,0.15); color:#e74c3c; font-weight:700; font-size:0.78rem; flex-shrink:0;">✗</span>';
+            } else if (markType === 'check') {
+              mark = '<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:rgba(200,169,110,0.15); color:var(--gold); font-weight:700; font-size:0.85rem; flex-shrink:0;">✓</span>';
+            } else {
+              mark = '<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:rgba(200,169,110,0.12); color:var(--gold); font-weight:700; font-size:0.78rem; flex-shrink:0;">' + (i+1) + '</span>';
+            }
+            return '<div style="display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--bg-elevated); border-radius:10px; margin-bottom:8px;">' +
+              mark +
+              '<span style="color:#f0f0f0; font-size:0.86rem; line-height:1.6; flex:1;">' + text + '</span>' +
+            '</div>';
+          }).join('');
+        }
 
-        // Next phase conditions card
-        html += QuizEngine.resultCard('次の段階へ進むための条件', d.nextPhase);
+        // Traps card（NG行動をカード化）
+        html += QuizEngine.resultCard(
+          'このフェーズで陥りがちな罠',
+          itemsToCards(d.traps, 'ng')
+        );
+
+        // Next phase conditions card（✓チェック付きカード）
+        const nextPhaseTitleMatch = d.nextPhase.match(/<strong>([^<]+)<\/strong>/);
+        const nextPhaseTitle = nextPhaseTitleMatch ? nextPhaseTitleMatch[1] : '次の段階へ進むための条件';
+        const nextPhaseBody = '<p style="color:#c0c0c0; font-size:0.82rem; margin-bottom:12px; line-height:1.6;">' + nextPhaseTitle + '</p>' +
+          itemsToCards(d.nextPhase, 'check');
+        html += QuizEngine.resultCard('次のステップへ進む条件', nextPhaseBody);
 
         // 3 months future image card
         html += QuizEngine.resultCard('3ヶ月後の変化イメージ', d.future);

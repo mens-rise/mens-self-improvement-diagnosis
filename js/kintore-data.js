@@ -85,27 +85,27 @@ window.pfcChartSVG = function(p, f, c) {
         <circle cx="80" cy="80" r="${r}" fill="none" stroke="#27ae60" stroke-width="24"
                 stroke-dasharray="${cLen} ${circumference - cLen}" stroke-dashoffset="-${pLen + fLen}"
                 transform="rotate(-90 80 80)" stroke-linecap="butt"/>
-        <text x="80" y="74" text-anchor="middle" fill="#fff" font-size="11" font-weight="500" opacity="0.7">Total</text>
-        <text x="80" y="94" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" font-family="Cormorant Garamond, serif">${total}</text>
-        <text x="80" y="108" text-anchor="middle" fill="#fff" font-size="9" opacity="0.6">kcal</text>
+        <text x="80" y="72" text-anchor="middle" fill="#bbb" font-size="10" font-weight="500">Total</text>
+        <text x="80" y="94" text-anchor="middle" fill="#fff" font-size="20" font-weight="800" font-family="-apple-system, BlinkMacSystemFont, 'Noto Sans JP', sans-serif">${total}</text>
+        <text x="80" y="108" text-anchor="middle" fill="#888" font-size="9" font-weight="500">kcal</text>
       </svg>
-      <div style="display:flex; flex-direction:column; gap:10px; font-size:0.82rem;">
+      <div style="display:flex; flex-direction:column; gap:10px; font-size:0.85rem;">
         <div style="display:flex; align-items:center; gap:10px;">
           <span style="width:12px; height:12px; background:#e74c3c; border-radius:2px; display:inline-block;"></span>
-          <span style="color:#fff; min-width:84px;"><strong>P タンパク質</strong></span>
-          <span style="color:#fff; font-family:Cormorant Garamond,serif;">${p}g</span>
+          <span style="color:#fff; min-width:90px; font-weight:600;">P タンパク質</span>
+          <span style="color:#fff; font-weight:700; font-size:0.92rem;">${p}<span style="font-size:0.75rem; color:#aaa; font-weight:500;">g</span></span>
           <span style="color:#888; font-size:0.72rem;">${pPct}%</span>
         </div>
         <div style="display:flex; align-items:center; gap:10px;">
           <span style="width:12px; height:12px; background:#f1c40f; border-radius:2px; display:inline-block;"></span>
-          <span style="color:#fff; min-width:84px;"><strong>F 脂質</strong></span>
-          <span style="color:#fff; font-family:Cormorant Garamond,serif;">${f}g</span>
+          <span style="color:#fff; min-width:90px; font-weight:600;">F 脂質</span>
+          <span style="color:#fff; font-weight:700; font-size:0.92rem;">${f}<span style="font-size:0.75rem; color:#aaa; font-weight:500;">g</span></span>
           <span style="color:#888; font-size:0.72rem;">${fPct}%</span>
         </div>
         <div style="display:flex; align-items:center; gap:10px;">
           <span style="width:12px; height:12px; background:#27ae60; border-radius:2px; display:inline-block;"></span>
-          <span style="color:#fff; min-width:84px;"><strong>C 炭水化物</strong></span>
-          <span style="color:#fff; font-family:Cormorant Garamond,serif;">${c}g</span>
+          <span style="color:#fff; min-width:90px; font-weight:600;">C 炭水化物</span>
+          <span style="color:#fff; font-weight:700; font-size:0.92rem;">${c}<span style="font-size:0.75rem; color:#aaa; font-weight:500;">g</span></span>
           <span style="color:#888; font-size:0.72rem;">${cPct}%</span>
         </div>
       </div>

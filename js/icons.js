@@ -75,50 +75,56 @@ const MR_ICONS = {
   </svg>`,
 
   // 手首テスト（3パターン）
-  // 親指(青)と中指(緑)で手首を囲んだときの指の重なり具合を図示
-  wristOverlap: `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- 手首（楕円） -->
-    <ellipse cx="40" cy="32" rx="11" ry="15" stroke="currentColor" stroke-width="1.8" opacity="0.6" fill="none"/>
-    <text x="40" y="36" text-anchor="middle" fill="currentColor" font-size="7" opacity="0.6">手首</text>
-    <!-- 親指リング（左側から回り込み、大きく重なる） -->
-    <path d="M 52 32 A 14 14 0 1 0 52 32.01" stroke="currentColor" stroke-width="2" fill="none"/>
-    <!-- 中指リング（右側から回り込み、大きく重なる） -->
-    <path d="M 28 32 A 14 14 0 1 1 28 32.01" stroke="currentColor" stroke-width="2" fill="none"/>
-    <!-- 重なり強調 -->
-    <circle cx="28" cy="32" r="3" fill="currentColor" opacity="0.3"/>
-    <circle cx="52" cy="32" r="3" fill="currentColor" opacity="0.3"/>
-  </svg>`,
-  wristTouch: `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="40" cy="32" rx="13" ry="17" stroke="currentColor" stroke-width="1.8" opacity="0.6" fill="none"/>
-    <text x="40" y="36" text-anchor="middle" fill="currentColor" font-size="7" opacity="0.6">手首</text>
-    <!-- 親指と中指がちょうど触れ合う -->
-    <path d="M 53 32 A 13 13 0 1 0 53 32.01" stroke="currentColor" stroke-width="2" fill="none"/>
-    <path d="M 27 32 A 13 13 0 1 1 27 32.01" stroke="currentColor" stroke-width="2" fill="none"/>
-    <!-- タッチポイント -->
-    <circle cx="40" cy="16" r="2" fill="currentColor"/>
-    <circle cx="40" cy="48" r="2" fill="currentColor"/>
-  </svg>`,
-  wristGap: `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="40" cy="32" rx="16" ry="19" stroke="currentColor" stroke-width="1.8" opacity="0.6" fill="none"/>
-    <text x="40" y="36" text-anchor="middle" fill="currentColor" font-size="7" opacity="0.6">手首</text>
-    <!-- 届かない：リングが手首より小さい -->
-    <path d="M 50 32 A 11 11 0 1 0 50 32.01" stroke="currentColor" stroke-width="2" fill="none" opacity="0.9"/>
-    <path d="M 30 32 A 11 11 0 1 1 30 32.01" stroke="currentColor" stroke-width="2" fill="none" opacity="0.9"/>
-    <!-- すき間の点線 -->
-    <line x1="40" y1="12" x2="40" y2="18" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 2" opacity="0.7"/>
-    <line x1="40" y1="46" x2="40" y2="52" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 2" opacity="0.7"/>
+  // 手首を上から見た断面図。中央の円が「手首」、それを囲む親指＋中指の輪
+  // ① 余裕で重なる：指の輪が手首より大きい → 指先が交差
+  wristOverlap: `<svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 手首（細い） -->
+    <circle cx="60" cy="52" r="14" fill="#3a3a3a" stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
+    <text x="60" y="56" text-anchor="middle" fill="#fff" font-size="9" font-weight="500">手首</text>
+    <!-- 親指（左） -->
+    <path d="M 60 74 Q 30 74 22 52 Q 18 36 30 26 Q 42 20 55 28" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <!-- 中指（右） -->
+    <path d="M 60 74 Q 90 74 98 52 Q 102 36 90 26 Q 78 20 65 28" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <!-- 指先の重なり（先端が交差） -->
+    <circle cx="55" cy="28" r="3" fill="currentColor"/>
+    <circle cx="65" cy="28" r="3" fill="currentColor"/>
+    <path d="M 50 24 L 70 32 M 70 24 L 50 32" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+    <!-- 指先重なりラベル -->
+    <text x="60" y="15" text-anchor="middle" fill="currentColor" font-size="9" font-weight="600">✓ 重なる</text>
   </svg>`,
 
-  // 手首テストのやり方イラスト
-  wristHowTo: `<svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- 腕 -->
-    <rect x="10" y="40" width="120" height="20" rx="10" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
-    <!-- 手首位置マーク -->
-    <ellipse cx="100" cy="50" rx="14" ry="12" stroke="currentColor" stroke-width="2" fill="none"/>
-    <!-- 指で囲むイメージ -->
-    <circle cx="100" cy="50" r="20" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="3 3"/>
-    <!-- ラベル -->
-    <text x="100" y="85" text-anchor="middle" fill="currentColor" font-size="9" opacity="0.8">親指と中指で輪を作って手首を囲む</text>
+  // ② ちょうど触れ合う：指の輪と手首が同じ大きさ → 指先が接触
+  wristTouch: `<svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 手首（中） -->
+    <circle cx="60" cy="52" r="18" fill="#3a3a3a" stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
+    <text x="60" y="56" text-anchor="middle" fill="#fff" font-size="9" font-weight="500">手首</text>
+    <!-- 親指（左・手首ぎりぎりを回る） -->
+    <path d="M 60 76 Q 30 76 22 52 Q 18 34 32 26 Q 45 22 57 29" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <!-- 中指（右・手首ぎりぎりを回る） -->
+    <path d="M 60 76 Q 90 76 98 52 Q 102 34 88 26 Q 75 22 63 29" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <!-- 指先が接触 -->
+    <circle cx="57" cy="29" r="3" fill="currentColor"/>
+    <circle cx="63" cy="29" r="3" fill="currentColor"/>
+    <!-- 接触ラベル -->
+    <text x="60" y="15" text-anchor="middle" fill="currentColor" font-size="9" font-weight="600">◯ 触れる</text>
+  </svg>`,
+
+  // ③ 全く届かない：指の輪が手首より小さい → 間にすき間
+  wristGap: `<svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 手首（太い） -->
+    <circle cx="60" cy="52" r="22" fill="#3a3a3a" stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
+    <text x="60" y="56" text-anchor="middle" fill="#fff" font-size="9" font-weight="500">手首</text>
+    <!-- 親指（届いてない） -->
+    <path d="M 60 80 Q 34 80 28 56 Q 26 42 38 34 Q 48 30 54 34" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <!-- 中指（届いてない） -->
+    <path d="M 60 80 Q 86 80 92 56 Q 94 42 82 34 Q 72 30 66 34" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <!-- 指先 -->
+    <circle cx="54" cy="34" r="3" fill="currentColor"/>
+    <circle cx="66" cy="34" r="3" fill="currentColor"/>
+    <!-- 届かない隙間の点線 -->
+    <line x1="54" y1="34" x2="66" y2="34" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2" opacity="0.7"/>
+    <!-- 隙間ラベル -->
+    <text x="60" y="15" text-anchor="middle" fill="currentColor" font-size="9" font-weight="600">✗ 届かない</text>
   </svg>`
 };
 
