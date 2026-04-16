@@ -12,12 +12,14 @@
   <script src="js/database.js"></script>
   <script src="js/cta-variants.js"></script>
   <script src="js/icons.js"></script>
+  <script src="js/kintore-data.js"></script>
   <script src="js/quiz-engine.js"></script>
   <script>
-    new QuizEngine({      diagnosisId: 'kintore',
+    new QuizEngine({
+      diagnosisId: 'kintore',
       iconSvg: MR_ICONS.kintore,
       title: '骨格×体型に合った<br>筋トレ診断',
-      description: 'あなたの骨格タイプを診断して<br>最適なトレーニングを提案します',
+      description: 'あなたの体質タイプを診断して<br>最適な食事・トレーニングを提案します',
       meta: '所要時間：約2分 ｜ 全7問',
 
       questions: [
@@ -25,7 +27,7 @@
           id: 'body',
           sharedKey: 'body',
           text: '身長と体重を教えてください',
-          hint: '体型タイプの判定に使用します',
+          hint: '目標カロリー・PFCの算出に使用します',
           type: 'number',
           fields: [
             { key: 'height', label: '身長', placeholder: '170', suffix: 'cm' },
@@ -33,9 +35,19 @@
           ]
         },
         {
+          id: 'age',
+          sharedKey: 'age',
+          text: '年齢を教えてください',
+          hint: '基礎代謝（BMR）の算出に使用します',
+          type: 'number',
+          fields: [
+            { key: 'age', label: '', placeholder: '28', suffix: '歳' }
+          ]
+        },
+        {
           id: 'targetBody',
           text: 'どちらの体型を目指したい？',
-          hint: 'あなたの目標に合わせて食事・トレーニングの方向性を調整します',
+          hint: '目標に合わせて食事・トレーニングの方向性を調整します',
           type: 'image-choice',
           options: [
             {
@@ -55,11 +67,12 @@
         {
           id: 'wrist',
           text: '手首テスト',
-          hint: '利き手じゃない方の手首を親指と中指で囲んでみて',
+          hint: '利き手じゃない方の手首を、反対の手の親指と中指で輪を作って囲んでみてください。指同士がどうなるかを選んでください。',
+          type: 'icon-choice',
           options: [
-            { label: '余裕で重なる', value: 'overlap' },
-            { label: 'ちょうど触れ合う', value: 'touch' },
-            { label: '全く届かない', value: 'gap' }
+            { label: '余裕で重なる', desc: '指が手首より大きい', value: 'overlap', icon: MR_ICONS.wristOverlap },
+            { label: 'ちょうど触れ合う', desc: '指と手首がほぼ同じ', value: 'touch', icon: MR_ICONS.wristTouch },
+            { label: '全く届かない', desc: '手首が指より太い', value: 'gap', icon: MR_ICONS.wristGap }
           ]
         },
         {
@@ -103,21 +116,14 @@
       calcResult: function(answers) {
         const wrist = answers.wrist;
         const metabolism = answers.metabolism;
-        let type = 'ecto'; // default: lean toward 痩せ型
+        let type = 'ecto';
 
-        if (wrist === 'overlap') {
-          type = 'ecto';
-        } else if (wrist === 'gap') {
-          type = 'endo';
-        } else if (wrist === 'touch' && metabolism === 'normal') {
-          type = 'meso';
-        } else if (wrist === 'touch' && metabolism === 'fast') {
-          type = 'ecto';
-        } else if (wrist === 'touch' && metabolism === 'slow') {
-          type = 'endo';
-        }
+        if (wrist === 'overlap') type = 'ecto';
+        else if (wrist === 'gap') type = 'endo';
+        else if (wrist === 'touch' && metabolism === 'normal') type = 'meso';
+        else if (wrist === 'touch' && metabolism === 'fast') type = 'ecto';
+        else if (wrist === 'touch' && metabolism === 'slow') type = 'endo';
 
-        // Specific overrides
         if (wrist === 'overlap' && metabolism === 'fast') type = 'ecto';
         if (wrist === 'touch' && metabolism === 'normal') type = 'meso';
         if (wrist === 'gap' && metabolism === 'slow') type = 'endo';
@@ -126,145 +132,209 @@
           type: type,
           gym: answers.gym,
           frequency: answers.frequency,
-          experience: answers.experience
+          experience: answers.experience,
+          targetBody: answers.targetBody
         };
       },
 
       renderResult: function(result, answers) {
-        const data = {
+        const typeMeta = {
           ecto: {
             name: '痩せ型（エクトモルフ）',
-            feature: '代謝が良すぎて太りにくい。筋肉もつきにくいが、一度筋肉がつけば脂肪に邪魔されずカットが綺麗に出る。',
-            strategy: '「短時間・高重量」。種目を絞って大きい筋肉を一気に動かす。ジム滞在は60分以内。ダラダラやるな。',
-            action: 'まずバーベルスクワットを8回×3セットやれ。足は体で一番デカい筋肉。成長ホルモンが出る。',
-            food: '高炭水化物・中タンパク・中脂質。とにかく食え。1日4〜5食。糖質制限は絶対NG。',
-            why: '代謝が基礎的に高く、摂取カロリーがすぐエネルギーに変換される体質。交感神経が優位で、筋肉がつきにくく脂肪もつきにくい。だから「食べる量」と「高重量の刺激」の両方が揃わないと体が変わらない。',
-            weeklyMenu: `
-              <table class="menu-table">
-                <tr><th>曜日</th><th>メニュー</th></tr>
-                <tr><td><strong>月曜</strong></td><td>バーベルスクワット 8回×3<br>ベンチプレス 8回×3<br>ラットプルダウン 8回×3</td></tr>
-                <tr><td><strong>水曜</strong></td><td>ダンベルショルダープレス 8回×3<br>アブローラー 10回×3</td></tr>
-                <tr><td><strong>金曜</strong></td><td>上記の組み合わせでローテーション</td></tr>
-              </table>
-              <p style="margin-top:12px;font-size:0.9em;opacity:0.8;">週3回・短時間・高重量が鉄則。60分以内で切り上げる。</p>
-            `,
-            ng: [
-              '長時間トレーニング（カロリー消費しすぎ）',
-              '空腹で長時間過ごす',
-              '朝食抜き（筋肉が分解される）',
-              '糖質制限'
-            ],
-            vision: '「細マッチョ化」の入口。腕が一回り太くなり、胸板に厚みが出る。体重は2〜3kg増えてしっかり食べられるようになる。Tシャツの着こなしが変わり、鎖骨のラインに厚みが加わる。'
+            cause: 'あなたは基礎代謝が高く、摂取カロリーをすぐに消費してしまう体質です。<br><br>手首が細く（周径が小さく）、食べても太りにくいのは、エネルギーの燃焼効率が同年代男性の平均より高いから。この体質は「脂肪はつきにくい」けど「筋肉もつきにくい」という両刃の剣。<br><br>つまり、<strong>あなたが変わらないのは努力不足じゃなく、カロリーと負荷が足りてないだけ</strong>。食べる量を増やして、大きな筋肉に強い刺激を入れれば、脂肪に邪魔されずにカットの綺麗な体が手に入ります。',
+            tag: '食えば変わる体質'
           },
           meso: {
             name: '筋肉質型（メソモルフ）',
-            feature: '少し鍛えたらすぐ筋肉がつく。脂肪も落としやすい。才能ある体。油断すると太るので注意。',
-            strategy: '「部位分割法（リーンバルク）」。週3回で部位を分けてトレーニング。',
-            action: 'まずベンチプレスを10回×3セットやれ。胸を育てろ。',
-            food: '高タンパク・中炭水化物・低〜中脂質。PFCバランス管理。タンパク質は体重×2g。',
-            why: '骨格がバランスよく、筋肉の合成効率が高い体質。テストステロンの働きが良く、トレーニングへの反応が早い。刺激を入れれば入れた分だけ返ってくる恵まれた体。だからこそ「正しい負荷」と「正しい食事」をサボると一気に停滞する。',
-            weeklyMenu: `
-              <table class="menu-table">
-                <tr><th>曜日</th><th>部位</th><th>メニュー</th></tr>
-                <tr><td><strong>月曜</strong></td><td>胸</td><td>ベンチプレス 10回×3<br>インクラインダンベル 10回×3<br>ケーブルクロス 12回×3</td></tr>
-                <tr><td><strong>水曜</strong></td><td>背中</td><td>デッドリフト 8回×3<br>ラットプルダウン 10回×3<br>シーテッドロウ 10回×3</td></tr>
-                <tr><td><strong>金曜</strong></td><td>肩+脚</td><td>スクワット 10回×3<br>レッグプレス 12回×3<br>ショルダープレス 10回×3</td></tr>
-              </table>
-              <p style="margin-top:12px;font-size:0.9em;opacity:0.8;">週3回の部位分割。回復日をしっかり取ることで合成効率が最大化する。</p>
-            `,
-            ng: [
-              '惰性で揚げ物定食・ラーメンセット',
-              '運動しない日の夜の白米大量摂取',
-              '同じメニューを何ヶ月も続ける（慣れる）'
-            ],
-            vision: '「アスリート体型」が完成形。腹筋が浮き出て、肩・胸・背中のメリハリが明確に。体脂肪率は12%前後を狙える。服の上からでも「鍛えてる人」とわかるシルエットに変わる。'
+            cause: 'あなたは骨格のバランスが良く、筋肉の合成効率が高い恵まれた体質です。<br><br>手首周径も食事反応も「標準的」な位置にいて、テストステロンの働きが良いタイプ。少しの刺激でも体が反応しやすいので、<strong>正しい負荷と正しい食事を入れれば、入れた分だけ結果が返ってきます</strong>。<br><br>ただし油断すると脂肪もつきやすいのがこのタイプ。才能がある体だからこそ、PFCを意識した食事と部位分割のトレーニングで、最短ルートで理想の体に到達できます。',
+            tag: '伸びしろが大きい才能体質'
           },
           endo: {
             name: 'がっしり型（エンドモルフ）',
-            feature: '力は強いが脂肪で筋肉が隠れている。パワーはある。脂肪さえ落とせばすぐにかっこいい体になるポテンシャル。',
-            strategy: '「消費カロリーを増やす」。セット間休憩短く密度高く。筋トレ後に有酸素20分。',
-            action: 'まずスミスベンチプレスを10回×3セットやれ。そのあと有酸素20分。',
-            food: '高タンパク・低脂質・低炭水化物。食事管理が成功の8割。夜の白米を半分or抜く。',
-            why: '副交感神経が優位で、エネルギーを蓄えやすい体質。基礎代謝が低めで脂肪がつきやすいが、筋力の絶対値は強い。つまり「パワーの土台」はすでにある。あとは上に乗っている脂肪をどう削ぎ落とすかが全て。',
-            weeklyMenu: `
-              <table class="menu-table">
-                <tr><th>部位</th><th>メニュー</th></tr>
-                <tr><td><strong>胸</strong></td><td>2種目×3セット（15回）</td></tr>
-                <tr><td><strong>背中</strong></td><td>2種目×3セット（15回）</td></tr>
-                <tr><td><strong>脚</strong></td><td>2種目×3セット（15回）</td></tr>
-                <tr><td><strong>腹筋</strong></td><td>2種目×3セット（15回）</td></tr>
-                <tr><td><strong>有酸素</strong></td><td>筋トレ後に20分（心拍120キープ）</td></tr>
-              </table>
-              <p style="margin-top:12px;font-size:0.9em;opacity:0.8;">週3〜4回・高回数・インターバル短め。休みすぎると脂肪燃焼モードに入らない。</p>
-            `,
-            ng: [
-              '締めラーメン、菓子パン、毎日ご褒美',
-              'ジュース・加糖コーヒー・スポドリ',
-              '揚げ物中心の食事',
-              '長時間座りっぱなし'
-            ],
-            vision: '「ガッチリ引き締まった体型」。お腹周りが3〜5cm細くなり、スーツを着たときのシルエットが変わる。体重より見た目の変化が先に来る。二重あごが取れ、顎のラインがシャープになる。'
+            cause: 'あなたはエネルギーを蓄えやすい体質で、筋力の絶対値は強いタイプ。<br><br>手首周径が太く、食べたものを溜めやすいのは副交感神経が優位で、基礎代謝が同年代平均より低めだから。ただし<strong>パワーの土台はすでにある</strong>ので、筋肉の上に乗っている脂肪を削ぎ落とすだけで、一気に「かっこいい体」になります。<br><br>食事管理が成功の8割。トレーニングは高回数×短インターバルで、脂肪を燃やしながら筋肉を守るのが正解です。',
+            tag: '土台は強いタイプ'
           }
         };
 
-        const d = data[result.type];
+        const meta = typeMeta[result.type];
+        const nutrition = calcNutrition(answers, result.type);
+        const targetKey = result.type + '_' + (result.targetBody || 'lean');
+        const mealPlan = MEAL_PLANS[targetKey] || MEAL_PLANS[result.type + '_lean'];
+        const convenienceList = CONVENIENCE_LIST[result.type] || [];
+        const supermarketList = SUPERMARKET_LIST[result.type] || [];
+        const gymMenuKey = result.type + '_' + (result.gym === 'home' ? 'home' : 'gym');
+        const gymMenu = GYM_MENU[gymMenuKey] || GYM_MENU[result.type + '_gym'];
 
         let html = '';
 
-        // Result header
+        // ───────── ヘッダー ─────────
         html += `
           <div class="result-header">
             <div class="result-label">YOUR TYPE</div>
-            <div class="result-type">${d.name}</div>
+            <div class="result-type">${meta.name}</div>
+            <div class="result-subtitle">${meta.tag}</div>
           </div>
         `;
 
-        // Free content cards
-        html += QuizEngine.resultCard('YOUR FEATURE ─ 特徴', `<p>${d.feature}</p>`);
+        // ───────── ① 原因カード ─────────
+        html += QuizEngine.resultCard(
+          'CAUSE ─ あなたがこのタイプである理由',
+          `<p style="line-height:1.85;">${meta.cause}</p>`
+        );
 
-        html += QuizEngine.resultCard('STRATEGY ─ 戦略', `<p><strong>${d.strategy}</strong></p>`);
+        // ───────── ② 正解アクション（大きな見出しで） ─────────
+        html += `
+          <div style="text-align:center; margin:40px 0 20px;">
+            <div style="font-family:var(--font-serif); font-size:0.75rem; letter-spacing:0.2em; color:var(--gold); margin-bottom:6px;">ACTION</div>
+            <div style="font-size:1.1rem; font-weight:700; color:var(--white);">あなたの正解アクション</div>
+            <div style="width:40px; height:1px; background:var(--gold); margin:16px auto 0;"></div>
+          </div>
+        `;
 
-        html += QuizEngine.resultCard('TODAY\'S ACTION ─ 今日やること', `<p>${d.action}</p>`);
+        // 2-1. 目標カロリー & PFC
+        let nutritionBody = `
+          <div style="margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border);">
+              <span style="color:#bbb; font-size:0.82rem;">現在の体重</span>
+              <span style="color:#fff; font-family:var(--font-serif); font-weight:600;">${nutrition.currentWeight} kg</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border);">
+              <span style="color:#bbb; font-size:0.82rem;">目標体重（BMI${result.targetBody === 'athlete' ? '24' : '22'}）</span>
+              <span style="color:var(--gold); font-family:var(--font-serif); font-weight:700; font-size:1.05rem;">${nutrition.targetWeight} kg</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border);">
+              <span style="color:#bbb; font-size:0.82rem;">基礎代謝（BMR）</span>
+              <span style="color:#fff; font-family:var(--font-serif);">${nutrition.bmr} kcal</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border);">
+              <span style="color:#bbb; font-size:0.82rem;">消費カロリー（TDEE）</span>
+              <span style="color:#fff; font-family:var(--font-serif);">${nutrition.tdee} kcal</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:2px solid var(--gold); margin-top:4px;">
+              <span style="color:var(--gold); font-size:0.9rem; font-weight:700;">1日の目標摂取</span>
+              <span style="color:var(--gold); font-family:var(--font-serif); font-weight:700; font-size:1.3rem;">${nutrition.actualKcal} kcal</span>
+            </div>
+          </div>
+          <div style="margin:24px 0 8px; text-align:center; font-size:0.75rem; color:#aaa; letter-spacing:0.1em;">── PFCバランス ──</div>
+          ${pfcChartSVG(nutrition.p, nutrition.f, nutrition.c)}
+          <p style="margin-top:18px; font-size:0.8rem; color:#aaa; text-align:center; line-height:1.6;">毎食この比率を目安にPFCを積み上げるだけ。<br>続ければ必ず体は変わります。</p>
+        `;
+        html += QuizEngine.resultCard('① 目標カロリー & PFC', nutritionBody);
 
-        html += QuizEngine.resultCard('FOOD ─ 食事の方向性', `
-          <div class="result-highlight">${d.food}</div>
-        `);
+        // 2-2. 1日の食事例
+        let mealHtml = `<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px; line-height:1.7;">${mealPlan.overview}</p>`;
+        mealPlan.meals.forEach(m => {
+          mealHtml += `
+            <div style="margin-bottom:16px; padding:14px; background:var(--bg-elevated); border-radius:8px; border-left:3px solid var(--gold);">
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+                <div>
+                  <span style="font-family:var(--font-serif); color:var(--gold); font-size:0.82rem; margin-right:10px;">${m.time}</span>
+                  <strong style="color:#fff; font-size:0.88rem;">${m.title}</strong>
+                </div>
+                <div style="font-size:0.7rem; color:#999; font-family:var(--font-serif);">
+                  ${m.kcal}kcal / P${m.p}g
+                </div>
+              </div>
+              <ul style="list-style:none; padding:0; margin:0;">
+                ${m.items.map(it => `<li style="color:#e8e8e8; font-size:0.82rem; padding:3px 0;">・${it}</li>`).join('')}
+              </ul>
+            </div>
+          `;
+        });
+        html += QuizEngine.resultCard('② 1日の食事例', mealHtml);
 
-        // Enhanced detailed know-how cards
-        html += QuizEngine.resultCard('WHY ─ なぜあなたがこのタイプか', `<p>${d.why}</p>`);
+        // 2-3. コンビニで買うものリスト
+        let convHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:12px;">セブン・ローソンで買える鉄板商品。迷ったらこのリストから。</p>';
+        convenienceList.forEach(item => {
+          convHtml += `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border);">
+              <div style="flex:1;">
+                <div style="color:#fff; font-size:0.85rem; font-weight:500;">${item.name}</div>
+                <div style="color:#888; font-size:0.7rem; margin-top:2px;">${item.nut}</div>
+              </div>
+              <div style="color:var(--gold); font-size:0.75rem; font-family:var(--font-serif); white-space:nowrap; margin-left:12px;">${item.price}</div>
+            </div>
+          `;
+        });
+        html += QuizEngine.resultCard('③ コンビニで買うもの（セブン・ローソン）', convHtml);
 
-        html += QuizEngine.resultCard('WEEKLY MENU ─ 1週間のトレーニングメニュー', d.weeklyMenu);
+        // 2-4. スーパーで買うものリスト
+        let superHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:12px;">業務スーパーや普通のスーパーで揃うもの。自炊派はここから。</p>';
+        supermarketList.forEach(item => {
+          superHtml += `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border);">
+              <div style="flex:1;">
+                <div style="color:#fff; font-size:0.85rem; font-weight:500;">${item.name}</div>
+                <div style="color:#888; font-size:0.7rem; margin-top:2px;">${item.nut}</div>
+              </div>
+              <div style="color:var(--gold); font-size:0.75rem; font-family:var(--font-serif); white-space:nowrap; margin-left:12px;">${item.price}</div>
+            </div>
+          `;
+        });
+        html += QuizEngine.resultCard('④ スーパーで買うもの', superHtml);
 
-        const ngListHtml = d.ng.map(item => `<li>✗ ${item}</li>`).join('');
-        html += QuizEngine.resultCard('NG ─ 避けるべきこと', `<ul class="check-list">${ngListHtml}</ul>`);
+        // 2-5. ジムメニュー
+        const gymLabel = result.gym === 'home' ? '自宅でやる3種目' : 'ジムでやる3種目';
+        let gymHtml = `<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px;">${result.gym === 'home' ? '器具なしで体が変わる、自重の鉄板3種目。' : '週' + (result.frequency === 'two' ? '2' : result.frequency === 'three' ? '3' : '4') + '回、これだけやれば3ヶ月で見た目が変わります。'}</p>`;
+        gymMenu.forEach((ex, i) => {
+          gymHtml += `
+            <div style="margin-bottom:14px; padding:14px; background:var(--bg-elevated); border-radius:8px;">
+              <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:6px;">
+                <span style="font-family:var(--font-serif); color:var(--gold); font-size:0.95rem; font-weight:700;">${i + 1}</span>
+                <strong style="color:#fff; font-size:0.95rem;">${ex.name}</strong>
+              </div>
+              <div style="color:var(--gold); font-size:0.78rem; margin-bottom:6px; font-weight:500;">${ex.detail}</div>
+              <div style="color:#c8c8c8; font-size:0.78rem; line-height:1.65;">${ex.note}</div>
+            </div>
+          `;
+        });
+        html += QuizEngine.resultCard('⑤ ' + gymLabel, gymHtml);
 
-        html += QuizEngine.resultCard('VISION ─ 3ヶ月後のあなた', `<p>${d.vision}</p>`);
+        // 2-6. おすすめプロテイン
+        const proteinHtml = `
+          <div style="padding:14px; background:var(--bg-elevated); border-radius:8px; border-left:3px solid var(--gold);">
+            <div style="color:var(--gold); font-size:0.7rem; letter-spacing:0.1em; margin-bottom:6px;">RYOTA'S CHOICE</div>
+            <div style="color:#fff; font-size:1rem; font-weight:700; margin-bottom:8px;">ANBEEK（アンビーク）プロテイン ヨーグルト味</div>
+            <div style="color:#ddd; font-size:0.82rem; line-height:1.7;">リョータが実際に毎日飲んでるメインプロテイン。スムージーやオートミールに混ぜても合う、飲みやすいヨーグルト味。朝と間食、トレ後の1日2〜3杯がおすすめ。</div>
+            <a href="https://anbeek.jp/" target="_blank" rel="noopener" style="display:inline-block; margin-top:10px; color:var(--gold); font-size:0.78rem;">ANBEEK公式 →</a>
+          </div>
+        `;
+        html += QuizEngine.resultCard('⑥ おすすめプロテイン', proteinHtml);
 
-        // Gated content
-        html += QuizEngine.gatedBlock('あなた専用の完全版メニュー', `
-          <table class="menu-table">
-            <tr>
-              <th>内容</th>
-              <th>詳細</th>
-            </tr>
-            <tr>
-              <td><strong>週間メニュー表</strong></td>
-              <td>全種目・重量・セット数を網羅</td>
-            </tr>
-            <tr>
-              <td><strong>食事テンプレ</strong></td>
-              <td>あなたのタイプに合った1週間分</td>
-            </tr>
-            <tr>
-              <td><strong>サプリ推薦</strong></td>
-              <td>おすすめプロテイン＆サプリ</td>
-            </tr>
-            <tr>
-              <td><strong>最短ロードマップ</strong></td>
-              <td>あなたの体型に合う理想の体へ</td>
-            </tr>
-          </table>
-        `);
+        // ───────── もっと詳しく（オプション） ─────────
+        html += `
+          <div style="text-align:center; margin:48px 0 20px;">
+            <div style="width:40px; height:1px; background:var(--border); margin:0 auto 16px;"></div>
+            <div style="font-size:0.68rem; letter-spacing:0.2em; color:#777;">OPTIONAL — もっと詳しく</div>
+          </div>
+        `;
+
+        // NG
+        const ngItems = {
+          ecto: ['長時間トレーニング（カロリー消費しすぎ）', '空腹で長時間過ごす', '朝食抜き（筋肉が分解される）', '極端な糖質制限'],
+          meso: ['惰性で揚げ物定食やラーメンセット', '運動しない日の夜の白米大量摂取', '同じメニューを何ヶ月も続ける（体が慣れる）'],
+          endo: ['締めラーメン、菓子パン、毎日のご褒美', 'ジュース・加糖コーヒー・スポドリ', '揚げ物中心の食事', '長時間座りっぱなし']
+        };
+        const ngHtml = '<ul style="list-style:none; padding:0; margin:0;">' + (ngItems[result.type] || []).map(it => `<li style="color:#ddd; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative;"><span style="position:absolute; left:0; color:#e74c3c;">✗</span>${it}</li>`).join('') + '</ul>';
+        html += QuizEngine.resultCard('NG ─ 避けたいこと', ngHtml);
+
+        // 3ヶ月後のビジョン
+        const visionMap = {
+          ecto: {
+            lean: '腕が一回り太くなり、胸板に厚みが出る。体重は2〜3kg増えて、しっかり食べられるようになる。Tシャツの着こなしが変わり、鎖骨のラインに厚みが加わる。',
+            athlete: '体重は5〜6kg増え、肩・胸・背中のボリュームが明らかに。シャツやジャケットのシルエットが変わる。「ジム行ってる？」と聞かれるようになる。'
+          },
+          meso: {
+            lean: '腹筋が浮き出て、肩・胸・背中のメリハリが明確に。体脂肪率は12%前後を狙える。服の上からでも「鍛えてる人」とわかるシルエットに変わる。',
+            athlete: '3ヶ月で体脂肪率10〜12%、筋量＋3〜4kgが目安。首・胸・肩のラインが変わり、周囲から「アスリートみたい」と言われるレベルに。'
+          },
+          endo: {
+            lean: 'お腹周りが3〜5cm細くなり、スーツを着たときのシルエットが変わる。二重あごが取れ、顎のラインがシャープになる。体重より見た目の変化が先に来る。',
+            athlete: '脂肪が減ってきたところに筋肉が浮かび上がる「リコンプ」状態に。厚みと引き締まりが両立した、最も貫禄のある体に近づく。'
+          }
+        };
+        const vision = (visionMap[result.type] && visionMap[result.type][result.targetBody]) || visionMap[result.type].lean;
+        html += QuizEngine.resultCard('VISION ─ 3ヶ月後のあなた', `<p style="color:#e8e8e8; line-height:1.85;">${vision}</p>`);
 
         return html;
       }
