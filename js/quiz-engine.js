@@ -472,16 +472,49 @@ class QuizEngine {
   }
 
   // ==================== 結果表示 ====================
+  // 回答を人間可読なテキストに変換（シート保存用）
+  buildReadableAnswers() {
+    const readable = {};
+    this.questions.forEach(q => {
+      const ans = this.answers[q.id];
+      if (ans === undefined || ans === null) return;
+
+      let label;
+      if (q.type === 'sub-questions' && Array.isArray(ans)) {
+        // 顔型診断のA/B選択配列：各サブ質問の回答ラベルに変換
+        label = ans.map((v, i) => {
+          const sub = q.subQuestions?.[i];
+          const opt = sub?.options?.find(o => o.value === v);
+          return opt ? opt.label : v;
+        }).join(' / ');
+      } else if (q.type === 'number' && typeof ans === 'object') {
+        // 数値入力：身長175cm、体重68kg のような形式
+        label = (q.fields || []).map(f => {
+          const v = ans[f.key];
+          if (v === undefined || v === null || v === '') return null;
+          return `${f.label || ''}${v}${f.suffix || ''}`;
+        }).filter(Boolean).join('、');
+      } else if (q.type === 'multi-select' && Array.isArray(ans)) {
+        label = ans.map(v => {
+          const o = (q.options || []).find(o => o.value === v);
+          return o ? o.label : v;
+        }).join('、');
+      } else {
+        // single-choice / icon-choice / image-choice
+        const o = (q.options || []).find(o => o.value === ans);
+        label = o ? o.label : ans;
+      }
+
+      const questionText = (q.text || '').replace(/<br\s*\/?>/gi, ' ');
+      readable[questionText] = label;
+    });
+    return readable;
+  }
+
   showResult() {
     const result = this.calcResult(this.answers);
     const resultHTML = this.renderResult(result, this.answers);
-
-    // データベースに保存
-    MRDB.saveResult({
-      diagnosisId: this.diagnosisId,
-      answers: this.answers,
-      result: result
-    });
+    const answersReadable = this.buildReadableAnswers();
 
     // ランダムCTA
     const cta = getRandomCTA();
@@ -507,6 +540,19 @@ class QuizEngine {
         <footer class="footer">© Men's Rise</footer>
       </div>
     `;
+
+    // DOM描画後に結果タイプ名を抽出してデータベース保存
+    const resultTypeEl = this.root.querySelector('.result-type');
+    const resultLabel = resultTypeEl ? resultTypeEl.textContent.replace(/\s+/g, ' ').trim() : '';
+
+    MRDB.saveResult({
+      diagnosisId: this.diagnosisId,
+      diagnosisName: this.title.replace(/<br\s*\/?>/gi, ' '),
+      answers: this.answers,
+      answersReadable: answersReadable,
+      result: result,
+      resultLabel: resultLabel
+    });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

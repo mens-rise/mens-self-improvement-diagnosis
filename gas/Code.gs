@@ -18,7 +18,7 @@ const SHEET_NAME = '診断結果';
 const HEADERS = [
   '日時',
   '名前',
-  '診断ID',
+  '診断名',
   '診断結果',
   '回答詳細',
   // 定量データ（全診断で使い回し、該当するものだけ入る）
@@ -30,6 +30,51 @@ const HEADERS = [
   '美容院予算',
   '肌の悩み'
 ];
+
+// 診断ID → 日本語名の対応表
+const DIAGNOSIS_NAMES = {
+  kintore: '筋トレ診断',
+  hada: '肌質診断',
+  kamigata: '髪型診断',
+  fashion: 'ファッション診断',
+  phase: '男磨きフェーズ診断'
+};
+
+// 男磨き予算の値 → 日本語ラベル
+const BUDGET_LABELS = {
+  minimal: '3,000円以内',
+  low: '3,000〜10,000円',
+  mid: '10,000〜30,000円',
+  high: '30,000円以上'
+};
+
+// 美容院頻度の値 → 日本語ラベル
+const SALON_FREQ_LABELS = {
+  monthly: '月1回',
+  bimonthly: '2〜3ヶ月に1回',
+  semiannual: '半年に1回',
+  rare: 'ほぼ行かない'
+};
+
+// 美容院予算の値 → 日本語ラベル
+const SALON_BUDGET_LABELS = {
+  low: '3,000円以内',
+  mid: '5,000円以内',
+  high: '8,000円以内',
+  unlimited: 'こだわらない'
+};
+
+// 肌の悩みの値 → 日本語ラベル
+const SKIN_CONCERN_LABELS = {
+  acne: 'ニキビ・吹き出物',
+  pores: '毛穴の黒ずみ・開き',
+  dryness: '乾燥・カサつき',
+  oiliness: 'テカリ・脂っぽさ',
+  redness: '赤み・肌荒れ',
+  spots: 'シミ・くすみ',
+  shaving: 'ひげ剃り後のヒリつき',
+  none: '特になし'
+};
 
 /**
  * 初回のみ実行：ヘッダー行を作成
@@ -48,6 +93,16 @@ function setupSheet() {
     .setFontColor('#c8a96e')
     .setFontWeight('bold');
   sheet.setFrozenRows(1);
+
+  // 列幅の調整
+  sheet.setColumnWidth(1, 140); // 日時
+  sheet.setColumnWidth(2, 120); // 名前
+  sheet.setColumnWidth(3, 160); // 診断名
+  sheet.setColumnWidth(4, 220); // 診断結果
+  sheet.setColumnWidth(5, 400); // 回答詳細
+  for (let i = 6; i <= HEADERS.length; i++) {
+    sheet.setColumnWidth(i, 120);
+  }
 }
 
 /**
@@ -64,33 +119,35 @@ function doPost(e) {
     }
 
     const answers = data.answers || {};
-    const result = data.result || {};
+    const answersReadable = data.answersReadable || {};
 
-    // 診断結果のタイプ名を抽出
-    let resultType = '';
-    if (typeof result === 'object') {
-      resultType = result.type || result.category || result.faceShape || JSON.stringify(result);
-    } else {
-      resultType = String(result);
-    }
+    // 診断名（日本語）
+    const diagnosisName = data.diagnosisName ||
+                         DIAGNOSIS_NAMES[data.diagnosisId] ||
+                         data.diagnosisId || '';
 
-    // 回答詳細をJSON文字列で保存（人間可読なインデント付き）
-    const answersStr = JSON.stringify(answers, null, 2);
+    // 診断結果（日本語ラベル）
+    const resultLabel = data.resultLabel || extractResultLabel(data.result);
 
-    // 定量データの抽出
-    const age = answers.age?.age || '';
-    const height = answers.body?.height || answers.height || '';
-    const weight = answers.body?.weight || '';
-    const manBudget = answers.budget || answers.salonBudget || '';
-    const salonFreq = answers.salonFreq || '';
-    const salonBudget = answers.salonBudget || '';
-    const skinConcerns = Array.isArray(answers.skinConcerns) ? answers.skinConcerns.join(', ') : '';
+    // 回答詳細を「質問: 回答」形式で整形
+    const answersStr = formatReadableAnswers(answersReadable);
+
+    // 定量データの抽出（複数のキーから拾う）
+    const age = extractNumber(answers.age, 'age');
+    const height = extractNumber(answers.body, 'height');
+    const weight = extractNumber(answers.body, 'weight');
+    const manBudget = BUDGET_LABELS[answers.budget] || answers.budget || '';
+    const salonFreq = SALON_FREQ_LABELS[answers.salonFreq] || answers.salonFreq || '';
+    const salonBudget = SALON_BUDGET_LABELS[answers.salonBudget] || answers.salonBudget || '';
+    const skinConcerns = Array.isArray(answers.skinConcerns)
+      ? answers.skinConcerns.map(v => SKIN_CONCERN_LABELS[v] || v).join('、')
+      : '';
 
     const row = [
       new Date(data.timestamp || Date.now()),
       data.name || '',
-      data.diagnosisId || '',
-      resultType,
+      diagnosisName,
+      resultLabel,
       answersStr,
       age,
       height,
@@ -112,8 +169,40 @@ function doPost(e) {
 }
 
 /**
+ * answersReadable オブジェクトを「質問: 回答」の複数行テキストに変換
+ * {"手首テスト": "余裕で重なる", ...} → "手首テスト: 余裕で重なる\n..."
+ */
+function formatReadableAnswers(readable) {
+  if (!readable || typeof readable !== 'object') return '';
+  return Object.keys(readable)
+    .map(q => `${q}：${readable[q]}`)
+    .join('\n');
+}
+
+/**
+ * 数値オブジェクトから特定のキーの値を抽出
+ */
+function extractNumber(obj, key) {
+  if (!obj) return '';
+  if (typeof obj === 'number') return obj;
+  if (typeof obj === 'object' && obj[key] != null) return obj[key];
+  return '';
+}
+
+/**
+ * result オブジェクトからラベルを抽出（resultLabel未送信時のフォールバック）
+ */
+function extractResultLabel(result) {
+  if (!result) return '';
+  if (typeof result === 'string' || typeof result === 'number') return String(result);
+  if (typeof result === 'object') {
+    return result.typeName || result.type || result.category || result.faceShape || '';
+  }
+  return '';
+}
+
+/**
  * GET: 管理ダッシュボード用にデータを取得
- * URL例: ?action=list / ?action=search&name=山田 / ?action=stats
  */
 function doGet(e) {
   try {
@@ -146,15 +235,14 @@ function doGet(e) {
         byResult: {}
       };
       records.forEach(r => {
-        const did = r['診断ID'];
-        stats.byDiagnosis[did] = (stats.byDiagnosis[did] || 0) + 1;
-        const key = `${did}:${r['診断結果']}`;
+        const dname = r['診断名'] || r['診断ID'] || '';
+        stats.byDiagnosis[dname] = (stats.byDiagnosis[dname] || 0) + 1;
+        const key = `${dname}:${r['診断結果']}`;
         stats.byResult[key] = (stats.byResult[key] || 0) + 1;
       });
       return jsonResponse({ status: 'ok', data: stats });
     }
 
-    // action === 'list'
     return jsonResponse({ status: 'ok', data: records });
   } catch (err) {
     return jsonResponse({ status: 'error', message: err.toString() });

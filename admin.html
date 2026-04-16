@@ -452,7 +452,7 @@
                 <div class="user-time">最終回答: ${new Date(latest['日時']).toLocaleString('ja-JP')}</div>
               </div>
               <div>
-                ${recs.map(r => `<span class="user-diagnosis">${DIAGNOSIS_LABELS[r['診断ID']] || r['診断ID']}: ${r['診断結果']}</span>`).join('')}
+                ${recs.map(r => `<span class="user-diagnosis">${r['診断名'] || DIAGNOSIS_LABELS[r['診断ID']] || r['診断ID']}: ${r['診断結果']}</span>`).join('')}
               </div>
               <div class="user-data-grid">
                 ${latest['年齢'] ? `<div class="data-item"><span class="data-item-label">年齢:</span>${latest['年齢']}歳</div>` : ''}
