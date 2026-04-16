@@ -12,9 +12,9 @@
   --bg-card: #141414;
   --bg-card-hover: #1a1a1a;
   --bg-elevated: #1e1e1e;
-  --text: #f0f0f0;
-  --text-secondary: #a0a0a0;
-  --text-muted: #666666;
+  --text: #f5f5f5;
+  --text-secondary: #c0c0c0;
+  --text-muted: #888888;
   --gold: #c8a96e;
   --gold-light: #dfc28f;
   --gold-dark: #a88c4f;
@@ -559,13 +559,26 @@ body {
 
 .result-card-body {
   font-size: 0.88rem;
-  line-height: 1.8;
-  color: var(--text);
+  line-height: 1.85;
+  color: #ececec;
+}
+
+.result-card-body p,
+.result-card-body li {
+  color: #ececec;
 }
 
 .result-card-body strong {
   font-weight: 700;
-  color: var(--white);
+  color: #ffffff;
+}
+
+.result-highlight,
+.result-highlight p,
+.result-highlight span,
+.result-highlight strong,
+.result-highlight div {
+  color: #ffffff !important;
 }
 
 .result-highlight {
@@ -574,9 +587,9 @@ body {
   padding: 14px 16px;
   margin: 12px 0;
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.88rem;
-  color: var(--white);
+  line-height: 1.8;
 }
 
 .result-image {

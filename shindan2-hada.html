@@ -88,11 +88,18 @@
         {
           id: 'current',
           text: '現在のスキンケアは？',
+          hint: '当てはまるものを全て選んでください',
+          type: 'multi-select',
+          maxSelect: 8,
           options: [
             { label: '何もしてない', value: 'nothing' },
-            { label: '洗顔のみ', value: 'wash' },
-            { label: '洗顔＋化粧水', value: 'basic' },
-            { label: 'フルセット（洗顔＋化粧水＋乳液＋美容液）', value: 'full' }
+            { label: 'クレンジング', value: 'cleansing' },
+            { label: '洗顔料', value: 'wash' },
+            { label: '化粧水', value: 'lotion' },
+            { label: '乳液', value: 'emulsion' },
+            { label: '美容液', value: 'serum' },
+            { label: 'クリーム', value: 'cream' },
+            { label: '日焼け止め', value: 'sunscreen' }
           ]
         },
         {

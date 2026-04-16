@@ -65,10 +65,15 @@
         {
           id: 'habit',
           text: '毎日続けてる習慣はある？',
+          hint: '当てはまるものを全て選んでください',
+          type: 'multi-select',
+          maxSelect: 6,
           options: [
             { label: '筋トレ', value: 'gym' },
             { label: 'スキンケア', value: 'skin' },
+            { label: '食事管理', value: 'diet' },
             { label: '読書', value: 'reading' },
+            { label: 'ジャーナリング・瞑想', value: 'journal' },
             { label: '特にない', value: 'none' }
           ]
         },
@@ -107,7 +112,9 @@
       calcResult: function(answers) {
         var history = answers.history;
         var worry = answers.worry;
-        var habit = answers.habit;
+        // habit は multi-select（配列）。後方互換のため single value でも動くように
+        var habitArr = Array.isArray(answers.habit) ? answers.habit : (answers.habit ? [answers.habit] : []);
+        var hasHabit = habitArr.length > 0 && !habitArr.includes('none');
         var confidence = answers.confidence;
         var peers = answers.peers;
 
@@ -115,13 +122,13 @@
         if (history === 'beginner' &&
             (worry === 'lost' || worry === 'looks') &&
             (confidence === 'zero' || confidence === 'little') &&
-            habit === 'none') {
+            !hasHabit) {
           return 1;
         }
 
         // Phase 2: 外見改造期
         if ((history === 'beginner' || history === 'half') &&
-            habit !== 'none' &&
+            hasHabit &&
             (confidence === 'little' || confidence === 'moderate')) {
           return 2;
         }
