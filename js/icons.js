@@ -74,6 +74,78 @@ const MR_ICONS = {
     <path d="M14 14 Q14 10 18 10 L46 10 Q50 10 50 14 L48 32 Q45 48 32 58 Q19 48 16 32 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
   </svg>`,
 
+  // 手首テスト 総合イラスト（質問の上部に大きく表示するやり方図）
+  wristTestIllustration: `<svg viewBox="0 0 360 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 上部：やり方説明イラスト -->
+    <g transform="translate(0, 10)">
+      <!-- 腕（下から伸びる） -->
+      <path d="M 130 75 L 130 15 Q 130 5 140 5 L 200 5 Q 210 5 210 15 L 210 75 Z" fill="#2a2a2a" stroke="currentColor" stroke-width="1.5"/>
+      <!-- 手首の位置マーク（腕の上端） -->
+      <ellipse cx="170" cy="75" rx="40" ry="7" fill="#1a1a1a" stroke="currentColor" stroke-width="1.2" opacity="0.8"/>
+      <!-- 反対の手の親指と中指（輪を作って手首を囲む） -->
+      <!-- 親指（左から回り込む） -->
+      <path d="M 110 75 Q 95 55 105 35 Q 115 20 135 22 Q 155 25 165 42" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- 中指（右から回り込む） -->
+      <path d="M 230 75 Q 245 55 235 35 Q 225 20 205 22 Q 185 25 175 42" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- 指先の重なり（交差部分） -->
+      <circle cx="165" cy="42" r="4" fill="currentColor"/>
+      <circle cx="175" cy="42" r="4" fill="currentColor"/>
+      <!-- ラベル -->
+      <text x="170" y="105" text-anchor="middle" fill="currentColor" font-size="11" font-weight="600" opacity="0.9">親指と中指で輪を作って手首を囲む</text>
+      <!-- 矢印 親指 -->
+      <text x="85" y="75" text-anchor="end" fill="currentColor" font-size="9" opacity="0.6">親指</text>
+      <path d="M 90 73 L 105 50" stroke="currentColor" stroke-width="0.8" opacity="0.5" marker-end="url(#arr)"/>
+      <text x="255" y="75" text-anchor="start" fill="currentColor" font-size="9" opacity="0.6">中指</text>
+      <path d="M 250 73 L 235 50" stroke="currentColor" stroke-width="0.8" opacity="0.5" marker-end="url(#arr)"/>
+    </g>
+
+    <!-- 下部：3パターンの結果比較 -->
+    <g transform="translate(0, 150)">
+      <!-- A パターン：余裕で重なる -->
+      <g transform="translate(30, 0)">
+        <!-- 手首（細い） -->
+        <circle cx="35" cy="45" r="11" fill="#3a3a3a" stroke="currentColor" stroke-width="1" opacity="0.7"/>
+        <text x="35" y="49" text-anchor="middle" fill="#fff" font-size="8">手首</text>
+        <!-- 指の輪（大きい） -->
+        <circle cx="35" cy="45" r="20" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <!-- 指先の重なり -->
+        <circle cx="28" cy="25" r="2.8" fill="currentColor"/>
+        <circle cx="42" cy="25" r="2.8" fill="currentColor"/>
+        <path d="M 25 22 L 45 30 M 45 22 L 25 30" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+        <!-- ラベル -->
+        <text x="35" y="88" text-anchor="middle" fill="currentColor" font-size="11" font-weight="700">A. 余裕で重なる</text>
+        <text x="35" y="103" text-anchor="middle" fill="currentColor" font-size="9" opacity="0.65">指が手首より大きい</text>
+      </g>
+
+      <!-- B パターン：ちょうど触れ合う -->
+      <g transform="translate(140, 0)">
+        <circle cx="35" cy="45" r="15" fill="#3a3a3a" stroke="currentColor" stroke-width="1" opacity="0.7"/>
+        <text x="35" y="49" text-anchor="middle" fill="#fff" font-size="8">手首</text>
+        <circle cx="35" cy="45" r="17" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <circle cx="32" cy="28" r="2.8" fill="currentColor"/>
+        <circle cx="38" cy="28" r="2.8" fill="currentColor"/>
+        <text x="35" y="88" text-anchor="middle" fill="currentColor" font-size="11" font-weight="700">B. 触れ合う</text>
+        <text x="35" y="103" text-anchor="middle" fill="currentColor" font-size="9" opacity="0.65">指と手首がほぼ同じ</text>
+      </g>
+
+      <!-- C パターン：届かない -->
+      <g transform="translate(250, 0)">
+        <!-- 手首（太い） -->
+        <circle cx="35" cy="45" r="20" fill="#3a3a3a" stroke="currentColor" stroke-width="1" opacity="0.7"/>
+        <text x="35" y="49" text-anchor="middle" fill="#fff" font-size="8">手首</text>
+        <!-- 指の輪（小さい） -->
+        <circle cx="35" cy="45" r="14" stroke="currentColor" stroke-width="2.5" fill="none" opacity="0.9"/>
+        <!-- 指先（離れている） -->
+        <circle cx="32" cy="31" r="2.8" fill="currentColor"/>
+        <circle cx="38" cy="31" r="2.8" fill="currentColor"/>
+        <!-- 隙間（点線） -->
+        <line x1="28" y1="25" x2="42" y2="25" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.7"/>
+        <text x="35" y="88" text-anchor="middle" fill="currentColor" font-size="11" font-weight="700">C. 届かない</text>
+        <text x="35" y="103" text-anchor="middle" fill="currentColor" font-size="9" opacity="0.65">手首が指より太い</text>
+      </g>
+    </g>
+  </svg>`,
+
   // 手首テスト（3パターン）
   // 手首を上から見た断面図。中央の円が「手首」、それを囲む親指＋中指の輪
   // ① 余裕で重なる：指の輪が手首より大きい → 指先が交差

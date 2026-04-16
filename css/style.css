@@ -160,10 +160,10 @@ body {
 }
 
 .progress-count {
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
   color: var(--gold);
-  font-family: var(--font-serif);
+  letter-spacing: 0.04em;
 }
 
 .progress-bar {
@@ -245,9 +245,8 @@ body {
   border: 1.5px solid var(--gold);
   color: var(--gold);
   border-radius: 50%;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  font-family: var(--font-serif);
   margin-bottom: 16px;
 }
 
@@ -264,6 +263,23 @@ body {
   color: var(--text-muted);
   margin-bottom: 28px;
   line-height: 1.6;
+}
+
+.question-illustration {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 16px;
+  margin-bottom: 24px;
+  color: var(--gold);
+}
+
+.question-illustration svg {
+  width: 100%;
+  height: auto;
+  max-width: 420px;
+  display: block;
+  margin: 0 auto;
 }
 
 /* ======== 選択肢ボタン ======== */
@@ -323,9 +339,8 @@ body {
   border: 1.5px solid var(--border-light);
   flex-shrink: 0;
   transition: var(--transition);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  font-family: var(--font-serif);
   color: var(--text-muted);
 }
 

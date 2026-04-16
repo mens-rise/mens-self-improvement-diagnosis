@@ -192,6 +192,7 @@ class QuizEngine {
             <span class="question-number">${this.currentQ + 1}</span>
             <h2 class="question-text">${q.text}</h2>
             ${q.hint ? `<p class="question-hint">${q.hint}</p>` : ''}
+            ${q.illustration ? `<div class="question-illustration">${q.illustration}</div>` : ''}
             ${inputHTML}
             ${canGoBack ? '<div style="margin-top:24px;"><button class="back-btn" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 前の質問に戻る</button></div>' : ''}
           </div>
