@@ -12,9 +12,11 @@
   <script src="js/database.js"></script>
   <script src="js/cta-variants.js"></script>
   <script src="js/icons.js"></script>
+  <script src="js/hada-data.js"></script>
   <script src="js/quiz-engine.js"></script>
   <script>
-    new QuizEngine({      diagnosisId: 'hada',
+    new QuizEngine({
+      diagnosisId: 'hada',
       iconSvg: MR_ICONS.hada,
       title: '肌質タイプ別<br>スキンケア診断',
       description: 'あなたの肌質を診断して<br>最適なケア方法を提案します',
@@ -27,7 +29,7 @@
           text: '年齢を教えてください',
           type: 'number',
           fields: [
-            { key: 'age', label: '', placeholder: '25', suffix: '歳' }
+            { key: 'age', label: '', placeholder: '28', suffix: '歳' }
           ]
         },
         {
@@ -122,7 +124,6 @@
 
         let type = 'normal';
 
-        // Primary rules
         if (sting === 'often' && redness === 'often') {
           type = 'sensitive';
         } else if (wash === 'tight' && acne !== 'often' && sting !== 'often') {
@@ -134,18 +135,11 @@
         } else if (wash === 'normal' && redness !== 'often' && sting !== 'often') {
           type = 'normal';
         } else {
-          // Default fallback chain
-          if (sting === 'often') {
-            type = 'sensitive';
-          } else if (wash === 'tight') {
-            type = 'dry';
-          } else if (wash === 'oily') {
-            type = 'oily';
-          } else if (wash === 't-zone') {
-            type = 'combination';
-          } else {
-            type = 'normal';
-          }
+          if (sting === 'often') type = 'sensitive';
+          else if (wash === 'tight') type = 'dry';
+          else if (wash === 'oily') type = 'oily';
+          else if (wash === 't-zone') type = 'combination';
+          else type = 'normal';
         }
 
         return {
@@ -155,272 +149,97 @@
       },
 
       renderResult: function(result, answers) {
-        const data = {
-          normal: {
-            name: '普通肌',
-            subtitle: 'バランス型',
-            feature: '皮脂と水分のバランスが取れている。肌トラブルが少ない。季節の変わり目に揺らぐ程度。',
-            care: '朝夜の洗顔・保湿を習慣化。洗顔のしすぎ注意。紫外線対策を徹底。',
-            firstBuy: '<a href="https://www.amazon.co.jp/dp/B001JF0MQC" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿化粧水II</a>（2,090円）— セラミド配合で肌バリア維持',
-            budgetProducts: {
-              low: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B06VX4FB9W" target="_blank" rel="noopener" style="color:var(--gold);">ちふれ 濃厚クリーム</a>(990円)',
-              mid: '<a href="https://www.amazon.co.jp/dp/B001JF0MQC" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿化粧水II</a>(2,090円) + <a href="https://www.amazon.co.jp/dp/B001JF0MRG" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 潤浸保湿フェイスクリーム</a>(2,970円)'
-            },
-            why: '皮脂腺の働きと水分保持機能のバランスが取れている恵まれた肌。ストレスや季節の変化にはやや弱い。',
-            morningRoutine: [
-              '①ぬるま湯だけの洗顔',
-              '②化粧水',
-              '③乳液（べたつく日はなし）'
-            ],
-            nightRoutine: [
-              '①クレンジング（日焼け止めを使った日のみ）',
-              '②洗顔',
-              '③化粧水',
-              '④乳液',
-              '⑤クリーム'
-            ],
-            ngActions: [
-              '洗顔のしすぎ（必要な皮脂まで落とす）',
-              '日焼け止めを塗らない日',
-              '遅い時間の食事・飲酒'
-            ],
-            futureVision: '肌トラブルがほぼゼロに。季節の変わり目でも安定。写真映りが良くなる。'
-          },
-          dry: {
-            name: '乾燥肌',
-            subtitle: '保湿命タイプ',
-            feature: '洗顔後につっぱる、カサつく。乾燥が一番肌トラブルに繋がるので保湿が最重要。',
-            care: '「保湿重視」。アミノ酸系洗顔＋セラミド化粧水＋保湿クリーム。',
-            firstBuy: '<a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>（1,980円）— セラミド配合で乾燥肌の基本。コスパも◎',
-            budgetProducts: {
-              low: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>(1,980円)',
-              mid: '<a href="https://www.amazon.co.jp/dp/B0FL761H75" target="_blank" rel="noopener" style="color:var(--gold);">ミノンアミノモイスト モイストチャージローションII</a>(2,200円) + <a href="https://www.amazon.co.jp/dp/B0BXRZT8PG" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿クリーム</a>(1,980円)'
-            },
-            why: '角質層のセラミドや天然保湿因子(NMF)が不足しがち。バリア機能が弱いので外部刺激を受けやすい。原因は遺伝・加齢・間違った洗顔（熱いお湯、擦りすぎ）が多い。',
-            morningRoutine: [
-              '①ぬるま湯だけで軽く洗う',
-              '②化粧水を2回重ね付け',
-              '③クリームをしっかり'
-            ],
-            nightRoutine: [
-              '①クレンジング',
-              '②アミノ酸系洗顔（泡で優しく）',
-              '③化粧水',
-              '④美容液',
-              '⑤保湿クリーム'
-            ],
-            ngActions: [
-              '熱いお湯での洗顔（天然保湿因子が流れる）',
-              'タオルでゴシゴシ拭く',
-              'スクラブ入り洗顔料',
-              'アルコール入り化粧水'
-            ],
-            futureVision: '洗顔後のつっぱりがなくなり、ひげ剃り後のヒリつきも軽減。小ジワが目立たなくなる。'
-          },
-          oily: {
-            name: '脂性肌',
-            subtitle: 'テカリ制御タイプ',
-            feature: '顔全体がテカる。毛穴が目立ちやすい。ニキビができやすい。',
-            care: '石鹸系成分の洗顔。オイルフリー・アルコールフリーの保湿。生活習慣改善が重要。洗顔は朝夜2回まで。',
-            firstBuy: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>（1,780円）— 皮脂対策＋保湿のバランス',
-            budgetProducts: {
-              low: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>(1,780円) + <a href="https://www.amazon.co.jp/dp/B00122NBVA" target="_blank" rel="noopener" style="color:var(--gold);">キュレル クリーム</a>(550円)',
-              mid: '<a href="https://www.amazon.co.jp/dp/B007MWYUXM" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア化粧水</a>(1,780円) + <a href="https://www.amazon.co.jp/dp/B007MWYV90" target="_blank" rel="noopener" style="color:var(--gold);">キュレル 皮脂トラブルケア保湿ジェル</a>(2,090円)'
-            },
-            why: '皮脂腺の活動が過剰。原因は男性ホルモンの影響、食生活（糖質・脂質過多）、ストレス、睡眠不足。',
-            morningRoutine: [
-              '①石鹸系洗顔（朝夜2回まで）',
-              '②オイルフリー化粧水',
-              '③軽めの乳液'
-            ],
-            nightRoutine: [
-              '①クレンジング',
-              '②洗顔（丁寧に、でも擦らない）',
-              '③化粧水',
-              '④ジェル or 乳液'
-            ],
-            ngActions: [
-              '1日3回以上の洗顔',
-              '皮脂を拭き取りすぎる（かえって分泌を促進）',
-              'オイル入り化粧品',
-              '甘いもの・揚げ物の過剰摂取'
-            ],
-            futureVision: '日中のテカリが半分以下に。毛穴の黒ずみが薄くなり、ニキビの頻度が減る。'
-          },
-          combination: {
-            name: '混合肌',
-            subtitle: '部位別ケアタイプ',
-            feature: 'Tゾーンはテカるが頬や口周りは乾燥。季節で変わる。日本人に最も多い。',
-            care: '「部位別ケア」。Tゾーンのみ泡洗顔。保湿は必須（乾燥が主原因）。',
-            firstBuy: '<a href="https://www.amazon.co.jp/dp/B0GFCYGLMK" target="_blank" rel="noopener" style="color:var(--gold);">IHADA 薬用ローション</a>（1,800円）— 肌荒れ防止＋保湿',
-            budgetProducts: {
-              low: '<a href="https://www.amazon.co.jp/dp/B0GFCYGLMK" target="_blank" rel="noopener" style="color:var(--gold);">IHADA 薬用ローション</a>(1,800円) + <a href="https://www.amazon.co.jp/dp/B00122NBVA" target="_blank" rel="noopener" style="color:var(--gold);">キュレル クリーム</a>(550円)',
-              mid: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 保湿浸透水モイストリッチ</a>(1,100円) + <a href="https://www.amazon.co.jp/dp/B075996DM4" target="_blank" rel="noopener" style="color:var(--gold);">キュレル エイジングケアシリーズ</a>(3,080円)'
-            },
-            why: '日本人男性に最も多い肌質。Tゾーン（額・鼻）は皮脂腺が多く、Uゾーン（頬・口周り）は乾燥しやすい。ホルモンバランスや季節で変動する。',
-            morningRoutine: [
-              '①Tゾーンのみ泡洗顔',
-              '②化粧水（全体）',
-              '③Tゾーンは軽め、Uゾーンはクリームも'
-            ],
-            nightRoutine: [
-              '①クレンジング',
-              '②洗顔（Tゾーン重点）',
-              '③化粧水',
-              '④Uゾーンはクリーム、Tゾーンは乳液'
-            ],
-            ngActions: [
-              '全体を同じケアで済ませる',
-              'Tゾーンを洗いすぎて頬が乾燥',
-              'べたつく保湿クリームを顔全体に塗る'
-            ],
-            futureVision: 'Tゾーンのテカリと頬の乾燥、両方が改善。全体がマットで健康的な質感に。'
-          },
-          sensitive: {
-            name: '敏感肌',
-            subtitle: '低刺激シンプルタイプ',
-            feature: 'スキンケアを使っても赤み、痒みが出る。化粧水でヒリヒリ。季節の変わり目に荒れやすい。',
-            care: 'クレンジング・洗顔を優しい成分に。スキンケアはシンプルに。絶対に擦らない。',
-            firstBuy: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂 化粧水</a>（1,100円）— 低刺激で敏感肌でも安心',
-            recommended: [
-              { category: 'クレンジング', item: 'お日様で作ったクレンジングオイル' },
-              { category: '洗顔', item: 'ニベア弱酸性泡洗顔' },
-              { category: '化粧水', item: '<a href="https://www.amazon.co.jp/dp/B0BXS767JL" target="_blank" rel="noopener" style="color:var(--gold);">松山油脂</a>' },
-              { category: '美容液', item: 'Trube' },
-              { category: 'クリーム', item: 'メタトロンコントアBクリーム' }
-            ],
-            why: '肌のバリア機能が慢性的に低下している状態。化粧品の成分に敏感に反応する。生まれつきの場合とストレス・生活習慣での場合がある。',
-            morningRoutine: [
-              '①ぬるま湯だけ（洗顔料なし）',
-              '②低刺激化粧水',
-              '③低刺激クリーム'
-            ],
-            nightRoutine: [
-              '①低刺激クレンジング',
-              '②低刺激洗顔（泡で優しく）',
-              '③化粧水',
-              '④クリーム',
-              '※絶対に擦らない、新商品は1週間テストしてから使う'
-            ],
-            ngActions: [
-              '成分表を見ずに買う',
-              '新商品をいきなり顔全体に塗る',
-              '摩擦（コットン、タオル、手のひらすべて）',
-              '頻繁に製品を変える'
-            ],
-            futureVision: '化粧品を試してもヒリヒリしなくなる。赤みが引いて、安定した肌の状態が続く。'
-          }
-        };
+        const d = HADA_DATA[result.type];
+        const products = HADA_PRODUCTS[result.type] || [];
+        const routine = HADA_ROUTINES[result.type];
+        const ng = HADA_NG[result.type] || [];
+        const vision = HADA_VISION[result.type];
+        const catColors = HADA_CAT_COLORS;
 
-        const d = data[result.type];
-        const budget = result.budget;
         let html = '';
 
-        // Result header
+        // ───────── ヘッダー ─────────
         html += `
           <div class="result-header">
             <div class="result-label">YOUR SKIN TYPE</div>
             <div class="result-type">${d.name}</div>
-            <div class="result-subtitle">${d.subtitle}</div>
+            <div class="result-subtitle">${d.tag}</div>
           </div>
         `;
 
-        // Feature
-        html += QuizEngine.resultCard('YOUR FEATURE ─ 肌の特徴', `<p>${d.feature}</p>`);
+        // ───────── ① 原因カード ─────────
+        html += QuizEngine.resultCard(
+          'CAUSE ─ あなたがこの肌質である理由',
+          `<p style="line-height:1.85; font-family:inherit;">${d.cause}</p>`
+        );
 
-        // Care strategy
-        html += QuizEngine.resultCard('CARE ─ ケア方針', `<p><strong>${d.care}</strong></p>`);
+        // ───────── ② 正解アクション 見出し ─────────
+        html += `
+          <div style="text-align:center; margin:40px 0 20px;">
+            <div style="font-family:var(--font-serif); font-size:0.75rem; letter-spacing:0.2em; color:var(--gold); margin-bottom:6px;">ACTION</div>
+            <div style="font-size:1.1rem; font-weight:700; color:var(--white); font-family:inherit;">あなたの正解アクション</div>
+            <div style="width:40px; height:1px; background:var(--gold); margin:16px auto 0;"></div>
+          </div>
+        `;
 
-        // First buy with highlight
-        html += QuizEngine.resultCard('FIRST BUY ─ まずこの1品買え', `
-          <div class="result-highlight">${d.firstBuy}</div>
-        `);
-
-        // Budget-appropriate products
-        if (result.type === 'sensitive') {
-          // Sensitive skin: show recommended lineup
-          let recHTML = '<p style="font-size:0.85rem; margin-bottom:12px;">敏感肌向けおすすめライン：</p>';
-          recHTML += '<ul class="check-list">';
-          d.recommended.forEach(function(r) {
-            recHTML += `<li><strong>${r.category}：</strong>${r.item}</li>`;
-          });
-          recHTML += '</ul>';
-          html += QuizEngine.resultCard('RECOMMENDED ─ おすすめアイテム', recHTML);
-        } else {
-          // Other types: show budget-matched products
-          let budgetLabel = '';
-          let budgetContent = '';
-
-          if (budget === 'low') {
-            budgetLabel = '3,000円以内プラン';
-            budgetContent = d.budgetProducts.low;
-          } else if (budget === 'mid') {
-            budgetLabel = '5,000円以内プラン';
-            budgetContent = d.budgetProducts.mid;
-          } else if (budget === 'high' || budget === 'unlimited') {
-            budgetLabel = '5,000円以内プラン';
-            budgetContent = d.budgetProducts.mid;
-          } else {
-            budgetLabel = '3,000円以内プラン';
-            budgetContent = d.budgetProducts.low;
-          }
-
-          html += QuizEngine.resultCard('PRODUCTS ─ ' + budgetLabel, `
-            <div class="result-highlight">${budgetContent}</div>
-          `);
-        }
-
-        // WHY - なぜあなたはこの肌質か
-        html += QuizEngine.resultCard('WHY ─ なぜあなたはこの肌質か', `<p>${d.why}</p>`);
-
-        // 朝夜のケアルーティン
-        let routineHTML = '<p style="font-size:0.9rem; margin-bottom:8px;"><strong>朝のケア</strong></p>';
-        routineHTML += '<ul class="check-list">';
-        d.morningRoutine.forEach(function(step) {
-          routineHTML += `<li>${step}</li>`;
+        // 2-1. 朝夜のルーティン
+        let routineHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:16px; font-family:inherit;">塗る順番を守るのが最重要。水分→油分の順で。</p>';
+        // 朝
+        routineHtml += '<div style="margin-bottom:18px;"><div style="color:var(--gold); font-size:0.8rem; font-weight:700; margin-bottom:10px; font-family:inherit;">☀ 朝のルーティン</div>';
+        routine.morning.forEach((step, i) => {
+          routineHtml += `
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:var(--bg-elevated); border-radius:8px; margin-bottom:6px;">
+              <span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; border-radius:50%; background:rgba(200,169,110,0.15); color:var(--gold); font-weight:700; font-size:0.82rem; font-family:inherit;">${i + 1}</span>
+              <span style="color:#f0f0f0; font-size:0.85rem; line-height:1.5; font-family:inherit;">${step}</span>
+            </div>
+          `;
         });
-        routineHTML += '</ul>';
-        routineHTML += '<p style="font-size:0.9rem; margin-top:16px; margin-bottom:8px;"><strong>夜のケア</strong></p>';
-        routineHTML += '<ul class="check-list">';
-        d.nightRoutine.forEach(function(step) {
-          routineHTML += `<li>${step}</li>`;
+        routineHtml += '</div>';
+        // 夜
+        routineHtml += '<div><div style="color:var(--gold); font-size:0.8rem; font-weight:700; margin-bottom:10px; font-family:inherit;">🌙 夜のルーティン</div>';
+        routine.night.forEach((step, i) => {
+          routineHtml += `
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:var(--bg-elevated); border-radius:8px; margin-bottom:6px;">
+              <span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; border-radius:50%; background:rgba(200,169,110,0.15); color:var(--gold); font-weight:700; font-size:0.82rem; font-family:inherit;">${i + 1}</span>
+              <span style="color:#f0f0f0; font-size:0.85rem; line-height:1.5; font-family:inherit;">${step}</span>
+            </div>
+          `;
         });
-        routineHTML += '</ul>';
-        html += QuizEngine.resultCard('ROUTINE ─ 朝夜のケアルーティン', routineHTML);
+        routineHtml += '</div>';
+        html += QuizEngine.resultCard('① 朝夜のケアルーティン', routineHtml);
 
-        // NG行動
-        let ngHTML = '<p style="font-size:0.85rem; margin-bottom:12px;">以下の行動は肌を悪化させます：</p>';
-        ngHTML += '<ul class="check-list">';
-        d.ngActions.forEach(function(ng) {
-          ngHTML += `<li>✗ ${ng}</li>`;
+        // 2-2. カテゴリ別おすすめ商品
+        let prodHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px; font-family:inherit;">このセットを揃えれば、あなたのスキンケアは完結します。</p>';
+        products.forEach(p => {
+          const color = catColors[p.cat] || '#c8a96e';
+          prodHtml += `
+            <div style="margin-bottom:12px; padding:14px; background:var(--bg-elevated); border-radius:8px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="display:inline-block; padding:3px 10px; background:${color}20; color:${color}; border:1px solid ${color}60; border-radius:20px; font-size:0.7rem; font-weight:700; font-family:inherit;">${p.cat}</span>
+                <span style="color:var(--gold); font-size:0.78rem; font-weight:600; font-family:inherit; margin-left:auto;">${p.price}</span>
+              </div>
+              <div style="color:#fff; font-size:0.9rem; font-weight:700; margin-bottom:4px; font-family:inherit;">${p.name}</div>
+              <div style="color:#c8c8c8; font-size:0.78rem; line-height:1.55; margin-bottom:8px; font-family:inherit;">${p.note}</div>
+              <a href="${p.url}" target="_blank" rel="noopener" style="color:var(--gold); font-size:0.74rem; font-family:inherit;">Amazonで見る →</a>
+            </div>
+          `;
         });
-        ngHTML += '</ul>';
-        html += QuizEngine.resultCard('NG ─ 避けるべきこと', ngHTML);
+        html += QuizEngine.resultCard('② あなたの肌質に合う商品（カテゴリ別）', prodHtml);
 
-        // 3ヶ月後の変化イメージ
-        html += QuizEngine.resultCard('FUTURE ─ 3ヶ月後の変化イメージ', `<p>${d.futureVision}</p>`);
+        // ───────── もっと詳しく（オプション） ─────────
+        html += `
+          <div style="text-align:center; margin:48px 0 20px;">
+            <div style="width:40px; height:1px; background:var(--border); margin:0 auto 16px;"></div>
+            <div style="font-size:0.68rem; letter-spacing:0.2em; color:#777; font-family:inherit;">OPTIONAL — もっと詳しく</div>
+          </div>
+        `;
 
-        // Gated content
-        html += QuizEngine.gatedBlock('あなた専用の完全版スキンケア', `
-          <table class="menu-table">
-            <tr>
-              <th>内容</th>
-              <th>詳細</th>
-            </tr>
-            <tr>
-              <td><strong>朝夜フルルーティン</strong></td>
-              <td>朝・夜それぞれの完全ステップ</td>
-            </tr>
-            <tr>
-              <td><strong>悩み別追加ケア</strong></td>
-              <td>ニキビ・毛穴・シミなど個別対策</td>
-            </tr>
-            <tr>
-              <td><strong>予算別商品リスト完全版</strong></td>
-              <td>全価格帯のおすすめ商品一覧</td>
-            </tr>
-          </table>
-        `);
+        // NG
+        const ngHtml = '<ul style="list-style:none; padding:0; margin:0;">' + ng.map(it => `<li style="color:#ddd; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative; font-family:inherit;"><span style="position:absolute; left:0; color:#e74c3c;">✗</span>${it}</li>`).join('') + '</ul>';
+        html += QuizEngine.resultCard('NG ─ 避けたいこと', ngHtml);
+
+        // 3ヶ月後
+        html += QuizEngine.resultCard('VISION ─ 3ヶ月後のあなた', `<p style="color:#e8e8e8; line-height:1.85; font-family:inherit;">${vision}</p>`);
 
         return html;
       }
