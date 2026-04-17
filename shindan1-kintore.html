@@ -243,8 +243,8 @@
         });
         html += QuizEngine.resultCard('② 1日の食事例', mealHtml);
 
-        // 2-3. コンビニで買うものリスト
-        let convHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:12px;">セブン・ローソンで買える鉄板商品。迷ったらこのリストから。</p>';
+        // 2-3. コンビニ＆ネットで買うものリスト
+        let convHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:12px;">セブン・ローソンやAmazon等のネットで揃う鉄板商品。迷ったらこのリストから。</p>';
         convenienceList.forEach(item => {
           convHtml += `
             <div style="display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border);">
@@ -256,7 +256,7 @@
             </div>
           `;
         });
-        html += QuizEngine.resultCard('③ コンビニで買うもの（セブン・ローソン）', convHtml);
+        html += QuizEngine.resultCard('③ コンビニ・ネットで買えるもの', convHtml);
 
         // 2-4. スーパーで買うものリスト
         let superHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:12px;">業務スーパーや普通のスーパーで揃うもの。自炊派はここから。</p>';
@@ -275,16 +275,16 @@
 
         // 2-5. ジムメニュー
         const gymLabel = result.gym === 'home' ? '自宅でやる3種目' : 'ジムでやる3種目';
-        let gymHtml = `<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px;">${result.gym === 'home' ? '器具なしで体が変わる、自重の鉄板3種目。' : '週' + (result.frequency === 'two' ? '2' : result.frequency === 'three' ? '3' : '4') + '回、これだけやれば3ヶ月で見た目が変わります。'}</p>`;
+        let gymHtml = `<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px; font-family:inherit;">${result.gym === 'home' ? '器具なしで体が変わる、自重の鉄板3種目。' : '週' + (result.frequency === 'two' ? '2' : result.frequency === 'three' ? '3' : '4') + '回、これだけやれば3ヶ月で見た目が変わります。'}</p>`;
         gymMenu.forEach((ex, i) => {
           gymHtml += `
-            <div style="margin-bottom:14px; padding:14px; background:var(--bg-elevated); border-radius:8px;">
+            <div style="margin-bottom:14px; padding:14px; background:var(--bg-elevated); border-radius:8px; font-family:inherit;">
               <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:6px;">
-                <span style="color:var(--gold); font-size:1rem; font-weight:800;">${i + 1}.</span>
-                <strong style="color:#fff; font-size:0.95rem;">${ex.name}</strong>
+                <span style="color:var(--gold); font-size:1rem; font-weight:800; font-family:inherit;">${i + 1}.</span>
+                <strong style="color:#fff; font-size:0.95rem; font-family:inherit;">${ex.name}</strong>
               </div>
-              <div style="color:var(--gold); font-size:0.78rem; margin-bottom:6px; font-weight:500;">${ex.detail}</div>
-              <div style="color:#c8c8c8; font-size:0.78rem; line-height:1.65;">${ex.note}</div>
+              <div style="color:var(--gold); font-size:0.78rem; margin-bottom:6px; font-weight:500; font-family:inherit;">${ex.detail}</div>
+              <div style="color:#c8c8c8; font-size:0.78rem; line-height:1.65; font-family:inherit;">${ex.note}</div>
             </div>
           `;
         });
@@ -294,9 +294,9 @@
         const proteinHtml = `
           <div style="padding:14px; background:var(--bg-elevated); border-radius:8px; border-left:3px solid var(--gold);">
             <div style="color:var(--gold); font-size:0.7rem; letter-spacing:0.1em; margin-bottom:6px;">RYOTA'S CHOICE</div>
-            <div style="color:#fff; font-size:1rem; font-weight:700; margin-bottom:8px;">ANBEEK（アンビーク）プロテイン ヨーグルト味</div>
-            <div style="color:#ddd; font-size:0.82rem; line-height:1.7;">リョータが実際に毎日飲んでるメインプロテイン。スムージーやオートミールに混ぜても合う、飲みやすいヨーグルト味。朝と間食、トレ後の1日2〜3杯がおすすめ。</div>
-            <a href="https://anbeek.jp/" target="_blank" rel="noopener" style="display:inline-block; margin-top:10px; color:var(--gold); font-size:0.78rem;">ANBEEK公式 →</a>
+            <div style="color:#fff; font-size:1rem; font-weight:700; margin-bottom:8px;">アンビーク オールインワン プロテイン（ヨーグルト風味）</div>
+            <div style="color:#ddd; font-size:0.82rem; line-height:1.7;">リョータが実際に毎日飲んでるメインプロテイン。ビタミン11種・ミネラル4種を配合した国産ホエイ。スムージーやオートミールに混ぜても合う、飲みやすいヨーグルト風味。朝と間食、トレ後の1日2〜3杯がおすすめ。</div>
+            <a href="https://www.amazon.co.jp/dp/B0BYYWXZD8" target="_blank" rel="noopener" style="display:inline-block; margin-top:10px; color:var(--gold); font-size:0.78rem;">Amazonで見る →</a>
           </div>
         `;
         html += QuizEngine.resultCard('⑥ おすすめプロテイン', proteinHtml);
@@ -334,7 +334,7 @@
           }
         };
         const vision = (visionMap[result.type] && visionMap[result.type][result.targetBody]) || visionMap[result.type].lean;
-        html += QuizEngine.resultCard('VISION ─ 3ヶ月後のあなた', `<p style="color:#e8e8e8; line-height:1.85;">${vision}</p>`);
+        html += QuizEngine.resultCard('VISION ─ 3ヶ月後のあなた', `<p style="color:#e8e8e8; line-height:1.85; font-family:inherit;">${vision}</p>`);
 
         return html;
       }

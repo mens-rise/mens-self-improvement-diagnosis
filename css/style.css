@@ -576,6 +576,16 @@ body {
   font-size: 0.88rem;
   line-height: 1.85;
   color: #ececec;
+  font-family: var(--font-sans);
+}
+
+.result-card-body *,
+.result-card-body p,
+.result-card-body span,
+.result-card-body div,
+.result-card-body li,
+.result-card-body strong {
+  font-family: var(--font-sans) !important;
 }
 
 .result-card-body p,
