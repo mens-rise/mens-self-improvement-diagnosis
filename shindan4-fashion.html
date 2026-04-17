@@ -327,13 +327,13 @@
           winter: '冬コーデ'
         };
 
-        // --- WHY data (なぜこの体型にこのスタイルか) ---
-        var whyData = {
-          short_slim: '身長が低め＋体の厚みが少ないため、線が細く頼りなく見えやすい。上半身にボリュームを足して、下半身で縦のラインを作ることで、逆算的に身長を高く見せる。',
-          short_big: '身長が低め＋体に厚みがある場合、全体がコンパクトに詰まって見える。ゆったりしたシルエットで体のラインを拾わず、縦方向を強調して引き締まった印象に。',
-          medium_all: '日本人男性の標準的な体型で、最もスタイリングの選択肢が多い。スタンダードなサイジングが合うので、シルエットと色使いでトレンド感を出す。',
-          tall_slim: '身長があり細身の場合、線が細く頼りない印象になりやすい。曲線シルエットのパンツで下半身にボリュームを足し、立体感を演出する。',
-          tall_normal: '身長を活かせる体型。面積の大きいアイテム（ロングコート、ワイドシルエット）が映える。ただしオーバーサイズにしすぎると大柄な印象になりすぎるので注意。'
+        // --- 原因（体型別）---
+        var causeData = {
+          short_slim: 'あなたは身長が低め＋体の厚みが少ないため、<strong>線が細く頼りなく見える</strong>のが主な課題。<br><br>正解は、<strong>上半身にボリュームを足して、下半身で縦のラインを作る</strong>こと。短丈・身幅広めのトップスで上を膨らませ、スラックスで縦を強調することで、視覚的に身長を高く＋バランスよく見せられます。',
+          short_big: 'あなたは身長が低め＋体に厚みがあるため、<strong>全体がコンパクトに詰まって見える</strong>のが課題。<br><br>正解は、<strong>ゆったりしたシルエットで体のラインを拾わず、縦方向を強調する</strong>こと。リラックスフィットのジャケットや落ち着いた色使いで、大人っぽく引き締まった印象に変えられます。',
+          medium_all: 'あなたは日本人男性の標準的な体型で、<strong>最もスタイリングの選択肢が多い</strong>恵まれたポジション。<br><br>スタンダードなサイジングが合うので、基本の形を押さえた上で<strong>シルエットと色使いでトレンド感を出す</strong>のが正解。ボックスシルエットやコットンブロードなど、素材感で差をつけられます。',
+          tall_slim: 'あなたは身長があり細身のため、<strong>線が細く頼りない印象</strong>になりやすい。<br><br>正解は、<strong>曲線シルエットのパンツで下半身にボリューム</strong>を足すこと。バレルレッグやカーブシルエットで立体感を演出して、今っぽいスタイリッシュさを作れます。',
+          tall_normal: 'あなたは身長を活かせる恵まれた体型。<strong>面積の大きいアイテム（ロングコート、ワイドシルエット）が映える</strong>のが最大の武器。<br><br>ただしオーバーサイズにしすぎると大柄な印象になりすぎるので、着丈や素材感で上品さをキープするのが正解です。'
         };
 
         // --- 3ヶ月後の変化イメージ ---
@@ -350,90 +350,128 @@
 
         var html = '';
 
-        // Result header
+        // ───── ヘッダー ─────
         html += '<div class="result-header">';
         html += '<div class="result-label">YOUR STYLE TYPE</div>';
         html += '<div class="result-type">' + d.type + '</div>';
+        html += '<div class="result-subtitle" style="font-family:inherit;">目指すシルエット： ' + d.silhouette + '</div>';
         html += '</div>';
 
-        // Silhouette card（Y/A/Iラインの説明付き）
-        var silhouetteExplain = {
-          'I': '上下とも細くまっすぐなシルエット。縦のラインを強調してスタイルを高く見せる。スーツスタイルの基本形。',
-          'Y': '上半身にボリュームがあり、下半身は細く絞るシルエット。アルファベットの「Y」のような形。秋冬のアウター主役コーデに多い。',
-          'A': '上半身はコンパクト、下半身にボリュームを持たせるシルエット。「A」の字のような形。上半身を引き締めて下で遊ぶ。'
-        };
-        var silhouetteBody = '<p><strong style="color:var(--white);font-size:1rem;">' + d.silhouette + '</strong></p>';
-        silhouetteBody += '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">';
-        // 含まれるライン（I/Y/A）を抽出して説明を追加
-        var lines = [];
-        if (d.silhouette.indexOf('I') !== -1) lines.push('I');
-        if (d.silhouette.indexOf('Y') !== -1) lines.push('Y');
-        if (d.silhouette.indexOf('A') !== -1) lines.push('A');
-        lines.forEach(function(l, idx) {
-          silhouetteBody += '<div style="' + (idx > 0 ? 'margin-top:10px;' : '') + '"><span style="display:inline-block;min-width:56px;font-family:var(--font-serif);color:var(--gold);font-weight:700;font-size:0.9rem;">' + l + ' LINE</span><span style="font-size:0.82rem;color:var(--text);">' + silhouetteExplain[l] + '</span></div>';
-        });
-        silhouetteBody += '</div>';
-        html += QuizEngine.resultCard('SILHOUETTE ─ シルエット', silhouetteBody);
+        // ───── ① 原因カード ─────
+        html += QuizEngine.resultCard(
+          'CAUSE ─ あなたの体型とシルエットの関係',
+          '<p style="line-height:1.85; font-family:inherit;">' + causeData[result.category] + '</p>'
+        );
 
-        // Key item card
-        html += QuizEngine.resultCard('KEY ITEM ─ キーアイテム', '<p><strong style="color:var(--white);">' + d.keyItem + '</strong></p><p style="margin-top:8px; font-size:0.85rem; color:var(--text-secondary);">' + d.reason + '</p>');
+        // ───── ② 正解アクション 見出し ─────
+        html += '<div style="text-align:center; margin:40px 0 20px;">'
+              + '<div style="font-family:var(--font-serif); font-size:0.75rem; letter-spacing:0.2em; color:var(--gold); margin-bottom:6px;">ACTION</div>'
+              + '<div style="font-size:1.1rem; font-weight:700; color:var(--white); font-family:inherit;">あなたの正解アクション</div>'
+              + '<div style="width:40px; height:1px; background:var(--gold); margin:16px auto 0;"></div>'
+              + '</div>';
 
-        // NG card
-        html += QuizEngine.resultCard('NG ─ 避けるべきこと', '<div class="result-highlight" style="border-left-color: #ef4444;">' + d.ng + '</div>');
+        // 2-1. まず揃える固定アイテム
+        html += QuizEngine.resultCard(
+          '① まず揃える鉄板2点',
+          '<p style="font-size:0.82rem; color:#ccc; margin-bottom:12px; font-family:inherit;">体型に関係なく、この2つを揃えれば足元からコーデが決まります。下半身を固定できるので、上はTシャツでも様になる。</p>'
+          + '<div style="padding:14px; background:var(--bg-elevated); border-radius:8px; margin-bottom:10px;">'
+          +   '<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">'
+          +     '<span style="display:inline-block; padding:3px 10px; background:rgba(200,169,110,0.15); color:var(--gold); border:1px solid var(--gold); border-radius:20px; font-size:0.7rem; font-weight:700; font-family:inherit;">ボトムス</span>'
+          +   '</div>'
+          +   '<div style="color:#fff; font-size:0.92rem; font-weight:700; margin-bottom:4px; font-family:inherit;">黒スラックス（センタープレス・ワイドストレート）</div>'
+          +   '<div style="color:#c8c8c8; font-size:0.78rem; line-height:1.55; font-family:inherit;">ユニクロ or GUで2,000〜4,000円。センタープレスが入っていて、足のラインがまっすぐ見えるもの。</div>'
+          + '</div>'
+          + '<div style="padding:14px; background:var(--bg-elevated); border-radius:8px;">'
+          +   '<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">'
+          +     '<span style="display:inline-block; padding:3px 10px; background:rgba(200,169,110,0.15); color:var(--gold); border:1px solid var(--gold); border-radius:20px; font-size:0.7rem; font-weight:700; font-family:inherit;">シューズ</span>'
+          +   '</div>'
+          +   '<div style="color:#fff; font-size:0.92rem; font-weight:700; margin-bottom:4px; font-family:inherit;">コインローファー（黒）</div>'
+          +   '<div style="color:#c8c8c8; font-size:0.78rem; line-height:1.55; font-family:inherit;">ABCマート or ミハマ で5,000〜8,000円。上品さをワンランク上げる汎用性の高い1足。</div>'
+          + '</div>'
+        );
 
-        // Fixed items card
-        html += QuizEngine.resultCard('FIXED ITEMS ─ 固定アイテム', '<p><strong style="color:var(--white);">' + d.fixedItems + '</strong></p><p style="margin-top:6px; font-size:0.8rem; color:var(--text-muted);">この2つはどの体型でも鉄板。まず揃えろ。</p>');
+        // 2-2. あなたの体型の最初の1着
+        html += QuizEngine.resultCard(
+          '② あなたの体型で最初に買うべき1着',
+          '<p style="font-size:0.82rem; color:#ccc; margin-bottom:12px; font-family:inherit;">鉄板2点を揃えたら、次はこれ。体型の課題を一発で解決してくれる1着です。</p>'
+          + '<div style="padding:16px; background:var(--bg-elevated); border-radius:8px; border-left:3px solid var(--gold);">'
+          +   '<div style="color:var(--gold); font-size:0.7rem; letter-spacing:0.1em; margin-bottom:6px; font-family:inherit;">KEY ITEM</div>'
+          +   '<div style="color:#fff; font-size:1rem; font-weight:700; margin-bottom:8px; font-family:inherit;">' + d.keyItem + '</div>'
+          +   '<div style="color:#ddd; font-size:0.82rem; line-height:1.7; font-family:inherit;">' + d.reason + '</div>'
+          + '</div>'
+        );
 
-        // First buy card
-        html += QuizEngine.resultCard('FIRST BUY ─ 最初に買うべき1着', '<div class="result-highlight">' + d.firstBuy + '</div>');
-
-        // --- Seasonal coordinate visual card ---
+        // 2-3. 今季のコーデ例
         var coords = coordData[result.category][season];
         if (coords) {
-          html += '<div class="coord-visual">';
-          html += '<div class="coord-visual-header">';
-          html += '<span class="coord-visual-title">Coordinate ─ ' + seasonLabels[season] + '</span>';
-          html += '<span class="coord-visual-label">Pattern A</span>';
-          html += '</div>';
-
-          // Silhouette label
-          var silMap = {short_slim:'I〜Y LINE',short_big:'Y LINE',medium_all:'I〜Y LINE',tall_slim:'A〜Y LINE',tall_normal:'Y LINE'};
-          html += '<div class="coord-visual-silhouette">' + (silMap[result.category]||'') + '</div>';
-
-          html += '<div class="coord-stack">';
+          var coordHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px; font-family:inherit;">今の季節にそのまま真似できるコーデ例。ユニクロや無印で大体揃います。</p>';
+          coordHtml += '<div class="coord-visual" style="margin:0;">';
+          coordHtml += '<div class="coord-visual-header"><span class="coord-visual-title">' + seasonLabels[season] + '</span><span class="coord-visual-label">Pattern A</span></div>';
+          coordHtml += '<div class="coord-stack">';
           for (var i = 0; i < coords.length; i++) {
             var item = coords[i];
             var dotColor = colorMap[item.color] || '#555';
-            html += '<div class="coord-layer">';
-            html += '<span class="coord-layer-tag">' + item.cat + '</span>';
-            html += '<span class="coord-layer-name">' + item.name + '</span>';
-            html += '<span class="coord-layer-swatch" style="background:' + dotColor + ';"></span>';
-            html += '<span class="coord-layer-color-name">' + item.color + '</span>';
-            html += '</div>';
+            coordHtml += '<div class="coord-layer">';
+            coordHtml += '<span class="coord-layer-tag">' + item.cat + '</span>';
+            coordHtml += '<span class="coord-layer-name">' + item.name + '</span>';
+            coordHtml += '<span class="coord-layer-swatch" style="background:' + dotColor + ';"></span>';
+            coordHtml += '<span class="coord-layer-color-name">' + item.color + '</span>';
+            coordHtml += '</div>';
           }
-          html += '</div>';
-
-          html += '<div class="coord-visual-note">※ 固定アイテム：黒スラックス ＋ コインローファー（黒）</div>';
-          html += '</div>';
+          coordHtml += '</div>';
+          coordHtml += '<div class="coord-visual-note">※ 固定アイテム：黒スラックス ＋ コインローファー（黒）</div>';
+          coordHtml += '</div>';
+          html += QuizEngine.resultCard('③ 今季のコーデ例', coordHtml);
         }
 
-        // --- Theory tips card ---
-        html += QuizEngine.resultCard('THEORY ─ 覚えるべき2つの法則', '<div style="margin-bottom:14px;"><p style="font-weight:700; margin-bottom:4px; color:var(--white);">ドレス7 : カジュアル3</p><p style="font-size:0.85rem; color:var(--text);">全体の7割をドレス（きれいめ）、3割をカジュアルにするとバランスが取れる。黒スラックス＋ローファーで下半身をドレスに固定すれば、トップスで遊べる。</p></div><div><p style="font-weight:700; margin-bottom:4px; color:var(--white);">3分割コーデ法</p><p style="font-size:0.85rem; color:var(--text);">体を「アウター・インナー・ボトムス」の3ブロックに分割して考える。3色以内に収め、1つのブロックだけアクセントにすると簡単にまとまる。</p></div>');
+        // 2-4. 買い物の優先順位リスト
+        html += QuizEngine.resultCard(
+          '④ 予算別ショッピングリスト',
+          '<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px; font-family:inherit;">この順番で揃えれば、買い物で迷わない。ユニクロ中心で1万円台からスタート可能。</p>'
+          + '<div style="padding:12px 14px; background:var(--bg-elevated); border-radius:8px; margin-bottom:10px; border-left:3px solid var(--gold);">'
+          +   '<div style="color:var(--gold); font-weight:700; font-size:0.82rem; margin-bottom:6px; font-family:inherit;">STEP 1（まず揃える）</div>'
+          +   '<ul style="font-size:0.82rem; color:#e8e8e8; line-height:1.75; padding-left:18px; margin:0; font-family:inherit;">'
+          +     '<li>黒スラックス（ユニクロ or GU「センタープレスワイドストレート」2,000〜4,000円）</li>'
+          +     '<li>コインローファー（ABCマート or ミハマ 5,000〜8,000円）</li>'
+          +   '</ul>'
+          + '</div>'
+          + '<div style="padding:12px 14px; background:var(--bg-elevated); border-radius:8px; margin-bottom:10px; border-left:3px solid var(--gold); opacity:0.9;">'
+          +   '<div style="color:var(--gold); font-weight:700; font-size:0.82rem; margin-bottom:6px; font-family:inherit;">STEP 2（次に揃える）</div>'
+          +   '<ul style="font-size:0.82rem; color:#e8e8e8; line-height:1.75; padding-left:18px; margin:0; font-family:inherit;">'
+          +     '<li>白無地Tシャツ（ユニクロ「U」クルーネック 1,500円）</li>'
+          +     '<li>オックスフォードシャツ（ユニクロ 2,990円）</li>'
+          +   '</ul>'
+          + '</div>'
+          + '<div style="padding:12px 14px; background:var(--bg-elevated); border-radius:8px; border-left:3px solid var(--gold); opacity:0.8;">'
+          +   '<div style="color:var(--gold); font-weight:700; font-size:0.82rem; margin-bottom:6px; font-family:inherit;">STEP 3（慣れてから）</div>'
+          +   '<ul style="font-size:0.82rem; color:#e8e8e8; line-height:1.75; padding-left:18px; margin:0; font-family:inherit;">'
+          +     '<li>' + d.keyItem + '（あなたの体型専用のキーアイテム）</li>'
+          +   '</ul>'
+          + '</div>'
+        );
 
-        // --- WHY card (なぜこの体型にこのスタイルか) ---
-        html += QuizEngine.resultCard('WHY ─ なぜあなたの体型にこのスタイルか', '<p style="font-size:0.88rem; line-height:1.8; color:var(--text);">' + whyData[result.category] + '</p>');
+        // ───── オプション ─────
+        html += '<div style="text-align:center; margin:48px 0 20px;">'
+              + '<div style="width:40px; height:1px; background:var(--border); margin:0 auto 16px;"></div>'
+              + '<div style="font-size:0.68rem; letter-spacing:0.2em; color:#777; font-family:inherit;">OPTIONAL — もっと詳しく</div>'
+              + '</div>';
 
-        // --- 予算別ショッピングリスト（優先順位）---
-        html += QuizEngine.resultCard('SHOPPING LIST ─ 予算別ショッピングリスト（優先順位）', '<div style="margin-bottom:14px;"><p style="font-weight:700; margin-bottom:6px; color:var(--gold);">優先順位1（まず買え）</p><ul style="font-size:0.85rem; color:var(--text); line-height:1.75; padding-left:18px; margin:0;"><li>黒スラックス（ユニクロ or GU「センタープレスワイドストレート」税込2,000〜4,000円）</li><li>コインローファー（ABCマート or ミハマ、黒、税込5,000〜8,000円）</li></ul></div><div style="margin-bottom:14px;"><p style="font-weight:700; margin-bottom:6px; color:var(--gold);">優先順位2（次に買え）</p><ul style="font-size:0.85rem; color:var(--text); line-height:1.75; padding-left:18px; margin:0;"><li>白無地Tシャツ（ユニクロ「U」クルーネック、1,500円）</li><li>オックスフォードシャツ（ユニクロ、2,990円）</li></ul></div><div><p style="font-weight:700; margin-bottom:6px; color:var(--gold);">優先順位3（慣れてきたら）</p><ul style="font-size:0.85rem; color:var(--text); line-height:1.75; padding-left:18px; margin:0;"><li>カテゴリ別のキーアイテム（ブレザー／テーラード／ロングコートなど、あなたの体型に合ったキーアイテム）</li></ul></div>');
+        // NG
+        html += QuizEngine.resultCard(
+          'NG ─ 避けたいこと',
+          '<ul style="list-style:none; padding:0; margin:0; font-family:inherit;">'
+          + '<li style="color:#ddd; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative; font-family:inherit;"><span style="position:absolute; left:0; color:#e74c3c;">✗</span>' + d.ng + '</li>'
+          + '<li style="color:#ddd; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative; font-family:inherit;"><span style="position:absolute; left:0; color:#e74c3c;">✗</span>毎シーズンすべて新調する（軸のアイテムを長く使う方が◎）</li>'
+          + '<li style="color:#ddd; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative; font-family:inherit;"><span style="position:absolute; left:0; color:#e74c3c;">✗</span>「ブランド」で選ぶ（シルエットと色で選ぶのが鉄則）</li>'
+          + '<li style="color:#ddd; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative; font-family:inherit;"><span style="position:absolute; left:0; color:#e74c3c;">✗</span>サイズ直しをしない（既製品は99%合っていない）</li>'
+          + '</ul>'
+        );
 
-        // --- NG行動（避けるべきこと）---
-        html += QuizEngine.resultCard('NG ACTIONS ─ 避けるべき行動', '<ul style="font-size:0.85rem; color:var(--text); line-height:1.85; padding-left:18px; margin:0;"><li>毎シーズンすべてのアイテムを新調する（軸のアイテムを長く使う）</li><li>セールだからと買う（サイズが合わなければ意味なし）</li><li>「ブランド」で選ぶ（シルエットと色で選ぶ）</li><li>サイズ直しをしない（既製品そのままは99%合っていない）</li><li>靴を1足しか持たない（革靴・スニーカー・ローファーの3足は最低持つ）</li></ul>');
-
-        // --- 3ヶ月後の変化イメージ ---
-        html += QuizEngine.resultCard('FUTURE ─ 3ヶ月後の変化イメージ', '<div class="result-highlight"><p style="font-size:0.9rem; line-height:1.8; color:var(--white); margin:0; font-weight:500;">' + futureData[result.category] + '</p></div>');
-
-        // --- Gated content ---
-        html += QuizEngine.gatedBlock('あなた専用のファッション完全ガイド', '<table class="menu-table"><tr><th>内容</th><th>詳細</th></tr><tr><td><strong>全季節コピペコーデ</strong></td><td>春夏秋冬すべてのコーデを網羅</td></tr><tr><td><strong>予算別ショッピングリスト</strong></td><td>商品名＋リンク＋価格つき</td></tr><tr><td><strong>体型別NGファッションリスト</strong></td><td>あなたの体型で避けるべきアイテム一覧</td></tr></table>');
+        // 3ヶ月後
+        html += QuizEngine.resultCard(
+          'VISION ─ 3ヶ月後のあなた',
+          '<p style="color:#e8e8e8; line-height:1.85; font-family:inherit;">' + futureData[result.category] + '</p>'
+        );
 
         return html;
       }

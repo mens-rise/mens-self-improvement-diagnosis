@@ -290,71 +290,86 @@
           html += QuizEngine.resultCard('YOUR HAIRSTYLE ─ あなたに似合う髪型', photoHtml);
         }
 
-        // Direction card
-        html += QuizEngine.resultCard('DIRECTION ─ 似合う方向性', '<p>' + fd.direction + '</p>');
+        // ───── ① 原因カード ─────
+        html += QuizEngine.resultCard(
+          'CAUSE ─ あなたがこの髪型である理由',
+          '<p style="line-height:1.85; font-family:inherit;">' + fd.why + '</p>'
+        );
 
-        // Recommended styles
-        var recHtml = '<ul class="check-list">';
-        for (var i = 0; i < fd.recommended.length; i++) {
-          recHtml += '<li>' + fd.recommended[i] + '</li>';
+        // ───── ② 正解アクション 見出し ─────
+        html += '<div style="text-align:center; margin:40px 0 20px;">'
+              + '<div style="font-family:var(--font-serif); font-size:0.75rem; letter-spacing:0.2em; color:var(--gold); margin-bottom:6px;">ACTION</div>'
+              + '<div style="font-size:1.1rem; font-weight:700; color:var(--white); font-family:inherit;">あなたの正解アクション</div>'
+              + '<div style="width:40px; height:1px; background:var(--gold); margin:16px auto 0;"></div>'
+              + '</div>';
+
+        // 2-1. 美容院オーダー文言
+        var orderHtml = '<p style="margin-bottom:10px; font-size:0.82rem; color:#ccc; font-family:inherit;">美容師さんにそのまま見せればOK。スクショを送るだけで、あなたに合った髪型がオーダーできます。</p>';
+        orderHtml += '<div class="result-highlight">' + fd.order + '</div>';
+        html += QuizEngine.resultCard('① 美容院でのオーダー文言', orderHtml);
+
+        // 2-2. 毎日のスタイリング手順（番号付き）
+        var steps = routineSteps[fd.routineType];
+        var stepsHtml = '<p style="margin-bottom:14px; font-size:0.82rem; color:#ccc; font-family:inherit;">' + routineLabels[fd.routineType] + '</p>';
+        for (var s = 0; s < steps.length; s++) {
+          stepsHtml += '<div style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:var(--bg-elevated); border-radius:8px; margin-bottom:6px;">'
+                    + '<span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; border-radius:50%; background:rgba(200,169,110,0.15); color:var(--gold); font-weight:700; font-size:0.82rem; font-family:inherit;">' + (s + 1) + '</span>'
+                    + '<span style="color:#f0f0f0; font-size:0.85rem; line-height:1.55; font-family:inherit;">' + steps[s] + '</span>'
+                    + '</div>';
         }
-        recHtml += '</ul>';
-        html += QuizEngine.resultCard('RECOMMEND ─ おすすめスタイル', recHtml);
+        html += QuizEngine.resultCard('② 毎日のスタイリング手順', stepsHtml);
 
-        // Avoid styles
-        html += QuizEngine.resultCard('AVOID ─ 避けたいスタイル', '<p>' + fd.avoid + '</p>');
-
-        // Celebs
-        html += QuizEngine.resultCard('CELEB ─ 同じ顔型の芸能人', '<p>' + fd.celebs + '</p>');
-
-        // Styling product recommendations
+        // 2-3. おすすめスタイリング剤
         var products = getProductRecommendations(result);
-        var prodHtml = '';
+        var prodHtml = '<p style="font-size:0.82rem; color:#ccc; margin-bottom:14px; font-family:inherit;">あなたの髪質・目指す雰囲気に合うスタイリング剤。</p>';
         for (var p = 0; p < products.length; p++) {
-          prodHtml += '<div class="result-highlight">';
-          prodHtml += '<strong>' + products[p].name + '</strong><br>';
-          prodHtml += '<span style="font-size:0.8rem;font-weight:400;">' + products[p].desc + '</span><br>';
-          prodHtml += '<a href="' + products[p].url + '" target="_blank" rel="noopener" style="font-size:0.75rem;color:var(--text-muted);word-break:break-all;">' + products[p].url + '</a>';
-          prodHtml += '</div>';
+          prodHtml += '<div style="padding:14px; background:var(--bg-elevated); border-radius:8px; margin-bottom:10px; border-left:3px solid var(--gold);">'
+                   + '<div style="color:#fff; font-size:0.92rem; font-weight:700; margin-bottom:6px; font-family:inherit;">' + products[p].name + '</div>'
+                   + '<div style="color:#c8c8c8; font-size:0.78rem; line-height:1.55; margin-bottom:8px; font-family:inherit;">' + products[p].desc + '</div>'
+                   + '<a href="' + products[p].url + '" target="_blank" rel="noopener" style="color:var(--gold); font-size:0.74rem; font-family:inherit;">商品ページを見る →</a>'
+                   + '</div>';
         }
-        html += QuizEngine.resultCard('STYLING ─ おすすめスタイリング剤', prodHtml);
+        html += QuizEngine.resultCard('③ おすすめスタイリング剤', prodHtml);
 
-        // Forehead tips
+        // ───── オプション ─────
+        html += '<div style="text-align:center; margin:48px 0 20px;">'
+              + '<div style="width:40px; height:1px; background:var(--border); margin:0 auto 16px;"></div>'
+              + '<div style="font-size:0.68rem; letter-spacing:0.2em; color:#777; font-family:inherit;">OPTIONAL — もっと詳しく</div>'
+              + '</div>';
+
+        // 避けたいスタイル + NG行動をまとめる
+        var avoidItems = [fd.avoid];
+        for (var na = 0; na < ngActions.length; na++) {
+          avoidItems.push(ngActions[na]);
+        }
+        var ngCombinedHtml = '<ul style="list-style:none; padding:0; margin:0; font-family:inherit;">';
+        for (var ai = 0; ai < avoidItems.length; ai++) {
+          ngCombinedHtml += '<li style="color:#ddd; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative; font-family:inherit;"><span style="position:absolute; left:0; color:#e74c3c;">✗</span>' + avoidItems[ai] + '</li>';
+        }
+        ngCombinedHtml += '</ul>';
+        html += QuizEngine.resultCard('NG ─ 避けたいこと', ngCombinedHtml);
+
+        // おでこ別アドバイス
         var foreheadTip = '';
         if (result.forehead === 'wide') {
           foreheadTip = '前髪で隠すスタイルがおすすめ。重めバングやマッシュ系で額をカバーすると小顔効果も。';
         } else if (result.forehead === 'narrow') {
-          foreheadTip = 'アップバングで額を見せるスタイルが◎。おでこが狭いからこそ上げた方がバランスが取れる。';
+          foreheadTip = 'アップバングで額を見せるスタイルが◎。おでこが狭いからこそ上げた方がバランスが取れます。';
         } else {
           foreheadTip = 'おでこの広さは標準的。上げても下ろしてもバランスが取りやすい。好みで選んでOK。';
         }
-        html += QuizEngine.resultCard('FOREHEAD TIP ─ おでこ別アドバイス', '<p>' + foreheadTip + '</p>');
+        html += QuizEngine.resultCard('おでこ別アドバイス', '<p style="font-family:inherit;">' + foreheadTip + '</p>');
 
-        // WHY - なぜこの顔型にこの髪型が似合うのか
-        html += QuizEngine.resultCard('WHY ─ なぜこの髪型が似合うのか', '<p>' + fd.why + '</p>');
+        // 参考芸能人
+        html += QuizEngine.resultCard('同じ顔型の芸能人', '<p style="font-family:inherit;">' + fd.celebs + '</p>');
 
-        // SALON ORDER - 美容院でのオーダー文言
-        var orderHtml = '<p style="margin-bottom:0.75rem;font-size:0.85rem;color:var(--text-muted);">美容師さんにそのまま伝えればOK。コピーして使ってください。</p>';
-        orderHtml += '<div class="result-highlight">' + fd.order + '</div>';
-        html += QuizEngine.resultCard('SALON ORDER ─ 美容院でのオーダー文言', orderHtml);
-
-        // DAILY STYLING - 毎日のスタイリング手順
-        var steps = routineSteps[fd.routineType];
-        var stepsHtml = '<p style="margin-bottom:0.75rem;font-size:0.85rem;color:var(--text-muted);">' + routineLabels[fd.routineType] + '</p>';
-        stepsHtml += '<ol class="check-list" style="padding-left:1.2rem;">';
-        for (var s = 0; s < steps.length; s++) {
-          stepsHtml += '<li>' + steps[s] + '</li>';
+        // おすすめスタイル（ダブりだが補足として）
+        var recHtml = '<ul style="list-style:none; padding:0; margin:0; font-family:inherit;">';
+        for (var ri = 0; ri < fd.recommended.length; ri++) {
+          recHtml += '<li style="color:#e0e0e0; font-size:0.85rem; padding:6px 0; padding-left:20px; position:relative; font-family:inherit;"><span style="position:absolute; left:0; color:var(--gold);">✓</span>' + fd.recommended[ri] + '</li>';
         }
-        stepsHtml += '</ol>';
-        html += QuizEngine.resultCard('DAILY STYLING ─ 毎日のスタイリング手順', stepsHtml);
-
-        // NG ACTIONS - 避けるべきこと
-        var ngHtml = '<ul class="check-list">';
-        for (var n = 0; n < ngActions.length; n++) {
-          ngHtml += '<li>' + ngActions[n] + '</li>';
-        }
-        ngHtml += '</ul>';
-        html += QuizEngine.resultCard('NG ACTION ─ 避けるべきこと', ngHtml);
+        recHtml += '</ul>';
+        html += QuizEngine.resultCard('他に似合うスタイル', recHtml);
 
         // Gated content
         html += QuizEngine.gatedBlock('あなた専用のヘアスタイル完全ガイド', '\
