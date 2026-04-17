@@ -529,13 +529,12 @@ body {
 }
 
 .result-label {
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 0.68rem;
+  font-weight: 700;
   letter-spacing: 0.25em;
   color: var(--gold);
   margin-bottom: 10px;
   text-transform: uppercase;
-  font-family: var(--font-serif);
 }
 
 .result-type {
@@ -561,15 +560,13 @@ body {
 }
 
 .result-card-title {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.08em;
   color: var(--gold);
   margin-bottom: 12px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
-  text-transform: uppercase;
-  font-family: var(--font-serif);
 }
 
 .result-card-body {
@@ -640,12 +637,10 @@ body {
 }
 
 .coord-visual-title {
-  font-size: 0.7rem;
+  font-size: 0.74rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   color: var(--gold);
-  font-family: var(--font-serif);
-  text-transform: uppercase;
 }
 
 .coord-visual-label {
@@ -728,10 +723,10 @@ body {
   display: flex;
   justify-content: center;
   margin: 16px 0 8px;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   color: var(--gold);
-  letter-spacing: 0.1em;
-  font-family: var(--font-serif);
+  letter-spacing: 0.08em;
+  font-weight: 700;
 }
 
 /* ======== ゲーティング（ブラー） ======== */
@@ -959,11 +954,10 @@ body {
 
 .top-brand {
   font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
+  font-weight: 700;
+  letter-spacing: 0.25em;
   color: var(--gold);
   margin-bottom: 6px;
-  font-family: var(--font-serif);
   text-transform: uppercase;
 }
 
