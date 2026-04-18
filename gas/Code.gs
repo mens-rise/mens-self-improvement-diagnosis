@@ -13,6 +13,17 @@
 
 // スプレッドシートのシート名
 const SHEET_NAME = '診断結果';
+const CTA_SHEET_NAME = 'CTAクリック';
+
+// CTAクリックシートのヘッダー
+const CTA_HEADERS = [
+  '日時',
+  '名前',
+  'クリック元',   // 'result' = 診断結果画面, 'top' = トップページ
+  '診断ID',
+  '診断名',
+  'リンク先'
+];
 
 // シートのヘッダー（列の順番）
 const HEADERS = [
@@ -103,6 +114,56 @@ function setupSheet() {
   for (let i = 6; i <= HEADERS.length; i++) {
     sheet.setColumnWidth(i, 120);
   }
+
+  // CTAクリックシートもセットアップ
+  setupCtaSheet();
+}
+
+/**
+ * CTAクリック用シートのセットアップ
+ */
+function setupCtaSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(CTA_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(CTA_SHEET_NAME);
+  }
+  if (sheet.getLastRow() === 0) {
+    sheet.getRange(1, 1, 1, CTA_HEADERS.length).setValues([CTA_HEADERS]);
+    sheet.getRange(1, 1, 1, CTA_HEADERS.length)
+      .setBackground('#1a1a1a')
+      .setFontColor('#c8a96e')
+      .setFontWeight('bold');
+    sheet.setFrozenRows(1);
+    sheet.setColumnWidth(1, 160); // 日時
+    sheet.setColumnWidth(2, 140); // 名前
+    sheet.setColumnWidth(3, 120); // クリック元
+    sheet.setColumnWidth(4, 120); // 診断ID
+    sheet.setColumnWidth(5, 180); // 診断名
+    sheet.setColumnWidth(6, 320); // リンク先
+  }
+  return sheet;
+}
+
+/**
+ * CTAクリックを記録
+ */
+function recordCtaClick(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(CTA_SHEET_NAME);
+  if (!sheet) sheet = setupCtaSheet();
+
+  const diagnosisId = data.diagnosisId || '';
+  const diagnosisName = data.diagnosisName || DIAGNOSIS_NAMES[diagnosisId] || '';
+
+  sheet.appendRow([
+    new Date(data.timestamp || Date.now()),
+    data.name || '(名前なし)',
+    data.source || '',
+    diagnosisId,
+    diagnosisName,
+    data.url || ''
+  ]);
 }
 
 /**
@@ -111,6 +172,14 @@ function setupSheet() {
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+
+    // CTAクリックの記録（診断結果とは別シートに保存）
+    if (data.type === 'cta_click') {
+      recordCtaClick(data);
+      return ContentService.createTextOutput(JSON.stringify({ status: 'ok' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet) {
@@ -232,7 +301,8 @@ function doGet(e) {
         total: records.length,
         uniqueUsers: new Set(records.map(r => r['名前'])).size,
         byDiagnosis: {},
-        byResult: {}
+        byResult: {},
+        cta: getCtaStats()
       };
       records.forEach(r => {
         const dname = r['診断名'] || r['診断ID'] || '';
@@ -243,10 +313,53 @@ function doGet(e) {
       return jsonResponse({ status: 'ok', data: stats });
     }
 
+    if (action === 'cta_list') {
+      return jsonResponse({ status: 'ok', data: getCtaRecords() });
+    }
+
     return jsonResponse({ status: 'ok', data: records });
   } catch (err) {
     return jsonResponse({ status: 'error', message: err.toString() });
   }
+}
+
+/**
+ * CTAクリックシートの全レコードを取得
+ */
+function getCtaRecords() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(CTA_SHEET_NAME);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+  const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, CTA_HEADERS.length).getValues();
+  return values.map(row => {
+    const obj = {};
+    CTA_HEADERS.forEach((h, i) => { obj[h] = row[i]; });
+    return obj;
+  });
+}
+
+/**
+ * CTAクリック統計
+ * - totalClicks: 総クリック数
+ * - uniqueUsers: ユニークユーザー数（同名は1カウント）
+ * - bySource: クリック元別（result/top）
+ * - byDiagnosis: 診断別クリック数
+ */
+function getCtaStats() {
+  const records = getCtaRecords();
+  const stats = {
+    totalClicks: records.length,
+    uniqueUsers: new Set(records.map(r => String(r['名前'] || '').trim()).filter(Boolean)).size,
+    bySource: {},
+    byDiagnosis: {}
+  };
+  records.forEach(r => {
+    const src = r['クリック元'] || 'unknown';
+    stats.bySource[src] = (stats.bySource[src] || 0) + 1;
+    const dname = r['診断名'] || r['診断ID'] || '(トップページ)';
+    stats.byDiagnosis[dname] = (stats.byDiagnosis[dname] || 0) + 1;
+  });
+  return stats;
 }
 
 function jsonResponse(obj) {

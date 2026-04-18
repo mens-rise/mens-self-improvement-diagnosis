@@ -530,7 +530,7 @@ class QuizEngine {
               <h3 class="cta-education-title">${cta.title}</h3>
               <p class="cta-education-body">${cta.body}</p>
             </div>
-            <a href="${CONFIG.CTA_URL}" class="cta-btn" target="_blank" rel="noopener">
+            <a href="${CONFIG.CTA_URL}" class="cta-btn" id="ctaBtnMain" target="_blank" rel="noopener">
               説明会の詳細をチェックする
             </a>
             <a href="index.html" class="cta-btn-secondary">
@@ -554,6 +554,19 @@ class QuizEngine {
       result: result,
       resultLabel: resultLabel
     });
+
+    // CTAボタン（説明会ページへのリンク）クリック計測
+    const ctaBtn = document.getElementById('ctaBtnMain');
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', () => {
+        MRDB.trackCtaClick({
+          source: 'result',
+          diagnosisId: this.diagnosisId,
+          diagnosisName: this.title.replace(/<br\s*\/?>/gi, ' '),
+          url: CONFIG.CTA_URL
+        });
+      });
+    }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

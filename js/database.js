@@ -27,6 +27,38 @@ const MRDB = {
     }
   },
 
+  // CTAクリックを記録（ナビゲーションを邪魔しないよう sendBeacon を優先）
+  trackCtaClick({ source, diagnosisId, diagnosisName, url }) {
+    const payload = {
+      type: 'cta_click',
+      name: this.getName(),
+      timestamp: new Date().toISOString(),
+      source: source || 'unknown',      // 'result' | 'top'
+      diagnosisId: diagnosisId || '',
+      diagnosisName: diagnosisName || '',
+      url: url || ''
+    };
+    try {
+      const body = JSON.stringify(payload);
+      if (navigator.sendBeacon) {
+        // sendBeacon はナビゲーションをブロックしない（最推奨）
+        const blob = new Blob([body], { type: 'text/plain;charset=utf-8' });
+        navigator.sendBeacon(CONFIG.GAS_ENDPOINT, blob);
+      } else {
+        // フォールバック（ブラウザが対応してない場合）
+        fetch(CONFIG.GAS_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: body
+        });
+      }
+    } catch (err) {
+      console.error('trackCtaClick failed:', err);
+    }
+  },
+
   // 診断結果をGASに送信
   async saveResult(payload) {
     const data = {

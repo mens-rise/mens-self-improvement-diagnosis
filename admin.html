@@ -272,6 +272,8 @@
         <div class="loading" id="statsLoading">読み込み中...</div>
         <div id="statsContent" style="display:none;">
           <div class="stats-grid" id="statsGrid"></div>
+          <div class="chart-section" id="ctaSummary"></div>
+          <div class="chart-section" id="ctaChart"></div>
           <div class="chart-section" id="diagnosisChart"></div>
           <div class="chart-section" id="typeChart"></div>
         </div>
@@ -352,7 +354,14 @@
         document.getElementById('statsLoading').style.display = 'none';
         document.getElementById('statsContent').style.display = 'block';
 
-        // サマリーカード
+        // CTA統計（GASが古いバージョンでも落ちないようデフォルト値を用意）
+        const cta = s.cta || { totalClicks: 0, uniqueUsers: 0, bySource: {}, byDiagnosis: {} };
+        // ユニーク診断ユーザーに対する、CTAクリック（ユニーク）率
+        const ctaRate = s.uniqueUsers
+          ? ((cta.uniqueUsers / s.uniqueUsers) * 100).toFixed(1)
+          : 0;
+
+        // サマリーカード（CTA指標を追加）
         document.getElementById('statsGrid').innerHTML = `
           <div class="stat-card">
             <div class="stat-card-label">総回答数</div>
@@ -366,7 +375,59 @@
             <div class="stat-card-label">平均診断数/人</div>
             <div class="stat-card-num">${s.uniqueUsers ? (s.total / s.uniqueUsers).toFixed(1) : 0}</div>
           </div>
+          <div class="stat-card">
+            <div class="stat-card-label">VSLクリック<br>（ユニーク）</div>
+            <div class="stat-card-num">${cta.uniqueUsers}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">VSLクリック<br>（総数）</div>
+            <div class="stat-card-num">${cta.totalClicks}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">診断→VSL<br>クリック率</div>
+            <div class="stat-card-num">${ctaRate}%</div>
+          </div>
         `;
+
+        // VSLクリックサマリー
+        const srcLabels = { result: '診断結果ページから', top: 'トップページから', unknown: '(不明)' };
+        document.getElementById('ctaSummary').innerHTML = `
+          <div class="chart-title">VSL（説明会ページ）クリック数</div>
+          <div style="font-size:0.78rem; color:var(--text-secondary); line-height:1.8; margin-bottom:4px;">
+            <strong style="color:var(--gold); font-size:1rem;">${cta.uniqueUsers}</strong> 人が <strong>「説明会の詳細をチェックする」</strong> ボタンをタップ（同じ名前は1カウント）<br>
+            総タップ数：<strong>${cta.totalClicks}</strong> 回<br>
+            診断回答者 <strong>${s.uniqueUsers}</strong> 人中 → クリック率 <strong style="color:var(--gold);">${ctaRate}%</strong>
+          </div>
+          <div style="margin-top:12px;">
+            ${Object.entries(cta.bySource).length === 0
+              ? '<div style="color:var(--text-muted); font-size:0.78rem;">まだクリックはありません</div>'
+              : Object.entries(cta.bySource).map(([src, n]) => `
+                <div class="bar-row">
+                  <div class="bar-label">${srcLabels[src] || src}</div>
+                  <div class="bar-track"><div class="bar-fill" style="width:${(n / cta.totalClicks) * 100}%"></div></div>
+                  <div class="bar-value">${n}</div>
+                </div>
+              `).join('')}
+          </div>
+        `;
+
+        // 診断別CTAクリック
+        const ctaDiagEntries = Object.entries(cta.byDiagnosis);
+        if (ctaDiagEntries.length > 0) {
+          const maxCtaDiag = Math.max(...ctaDiagEntries.map(e => e[1]), 1);
+          document.getElementById('ctaChart').innerHTML = `
+            <div class="chart-title">診断別 VSLクリック数</div>
+            ${ctaDiagEntries.map(([k, v]) => `
+              <div class="bar-row">
+                <div class="bar-label">${k}</div>
+                <div class="bar-track"><div class="bar-fill" style="width:${(v / maxCtaDiag) * 100}%"></div></div>
+                <div class="bar-value">${v}</div>
+              </div>
+            `).join('')}
+          `;
+        } else {
+          document.getElementById('ctaChart').style.display = 'none';
+        }
 
         // 診断別グラフ
         const maxDiag = Math.max(...Object.values(s.byDiagnosis), 1);

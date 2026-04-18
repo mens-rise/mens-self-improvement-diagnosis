@@ -168,7 +168,7 @@
           1対1であなた専用の方向性を整理する<br>
           無料の個別説明会をご用意しています。
         </p>
-        <a href="https://info.opt--in.com/page/Qy4wMDG59FK5?ftid=1f1G9vBLtuxj" class="cta-btn" target="_blank" rel="noopener">
+        <a href="https://info.opt--in.com/page/Qy4wMDG59FK5?ftid=1f1G9vBLtuxj" class="cta-btn" id="ctaBtnTop" target="_blank" rel="noopener">
           説明会の詳細をチェックする
         </a>
       </div>
@@ -176,12 +176,27 @@
 
     <footer class="footer">© Men's Rise</footer>
   </div>
+  <script src="js/config.js?v=202604171736"></script>
+  <script src="js/database.js?v=202604171736"></script>
   <script>
     document.getElementById('icon-phase').innerHTML = MR_ICONS.phase;
     document.getElementById('icon-kintore').innerHTML = MR_ICONS.kintore;
     document.getElementById('icon-hada').innerHTML = MR_ICONS.hada;
     document.getElementById('icon-kamigata').innerHTML = MR_ICONS.kamigata;
     document.getElementById('icon-fashion').innerHTML = MR_ICONS.fashion;
+
+    // トップページのCTAクリック計測
+    var ctaTop = document.getElementById('ctaBtnTop');
+    if (ctaTop) {
+      ctaTop.addEventListener('click', function() {
+        MRDB.trackCtaClick({
+          source: 'top',
+          diagnosisId: '',
+          diagnosisName: '(トップページ)',
+          url: ctaTop.href
+        });
+      });
+    }
   </script>
 </body>
 </html>
