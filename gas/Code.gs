@@ -302,6 +302,7 @@ function doGet(e) {
         uniqueUsers: new Set(records.map(r => r['名前'])).size,
         byDiagnosis: {},
         byResult: {},
+        byAgeGroup: {},
         cta: getCtaStats()
       };
       records.forEach(r => {
@@ -310,6 +311,39 @@ function doGet(e) {
         const key = `${dname}:${r['診断結果']}`;
         stats.byResult[key] = (stats.byResult[key] || 0) + 1;
       });
+
+      // ========= 年齢別集計 =========
+      // 名前→年齢マップ（最新の年齢を採用）
+      const nameAge = {};
+      records.forEach(r => {
+        const n = String(r['名前'] || '').trim();
+        const a = Number(r['年齢']);
+        if (n && a) nameAge[n] = a;
+      });
+
+      // ユーザー単位（ユニーク）で年齢層別にカウント
+      const seenNames = new Set();
+      records.forEach(r => {
+        const n = String(r['名前'] || '').trim();
+        if (!n || seenNames.has(n)) return;
+        seenNames.add(n);
+        const b = ageBucket(nameAge[n]);
+        stats.byAgeGroup[b] = (stats.byAgeGroup[b] || 0) + 1;
+      });
+
+      // CTAクリック（ユニーク）を年齢層別にカウント
+      const ctaRecords = getCtaRecords();
+      const ctaSeen = new Set();
+      const ctaByAgeGroup = {};
+      ctaRecords.forEach(r => {
+        const n = String(r['名前'] || '').trim();
+        if (!n || ctaSeen.has(n)) return;
+        ctaSeen.add(n);
+        const b = ageBucket(nameAge[n]);
+        ctaByAgeGroup[b] = (ctaByAgeGroup[b] || 0) + 1;
+      });
+      stats.cta.byAgeGroup = ctaByAgeGroup;
+
       return jsonResponse({ status: 'ok', data: stats });
     }
 
@@ -360,6 +394,20 @@ function getCtaStats() {
     stats.byDiagnosis[dname] = (stats.byDiagnosis[dname] || 0) + 1;
   });
   return stats;
+}
+
+/**
+ * 年齢 → 年齢層ラベルに変換
+ */
+function ageBucket(age) {
+  const n = Number(age);
+  if (!n || isNaN(n)) return '(不明)';
+  if (n < 20) return '〜19歳';
+  if (n < 25) return '20〜24歳';
+  if (n < 30) return '25〜29歳';
+  if (n < 35) return '30〜34歳';
+  if (n < 40) return '35〜39歳';
+  return '40歳〜';
 }
 
 function jsonResponse(obj) {
