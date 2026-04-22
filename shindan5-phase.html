@@ -6,8 +6,8 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>男磨きプロファイル診断 | Men's Rise</title>
-  <meta name="description" content="8つの質問であなたの男磨きプロファイルを作成。あなたに最適な診断をおすすめします。">
+  <title>男磨きフェーズ診断 | Men's Rise</title>
+  <meta name="description" content="今のあなたのフェーズと次にやるべき診断がわかる。8つの質問で最適な次の一手を診断します。">
   <link rel="stylesheet" href="css/style.css?v=202604230300">
 </head>
 <body>
@@ -22,8 +22,8 @@
     new QuizEngine({
       diagnosisId: 'phase',
       iconSvg: MR_ICONS.phase,
-      title: '男磨きプロファイル診断',
-      description: 'あなたを知る → あなたに最適な診断がわかる。<br>8つの質問で今のあなたを整理します。',
+      title: '男磨きフェーズ診断',
+      description: '今のあなたのフェーズと、次にやるべき診断がわかる。<br>8つの質問で最適な一手を見つけよう。',
       meta: '所要時間：約1分 ｜ 全8問',
 
       questions: [
@@ -114,82 +114,109 @@
       ],
 
       calcResult: function(answers) {
-        var worry = answers.worry;
-        var change = answers.change;
         var history = answers.history;
+        var worry = answers.worry;
         var confidence = answers.confidence;
+        var peers = answers.peers;
         var habitArr = Array.isArray(answers.habit) ? answers.habit : (answers.habit ? [answers.habit] : []);
-        var hasHabit = habitArr.length > 0 && !habitArr.includes('none');
+        var hasHabit = habitArr.length > 0 && habitArr.indexOf('none') < 0;
 
-        var DIAG = {
-          kintore:  { label: '筋トレ診断',       to: 'shindan1-kintore.html' },
-          hada:     { label: '肌質診断',         to: 'shindan2-hada.html'    },
-          kamigata: { label: '髪型診断',         to: 'shindan3-kamigata.html'},
-          fashion:  { label: 'ファッション診断', to: 'shindan4-fashion.html' }
-        };
-
-        var recs = [];
-        function push(key, reason) {
-          if (!recs.find(function(r) { return r.key === key; })) {
-            recs.push({
-              key: key,
-              reason: reason,
-              label: DIAG[key].label,
-              to: DIAG[key].to
-            });
-          }
-        }
-
-        // 最重要：一番の悩み
-        if (worry === 'looks') {
-          push('fashion', '外見の自信のなさは、服でシルエットを整えると最短で変わる。');
-          push('kamigata', '顔型に合う髪型に変えるだけで、第一印象が激変する。');
-        } else if (worry === 'communication') {
-          push('kamigata', '印象が変われば、話しかけられ方が変わる。自信は後からついてくる。');
-          push('fashion', '清潔感のあるコーデが"話しかけやすい雰囲気"を作る。');
-        } else if (worry === 'lost') {
-          push('hada', '一番成功体験を作りやすい。今日から始められる、パッと変わる。');
-          push('kintore', '体が変われば、一番深いところの自信が変わる。');
-        } else if (worry === 'plateau') {
-          push('kintore', '数字で成長を可視化すると、停滞感が消える。TDEE・PFCを出してみよう。');
-          push('fashion', '外見が変わったなら、その体を活かすコーデに進化させよう。');
-        }
-
-        // 変えたい領域で補強
-        if (change === 'love') {
-          push('kamigata', '恋愛文脈ではまず見た目の印象が全て。髪型で殴る。');
-          push('fashion', 'デート服の鉄板を押さえると、失敗がなくなる。');
-        } else if (change === 'looks') {
-          push('fashion', '見た目の変化は服が一番早い。今週末から着れる。');
-        } else if (change === 'all' && recs.length < 2) {
-          push('kintore', '全部変えたいなら、体という土台から。');
-          push('hada', '肌はパッと変わる。最初の成功体験に。');
-        }
-
-        // Fallback
-        if (recs.length === 0) {
-          push('kintore', '体が変われば全部変わる。まず土台から。');
-          push('hada', '今日から始められる、一番簡単な改善。');
+        // Phase判定（旧ロジック踏襲）
+        var phase = 2;
+        if (history === 'beginner' &&
+            (worry === 'lost' || worry === 'looks') &&
+            (confidence === 'zero' || confidence === 'little') &&
+            !hasHabit) {
+          phase = 1;
+        } else if ((history === 'beginner' || history === 'half') &&
+            hasHabit &&
+            (confidence === 'little' || confidence === 'moderate')) {
+          phase = 2;
+        } else if ((history === 'half' || history === 'oneyear') &&
+            worry === 'plateau' &&
+            confidence === 'moderate') {
+          phase = 3;
+        } else if ((history === 'oneyear' || history === 'veteran') &&
+            worry === 'plateau' &&
+            (confidence === 'zero' || confidence === 'little')) {
+          phase = 4;
+        } else if (history === 'veteran' &&
+            (confidence === 'moderate' || confidence === 'yes') &&
+            peers === 'yes') {
+          phase = 5;
+        } else if (history === 'beginner') {
+          phase = 1;
+        } else if (history === 'half') {
+          phase = 2;
+        } else if (history === 'oneyear') {
+          phase = (worry === 'plateau')
+            ? ((confidence === 'moderate' || confidence === 'yes') ? 3 : 4)
+            : 2;
+        } else if (history === 'veteran') {
+          phase = (confidence === 'moderate' || confidence === 'yes') ? 5 : 4;
         }
 
         return {
-          recs: recs.slice(0, 2),
+          phase: phase,
           profile: {
-            history: history,
-            worry: worry,
-            change: change,
-            confidence: confidence,
-            budget: answers.budget,
-            peers: answers.peers,
-            hasHabit: hasHabit,
-            habitArr: habitArr,
+            history: history, worry: worry,
+            change: answers.change, confidence: confidence,
+            budget: answers.budget, peers: peers,
+            hasHabit: hasHabit, habitArr: habitArr,
             age: answers.age
           }
         };
       },
 
       renderResult: function(result, answers) {
+        var phase = result.phase;
         var p = result.profile;
+
+        var PHASE_DATA = {
+          1: {
+            label: '① なんかモテたい期',
+            feature: '漠然とした不満があるけど、何から始めていいかわからない。',
+            message: 'まず外見の1つを変えてみよう。眉毛か黒パンツから。そこから全部が始まる。',
+            recs: [
+              { key:'hada', label:'肌質診断', to:'shindan2-hada.html', reason:'最初の成功体験を作りやすい。パッと変わる。' },
+              { key:'kintore', label:'筋トレ診断', to:'shindan1-kintore.html', reason:'体が変われば自信が変わる。基礎の土台。' }
+            ]
+          },
+          2: {
+            label: '② 外見改造期',
+            feature: '服・髪・肌に目覚め始めた段階。今が一番伸びる時期。',
+            message: '他の診断を全部やって、自分専用のロードマップを作ってみよう。',
+            recs: [
+              { key:'fashion', label:'ファッション診断', to:'shindan4-fashion.html', reason:'外見改造期は服でシルエットが激変する。最も効果が出やすい。' },
+              { key:'kamigata', label:'髪型診断', to:'shindan3-kamigata.html', reason:'顔型に合った髪型に変えるだけで印象が一気に変わる。' }
+            ]
+          },
+          3: {
+            label: '③ テクニック収集期',
+            feature: '知識は増えたが空回りしている。',
+            message: '情報はもう十分。足りないのは実践と環境。行動量を増やす仕組みを作ろう。',
+            recs: [
+              { key:'kintore', label:'筋トレ診断', to:'shindan1-kintore.html', reason:'頭で考えるより体を動かす。数値目標が行動を引き出す。' }
+            ]
+          },
+          4: {
+            label: '④ 自信迷子期',
+            feature: 'やってるのに変わらない。外見は変わったが自信がない。',
+            message: '外見は土台。次は"在り方"。自分との約束を守る習慣を始めてみよう。',
+            recs: [
+              { key:'kintore', label:'筋トレ診断', to:'shindan1-kintore.html', reason:'自信の土台は身体。小さな達成（重量更新・体重変化）が効く。' }
+            ]
+          },
+          5: {
+            label: '⑤ 本質到達期',
+            feature: '自分軸で動けている。言うことなし。',
+            message: '目の前のやるべきことを、ひとつずつ積み上げていこう。',
+            recs: [
+              { key:'kintore', label:'筋トレ診断', to:'shindan1-kintore.html', reason:'現状維持を脱するには新しい負荷を。数値目標を再設定しよう。' }
+            ]
+          }
+        };
+        var d = PHASE_DATA[phase];
 
         var HISTORY_LABEL = { beginner:'これから始める', half:'半年未満', oneyear:'半年〜1年', veteran:'1年以上' };
         var WORRY_LABEL = { looks:'外見に自信がない', communication:'女性と話せない', lost:'何から始めていいか', plateau:'やってるのに変わらない' };
@@ -206,11 +233,34 @@
 
         var html = '';
 
-        // Result header
+        // Result header - フェーズ表示
         html += '<div class="result-header">';
-        html += '<div class="result-label">YOUR PROFILE</div>';
-        html += '<div class="result-type">あなたの男磨きプロファイル</div>';
+        html += '<div class="result-label">YOUR PHASE</div>';
+        html += '<div class="result-type">' + d.label + '</div>';
         html += '</div>';
+
+        // フェーズ説明カード
+        html += QuizEngine.resultCard('今のあなたのフェーズ', d.feature);
+
+        // メッセージハイライト
+        html += '<div class="result-highlight">' + d.message + '</div>';
+
+        // 最適な次の診断（メインアウトプット）
+        var recsHtml = '<p style="color:#ccc; font-size:0.84rem; margin-bottom:14px;">' + d.label + 'のあなたに一番効くのはこの診断。タップしてすぐ受けよう。</p>';
+        d.recs.forEach(function(r, i) {
+          var rank = (d.recs.length > 1) ? (i === 0 ? '【最優先】' : '【次に】') : '【おすすめ】';
+          recsHtml += ''
+            + '<a href="' + r.to + '" style="display:block; padding:16px 18px; background:var(--bg-elevated); border:1px solid var(--gold); border-radius:var(--radius-md); text-decoration:none; margin-bottom:10px;">'
+            +   '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">'
+            +     '<span style="color:var(--gold); font-size:1rem; font-weight:700;">'
+            +       rank + r.label
+            +     '</span>'
+            +     '<span style="color:var(--gold); font-size:0.78rem;">受ける →</span>'
+            +   '</div>'
+            +   '<div style="color:#e0e0e0; font-size:0.78rem; line-height:1.6;">' + r.reason + '</div>'
+            + '</a>';
+        });
+        html += QuizEngine.resultCard('次にやるべき診断', recsHtml);
 
         // プロファイル要約
         var profileBody = '<div style="display:grid; gap:10px;">';
@@ -231,38 +281,6 @@
         });
         profileBody += '</div>';
         html += QuizEngine.resultCard('あなたの現状サマリー', profileBody);
-
-        // 一言メッセージ
-        var msg = '';
-        if (p.worry === 'lost' || p.history === 'beginner') {
-          msg = 'まず1つ、小さく始めよう。迷ってる間に1ヶ月が過ぎる。';
-        } else if (p.worry === 'plateau') {
-          msg = '努力は足りてる。足りてないのは"正しい方向"だけ。';
-        } else if (p.worry === 'looks') {
-          msg = '外見は、変えようと思えば今週中に変えられる。';
-        } else if (p.worry === 'communication') {
-          msg = '話せないのは性格じゃない。印象を整えれば、話す機会が増える。';
-        } else {
-          msg = 'あなたは既に動き始めてる。あとは優先順位を間違えないこと。';
-        }
-        html += '<div class="result-highlight">' + msg + '</div>';
-
-        // あなたに最適な診断（メインの出力）
-        var recsHtml = '<p style="color:#ccc; font-size:0.84rem; margin-bottom:14px;">プロファイルから判断すると、次にやるべきはこの診断。タップしてすぐ受けよう。</p>';
-        result.recs.forEach(function(r, i) {
-          var rank = (i === 0 ? '最優先' : '次に');
-          recsHtml += ''
-            + '<a href="' + r.to + '" style="display:block; padding:16px 18px; background:var(--bg-elevated); border:1px solid var(--gold); border-radius:var(--radius-md); text-decoration:none; margin-bottom:10px;">'
-            +   '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">'
-            +     '<span style="color:var(--gold); font-size:1rem; font-weight:700;">'
-            +       '【' + rank + '】' + r.label
-            +     '</span>'
-            +     '<span style="color:var(--gold); font-size:0.78rem;">受ける →</span>'
-            +   '</div>'
-            +   '<div style="color:#e0e0e0; font-size:0.78rem; line-height:1.6;">' + r.reason + '</div>'
-            + '</a>';
-        });
-        html += QuizEngine.resultCard('あなたに最適な診断', recsHtml);
 
         return html;
       }

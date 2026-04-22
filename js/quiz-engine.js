@@ -563,13 +563,11 @@ class QuizEngine {
         </main>
         <footer class="footer">© Men's Rise</footer>
       </div>
-      <a href="${CONFIG.CTA_URL}" class="cta-sticky" id="ctaSticky" target="_blank" rel="noopener">
-        <svg class="cta-sticky-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <a href="${CONFIG.CTA_URL}" class="cta-fab" id="ctaSticky" target="_blank" rel="noopener" aria-label="無料の個別説明会の詳細を見る">
+        <span class="cta-fab-badge">無料</span>
+        <span class="cta-fab-ring"></span>
+        <svg class="cta-fab-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <span class="cta-sticky-text">あなた専用の無料個別説明会</span>
-        <svg class="cta-sticky-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </a>
     `;
