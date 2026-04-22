@@ -560,16 +560,10 @@ class QuizEngine {
         </main>
         <footer class="footer">© Men's Rise</footer>
       </div>
-      <a href="${CONFIG.CTA_URL}" class="cta-fab" id="ctaSticky" target="_blank" rel="noopener" aria-label="無料の個別説明会の詳細を見る">
+      <a href="${CONFIG.CTA_URL}" class="cta-fab" id="ctaSticky" target="_blank" rel="noopener" aria-label="あなたに合う男磨きの最短ルートをチェックする">
         <span class="cta-fab-badge">無料</span>
         <span class="cta-fab-ring"></span>
-        <svg class="cta-fab-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <span class="cta-fab-text">個別説明会を<br>チェック</span>
-        <svg class="cta-fab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
+        <span class="cta-fab-text">あなたに合う<br>男磨きの最短ルートをチェック</span>
       </a>
     `;
 
