@@ -272,6 +272,7 @@
         <div class="loading" id="statsLoading">読み込み中...</div>
         <div id="statsContent" style="display:none;">
           <div class="stats-grid" id="statsGrid"></div>
+          <div class="chart-section" id="comparisonPanel"></div>
           <div class="chart-section" id="ctaSummary"></div>
           <div class="chart-section" id="ctaChart"></div>
           <div class="chart-section" id="ageChart"></div>
@@ -390,6 +391,55 @@
             <div class="stat-card-num">${ctaRate}%</div>
           </div>
         `;
+
+        // ========= Before/After 比較（CTA装飾リニューアル前後） =========
+        const cmp = s.comparison;
+        const cmpEl = document.getElementById('comparisonPanel');
+        if (cmp && (cmp.before.uniqueUsers > 0 || cmp.after.uniqueUsers > 0)) {
+          const cutoffDate = new Date(cmp.cutoffISO);
+          const isFuture = cutoffDate.getTime() > Date.now();
+          const deltaColor = cmp.deltaRate > 0 ? '#22c55e' : (cmp.deltaRate < 0 ? '#ef4444' : 'var(--text-muted)');
+          const deltaSign = cmp.deltaRate > 0 ? '+' : '';
+
+          cmpEl.innerHTML = `
+            <div class="chart-title">CTA改善 Before / After 比較</div>
+            ${isFuture
+              ? `<div style="padding:12px 14px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:8px; color:#fca5a5; font-size:0.78rem; margin-bottom:16px; line-height:1.6;">
+                  ⚠️ リニューアル日時（<strong>${cutoffDate.toLocaleString('ja-JP')}</strong>）が未来のため、現時点のデータは全て<strong>Before</strong>に集計されています。<br>
+                  CTA装飾を本番デプロイしたら、GASの <code>CTA_V2_SINCE</code> を実際の日時に更新してください。
+                </div>`
+              : `<div style="color:var(--text-muted); font-size:0.72rem; margin-bottom:16px;">
+                  境界日時：<strong style="color:var(--text-secondary);">${cutoffDate.toLocaleString('ja-JP')}</strong>
+                </div>`
+            }
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+              <div style="background:var(--bg-elevated); border:1px solid var(--border); border-radius:10px; padding:16px 14px;">
+                <div style="font-size:0.68rem; color:var(--text-muted); letter-spacing:0.1em; margin-bottom:8px;">BEFORE</div>
+                <div style="font-size:0.78rem; color:var(--text-secondary); line-height:1.9;">
+                  診断ユーザー：<strong style="color:#fff;">${cmp.before.uniqueUsers}</strong>人<br>
+                  VSLクリック：<strong style="color:#fff;">${cmp.before.ctaUnique}</strong>人<br>
+                  クリック率：<strong style="color:var(--gold); font-size:1rem;">${cmp.before.rate}%</strong>
+                </div>
+              </div>
+              <div style="background:var(--bg-elevated); border:1px solid var(--gold); border-radius:10px; padding:16px 14px;">
+                <div style="font-size:0.68rem; color:var(--gold); letter-spacing:0.1em; margin-bottom:8px;">AFTER</div>
+                <div style="font-size:0.78rem; color:var(--text-secondary); line-height:1.9;">
+                  診断ユーザー：<strong style="color:#fff;">${cmp.after.uniqueUsers}</strong>人<br>
+                  VSLクリック：<strong style="color:#fff;">${cmp.after.ctaUnique}</strong>人<br>
+                  クリック率：<strong style="color:var(--gold); font-size:1rem;">${cmp.after.rate}%</strong>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:center; padding:14px; background:var(--bg-elevated); border-radius:10px;">
+              <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:4px;">クリック率の変化</div>
+              <div style="font-size:1.4rem; font-weight:900; color:${deltaColor};">
+                ${deltaSign}${cmp.deltaRate}pt
+              </div>
+            </div>
+          `;
+        } else {
+          cmpEl.style.display = 'none';
+        }
 
         // VSLクリックサマリー
         const srcLabels = { result: '診断結果ページから', top: 'トップページから', unknown: '(不明)' };

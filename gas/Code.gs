@@ -15,6 +15,17 @@
 const SHEET_NAME = '診断結果';
 const CTA_SHEET_NAME = 'CTAクリック';
 
+/**
+ * 【CTAリニューアル日時】Before/After比較の境界線
+ *
+ * この日時を境に、admin.html の「Before/After比較」パネルで
+ * VSLクリック率の変化を計測します。
+ *
+ * ▼ CTA装飾を本番デプロイしたタイミングで、ここを実際の日時に更新してください
+ *   （JST・ISO 8601形式）
+ */
+const CTA_V2_SINCE = '2099-12-31T00:00:00+09:00';  // 未リニューアル時はダミー未来日
+
 // CTAクリックシートのヘッダー
 const CTA_HEADERS = [
   '日時',
@@ -344,6 +355,9 @@ function doGet(e) {
       });
       stats.cta.byAgeGroup = ctaByAgeGroup;
 
+      // ========= Before/After 比較（CTA装飾リニューアル前後） =========
+      stats.comparison = buildComparison(records, ctaRecords);
+
       return jsonResponse({ status: 'ok', data: stats });
     }
 
@@ -394,6 +408,47 @@ function getCtaStats() {
     stats.byDiagnosis[dname] = (stats.byDiagnosis[dname] || 0) + 1;
   });
   return stats;
+}
+
+/**
+ * Before/After 比較を構築
+ * CTA_V2_SINCE の前後で、ユーザー数 / VSLクリック率 を算出
+ */
+function buildComparison(records, ctaRecords) {
+  const cutoff = new Date(CTA_V2_SINCE).getTime();
+
+  function bucket(isAfter) {
+    const diag = records.filter(r => {
+      const t = new Date(r['日時']).getTime();
+      return isAfter ? (t >= cutoff) : (t < cutoff);
+    });
+    const cta = ctaRecords.filter(r => {
+      const t = new Date(r['日時']).getTime();
+      return isAfter ? (t >= cutoff) : (t < cutoff);
+    });
+    const uniqueUsers = new Set(diag.map(r => String(r['名前'] || '').trim()).filter(Boolean)).size;
+    const uniqueCta = new Set(cta.map(r => String(r['名前'] || '').trim()).filter(Boolean)).size;
+    const totalClicks = cta.length;
+    const rate = uniqueUsers ? ((uniqueCta / uniqueUsers) * 100) : 0;
+    return {
+      totalResponses: diag.length,
+      uniqueUsers: uniqueUsers,
+      ctaUnique: uniqueCta,
+      ctaTotal: totalClicks,
+      rate: Number(rate.toFixed(1))
+    };
+  }
+
+  const before = bucket(false);
+  const after = bucket(true);
+  const delta = Number((after.rate - before.rate).toFixed(1));
+
+  return {
+    cutoffISO: CTA_V2_SINCE,
+    before: before,
+    after: after,
+    deltaRate: delta  // 正なら改善、負なら悪化
+  };
 }
 
 /**
