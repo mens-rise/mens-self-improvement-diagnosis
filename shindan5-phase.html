@@ -6,23 +6,24 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>男磨きフェーズ診断 | Men's Rise</title>
-  <meta name="description" content="今のあなたに本当に必要なことがわかる。6つの質問に答えるだけで、男磨きのフェーズを診断します。">
-  <link rel="stylesheet" href="css/style.css?v=202604180800">
+  <title>男磨きプロファイル診断 | Men's Rise</title>
+  <meta name="description" content="8つの質問であなたの男磨きプロファイルを作成。あなたに最適な診断をおすすめします。">
+  <link rel="stylesheet" href="css/style.css?v=202604230300">
 </head>
 <body>
   <div id="app"></div>
 
-  <script src="js/config.js?v=202604180800"></script>
-  <script src="js/database.js?v=202604180800"></script>
-  <script src="js/cta-variants.js?v=202604180800"></script>
-  <script src="js/icons.js?v=202604180800"></script>
-  <script src="js/quiz-engine.js?v=202604180800"></script>
+  <script src="js/config.js?v=202604230300"></script>
+  <script src="js/database.js?v=202604230300"></script>
+  <script src="js/cta-variants.js?v=202604230300"></script>
+  <script src="js/icons.js?v=202604230300"></script>
+  <script src="js/quiz-engine.js?v=202604230300"></script>
   <script>
-    new QuizEngine({      diagnosisId: 'phase',
+    new QuizEngine({
+      diagnosisId: 'phase',
       iconSvg: MR_ICONS.phase,
-      title: '男磨きフェーズ診断',
-      description: '今のあなたに本当に必要なことがわかる。<br>6つの質問に答えるだけ。',
+      title: '男磨きプロファイル診断',
+      description: 'あなたを知る → あなたに最適な診断がわかる。<br>8つの質問で今のあなたを整理します。',
       meta: '所要時間：約1分 ｜ 全8問',
 
       questions: [
@@ -113,223 +114,155 @@
       ],
 
       calcResult: function(answers) {
-        var history = answers.history;
         var worry = answers.worry;
-        // habit は multi-select（配列）。後方互換のため single value でも動くように
+        var change = answers.change;
+        var history = answers.history;
+        var confidence = answers.confidence;
         var habitArr = Array.isArray(answers.habit) ? answers.habit : (answers.habit ? [answers.habit] : []);
         var hasHabit = habitArr.length > 0 && !habitArr.includes('none');
-        var confidence = answers.confidence;
-        var peers = answers.peers;
 
-        // Phase 1: なんかモテたい期
-        if (history === 'beginner' &&
-            (worry === 'lost' || worry === 'looks') &&
-            (confidence === 'zero' || confidence === 'little') &&
-            !hasHabit) {
-          return 1;
-        }
-
-        // Phase 2: 外見改造期
-        if ((history === 'beginner' || history === 'half') &&
-            hasHabit &&
-            (confidence === 'little' || confidence === 'moderate')) {
-          return 2;
-        }
-
-        // Phase 3: テクニック収集期
-        if ((history === 'half' || history === 'oneyear') &&
-            worry === 'plateau' &&
-            confidence === 'moderate') {
-          return 3;
-        }
-
-        // Phase 4: 自信迷子期
-        if ((history === 'oneyear' || history === 'veteran') &&
-            worry === 'plateau' &&
-            (confidence === 'zero' || confidence === 'little')) {
-          return 4;
-        }
-
-        // Phase 5: 本質到達期
-        if (history === 'veteran' &&
-            (confidence === 'moderate' || confidence === 'yes') &&
-            peers === 'yes') {
-          return 5;
-        }
-
-        // Fallback logic
-        if (history === 'beginner') {
-          return 1;
-        }
-        if (history === 'half') {
-          return 2;
-        }
-        if (history === 'oneyear') {
-          if (worry === 'plateau') {
-            return (confidence === 'moderate' || confidence === 'yes') ? 3 : 4;
-          }
-          return 2;
-        }
-        if (history === 'veteran') {
-          return (confidence === 'moderate' || confidence === 'yes') ? 5 : 4;
-        }
-
-        return 2;
-      },
-
-      renderResult: function(phase, answers) {
-        var data = {
-          1: {
-            type: '\u2460 \u306a\u3093\u304b\u30e2\u30c6\u305f\u3044\u671f',
-            feature: '\u6f20\u7136\u3068\u3057\u305f\u4e0d\u6e80\u304c\u3042\u308b\u3002\u4f55\u304b\u3089\u59cb\u3081\u3066\u3044\u3044\u304b\u308f\u304b\u3089\u306a\u3044\u3002',
-            message: 'まず外見の1つを変えてみよう。眉毛か黒パンツから。そこから全部が始まる。',
-            action: '眉毛サロンに行ってみよう。今すぐ予約するのがおすすめ。',
-            nextDiagnosis: [
-              { label: '肌質診断', to: 'shindan2-hada.html', reason: '最初の成功体験を作りやすい。パッと変わる。' },
-              { label: '筋トレ診断', to: 'shindan1-kintore.html', reason: '体が変われば自信が変わる。基礎の土台。' }
-            ],
-            why: 'まだ行動に移せていない、もしくは何から始めるべきか判断材料が不足している状態。情報はネットにあふれているが、自分にとって「どれが正解か」を見極められていない。まずは1つでも始めることで、自分の傾向が見えてきます。',
-            traps: '<ul><li>YouTubeを見ているだけで満足する</li><li>「お金がないから無理」と諦める</li><li>いきなり高額な商品を買って続かない</li><li>完璧な計画を立ててから始めようとする（結果スタートしない）</li></ul>',
-            nextPhase: '<p><strong>次のフェーズ（②外見改造期）へ進むための条件</strong></p><ul><li>どれか1つを始める（スキンケアでも眉毛でも何でも）</li><li>1週間続ける</li><li>写真を撮る（ビフォー）</li><li>自分の「好き」を言語化する</li></ul>',
-            future: '何から始めるかが明確になり、1つのルーティンが定着している。周りから「なんか変わった？」と言われる最初の段階。',
-            gatedContent: '<p><strong>あなた専用のスタートダッシュプラン</strong></p><ul><li>Week 1: 眉毛サロン予約・スキンケア開始</li><li>Week 2: 黒パンツ購入・筋トレ開始</li><li>Week 3-4: 美容室予約・全身コーデ見直し</li><li>継続サポート・仲間環境のご案内</li></ul>'
-          },
-          2: {
-            type: '\u2461 \u5916\u898b\u6539\u9020\u671f',
-            feature: '服・髪・肌に目覚め始めた段階。今が一番伸びる時期。',
-            message: '他の診断を全部やって、自分専用のロードマップを作ってみよう。',
-            action: 'カット4,000円以上のメンズ美容室に行ってみよう。',
-            nextDiagnosis: [
-              { label: 'ファッション診断', to: 'shindan4-fashion.html', reason: '外見改造期は服でシルエットが激変する。最も効果が出やすい。' },
-              { label: '髪型診断', to: 'shindan3-kamigata.html', reason: '顔型に合った髪型に変えるだけで印象が一気に変わる。' }
-            ],
-            why: '行動を始めた段階。ファッション、髪型、スキンケアに興味を持ち、色々試している時期。ここで大事なのは「完璧を目指さない」こと。一気にすべて変えようとすると挫折します。1つずつ、着実に。',
-            traps: '<ul><li>複数のジャンルに同時に手を出して挫折</li><li>他人のやり方をそのままコピーする</li><li>効果が出る前にアイテムを変える</li><li>写真を撮らない（変化が分からない）</li></ul>',
-            nextPhase: '<p><strong>次のフェーズ（③テクニック収集期）へ進むための条件</strong></p><ul><li>3ヶ月以上1つのジャンルを続ける</li><li>最低5人から「変わったね」と言われる</li><li>自分なりのルーティンが固まる</li><li>次に何を学ぶべきか自問できるようになる</li></ul>',
-            future: '外見に自信が持てるようになる。写真に写るのが嫌じゃなくなり、服を買うのが楽しみになる。デートや飲み会で堂々とできる。',
-            gatedContent: '<p><strong>あなた専用の外見改造ロードマップ</strong></p><ul><li>Month 1: ヘアスタイル確立・スキンケアルーティン化</li><li>Month 2: ワードローブ構築・体型改善開始</li><li>Month 3: トータルコーデ完成・写真撮影</li><li>継続サポート・仲間環境のご案内</li></ul>'
-          },
-          3: {
-            type: '\u2462 \u30c6\u30af\u30cb\u30c3\u30af\u53ce\u96c6\u671f',
-            feature: '知識は増えたが空回りしている。',
-            message: '情報はもう十分。足りないのは実践と環境。行動量を増やす仕組みを作ろう。',
-            action: '3ヶ月後の自分がどうなるか、今すぐ宣言してみよう。',
-            nextDiagnosis: [
-              { label: '筋トレ診断', to: 'shindan1-kintore.html', reason: '頭で考えるより体を動かす。数値目標が行動を引き出す。' }
-            ],
-            why: '情報をたくさん集めたが、実行に移せていない状態。「知識」と「行動」の間に大きな壁がある時期。最も抜け出しにくい罠。情報収集は楽だけど、それだけでは何も変わりません。',
-            traps: '<ul><li>SNSの情報を保存して見返さない</li><li>「いつか始めよう」の繰り返し</li><li>完璧な方法を探し続ける</li><li>行動しない自分を正当化する</li></ul>',
-            nextPhase: '<p><strong>次のフェーズ（④自信迷子期）へ進むための条件</strong></p><ul><li>集めた情報の80%を実行に移す</li><li>「知ってる」を「できる」に変える</li><li>毎日同じ時間に同じ行動を繰り返す</li><li>3ヶ月間、誰かに宣言した目標を追う</li></ul>',
-            future: '知識を行動に変えられるようになる。「やらない言い訳」をしなくなる。時間管理がうまくなる。',
-            gatedContent: '<p><strong>あなた専用のブレイクスループラン</strong></p><ul><li>行動計画: 週3回の実践タスク設計</li><li>環境設計: 同じフェーズの仲間とつながる</li><li>3ヶ月後の目標設定・進捗管理</li><li>継続サポート・仲間環境のご案内</li></ul>'
-          },
-          4: {
-            type: '\u2463 \u81ea\u4fe1\u8ff7\u5b50\u671f',
-            feature: 'やってるのに変わらない。外見は変わったが自信がない。',
-            message: '外見は土台。次は"在り方"。自分との約束を守る習慣を始めてみよう。',
-            action: 'モチベーションに頼らず、小さな自分との毎日の約束を5つ作って守ってみよう。',
-            nextDiagnosis: [
-              { label: '筋トレ診断', to: 'shindan1-kintore.html', reason: '自信の土台は身体。小さな達成（重量更新・体重変化）が効く。' }
-            ],
-            why: '外見は整ってきたのに、なぜか自信が持てない状態。原因は「自分との約束を守っていないから」。小さな約束を毎日守る習慣が、本物の自信を作ります。',
-            traps: '<ul><li>他人と比較する</li><li>小さな達成を無視する</li><li>「まだ足りない」と自分を責める</li><li>結果だけを見て過程を評価しない</li></ul>',
-            nextPhase: '<p><strong>次のフェーズ（⑤本質到達期）へ進むための条件</strong></p><ul><li>自分との約束を5つ作り、毎日守る</li><li>他人との比較を手放す</li><li>自分の価値観を言語化する</li><li>小さな達成を毎日認める</li></ul>',
-            future: '他人の評価に左右されなくなる。自分の基準で動ける。毎朝起きるのが楽しくなる。',
-            gatedContent: '<p><strong>あなた専用の自信構築プラン</strong></p><ul><li>毎日の5つの約束設計サポート</li><li>マインドセット改善ワーク</li><li>行動記録・振り返りテンプレート</li><li>継続サポート・仲間環境のご案内</li></ul>'
-          },
-          5: {
-            type: '\u2464 \u672c\u8cea\u5230\u9054\u671f',
-            feature: '自分軸で動けている。言うことなし。',
-            message: '目の前のやるべきことを、ひとつずつ積み上げていこう。',
-            action: '今のペースを崩さず、積み上げていこう。',
-            nextDiagnosis: [
-              { label: '筋トレ診断', to: 'shindan1-kintore.html', reason: '現状維持を脱するには新しい負荷を。数値目標を再設定しよう。' }
-            ],
-            why: '自分軸で動けている状態。何をすべきかが明確で、継続できている。ここまで来たら、あとは積み上げるだけ。停滞を感じたら、また新しい目標を見つけるタイミングです。',
-            traps: '<ul><li>現状維持に満足する</li><li>新しい挑戦を避ける</li><li>後輩を育てない（与える側に回らない）</li><li>謙虚さを失う</li></ul>',
-            nextPhase: '<p><strong>さらなる成長のための条件</strong></p><ul><li>誰かの力になる（教える、支える）</li><li>新しい分野に挑戦する</li><li>経験を発信する</li><li>コミュニティを作る</li></ul>',
-            future: '周りから相談される立場に。人に影響を与えられるようになる。自分の次の目標が自然と見つかる。',
-            gatedContent: '<p><strong>あなた専用のネクストステージプラン</strong></p><ul><li>現状維持・さらなる成長のためのロードマップ</li><li>後輩へのメンタリング機会</li><li>ハイレベルな仲間環境への招待</li><li>継続サポート・限定コミュニティのご案内</li></ul>'
-          }
+        var DIAG = {
+          kintore:  { label: '筋トレ診断',       to: 'shindan1-kintore.html' },
+          hada:     { label: '肌質診断',         to: 'shindan2-hada.html'    },
+          kamigata: { label: '髪型診断',         to: 'shindan3-kamigata.html'},
+          fashion:  { label: 'ファッション診断', to: 'shindan4-fashion.html' }
         };
 
-        var d = data[phase];
+        var recs = [];
+        function push(key, reason) {
+          if (!recs.find(function(r) { return r.key === key; })) {
+            recs.push({
+              key: key,
+              reason: reason,
+              label: DIAG[key].label,
+              to: DIAG[key].to
+            });
+          }
+        }
+
+        // 最重要：一番の悩み
+        if (worry === 'looks') {
+          push('fashion', '外見の自信のなさは、服でシルエットを整えると最短で変わる。');
+          push('kamigata', '顔型に合う髪型に変えるだけで、第一印象が激変する。');
+        } else if (worry === 'communication') {
+          push('kamigata', '印象が変われば、話しかけられ方が変わる。自信は後からついてくる。');
+          push('fashion', '清潔感のあるコーデが"話しかけやすい雰囲気"を作る。');
+        } else if (worry === 'lost') {
+          push('hada', '一番成功体験を作りやすい。今日から始められる、パッと変わる。');
+          push('kintore', '体が変われば、一番深いところの自信が変わる。');
+        } else if (worry === 'plateau') {
+          push('kintore', '数字で成長を可視化すると、停滞感が消える。TDEE・PFCを出してみよう。');
+          push('fashion', '外見が変わったなら、その体を活かすコーデに進化させよう。');
+        }
+
+        // 変えたい領域で補強
+        if (change === 'love') {
+          push('kamigata', '恋愛文脈ではまず見た目の印象が全て。髪型で殴る。');
+          push('fashion', 'デート服の鉄板を押さえると、失敗がなくなる。');
+        } else if (change === 'looks') {
+          push('fashion', '見た目の変化は服が一番早い。今週末から着れる。');
+        } else if (change === 'all' && recs.length < 2) {
+          push('kintore', '全部変えたいなら、体という土台から。');
+          push('hada', '肌はパッと変わる。最初の成功体験に。');
+        }
+
+        // Fallback
+        if (recs.length === 0) {
+          push('kintore', '体が変われば全部変わる。まず土台から。');
+          push('hada', '今日から始められる、一番簡単な改善。');
+        }
+
+        return {
+          recs: recs.slice(0, 2),
+          profile: {
+            history: history,
+            worry: worry,
+            change: change,
+            confidence: confidence,
+            budget: answers.budget,
+            peers: answers.peers,
+            hasHabit: hasHabit,
+            habitArr: habitArr,
+            age: answers.age
+          }
+        };
+      },
+
+      renderResult: function(result, answers) {
+        var p = result.profile;
+
+        var HISTORY_LABEL = { beginner:'これから始める', half:'半年未満', oneyear:'半年〜1年', veteran:'1年以上' };
+        var WORRY_LABEL = { looks:'外見に自信がない', communication:'女性と話せない', lost:'何から始めていいか', plateau:'やってるのに変わらない' };
+        var CHANGE_LABEL = { looks:'見た目', love:'恋愛', relations:'人間関係', work:'仕事', all:'全部' };
+        var CONF_LABEL = { zero:'全然ない', little:'少しだけ', moderate:'まあまあ', yes:'ある' };
+        var BUDGET_LABEL = { minimal:'3,000円以内', low:'3,000〜10,000円', mid:'10,000〜30,000円', high:'30,000円以上' };
+        var PEERS_LABEL = { none:'いない', few:'1〜2人', yes:'いる' };
+        var HABIT_LABEL = { gym:'筋トレ', skin:'スキンケア', diet:'食事管理', reading:'読書', journal:'ジャーナリング・瞑想', none:'特にない' };
+
+        var habitText;
+        if (p.habitArr.length === 0) habitText = '（回答なし）';
+        else if (p.habitArr.indexOf('none') >= 0) habitText = 'まだない';
+        else habitText = p.habitArr.map(function(v) { return HABIT_LABEL[v] || v; }).join('・');
 
         var html = '';
 
         // Result header
         html += '<div class="result-header">';
-        html += '<div class="result-label">YOUR PHASE</div>';
-        html += '<div class="result-type">' + d.type + '</div>';
+        html += '<div class="result-label">YOUR PROFILE</div>';
+        html += '<div class="result-type">あなたの男磨きプロファイル</div>';
         html += '</div>';
 
-        // Feature card
-        html += QuizEngine.resultCard('あなたの特徴', d.feature);
-
-        // Message highlight
-        html += '<div class="result-highlight">' + d.message + '</div>';
-
-        // Today's action card
-        html += QuizEngine.resultCard('今日やるべきこと', d.action);
-
-        // Next diagnosis card（複数診断をボタンで表示）
-        const diagList = Array.isArray(d.nextDiagnosis) ? d.nextDiagnosis : [{ label: '次の診断', to: 'index.html', reason: d.nextDiagnosis }];
-        let nextDiagHtml = '<p style="color:#ccc; font-size:0.84rem; margin-bottom:14px; font-family:inherit;">今のあなたに一番効くのはこの診断。タップしてすぐ受けよう。</p>';
-        diagList.forEach(dg => {
-          nextDiagHtml += `
-            <a href="${dg.to}" style="display:block; padding:16px 18px; background:var(--bg-elevated); border:1px solid var(--gold); border-radius:var(--radius-md); text-decoration:none; margin-bottom:10px; transition:var(--transition);">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <span style="color:var(--gold); font-size:1rem; font-weight:700; font-family:inherit;">▶ ${dg.label}</span>
-                <span style="color:var(--gold); font-size:0.78rem; font-family:inherit;">受ける →</span>
-              </div>
-              <div style="color:#e0e0e0; font-size:0.78rem; line-height:1.6; font-family:inherit;">${dg.reason}</div>
-            </a>
-          `;
+        // プロファイル要約
+        var profileBody = '<div style="display:grid; gap:10px;">';
+        var rows = [
+          ['男磨き歴',     HISTORY_LABEL[p.history] || '-'],
+          ['今の一番の悩み', WORRY_LABEL[p.worry] || '-'],
+          ['変えたい領域', CHANGE_LABEL[p.change] || '-'],
+          ['今の自信',     CONF_LABEL[p.confidence] || '-'],
+          ['月の予算感',   BUDGET_LABEL[p.budget] || '-'],
+          ['続けてる習慣', habitText],
+          ['周りの仲間',   PEERS_LABEL[p.peers] || '-']
+        ];
+        rows.forEach(function(r) {
+          profileBody += '<div style="display:flex; gap:14px; padding:10px 12px; background:var(--bg-elevated); border-radius:8px; font-size:0.82rem;">'
+            + '<span style="min-width:96px; color:var(--text-muted); font-size:0.74rem; letter-spacing:0.04em;">' + r[0] + '</span>'
+            + '<span style="color:#f0f0f0; flex:1; line-height:1.5;">' + r[1] + '</span>'
+            + '</div>';
         });
-        html += QuizEngine.resultCard('次にやるべき診断', nextDiagHtml);
+        profileBody += '</div>';
+        html += QuizEngine.resultCard('あなたの現状サマリー', profileBody);
 
-        // WHY card
-        html += QuizEngine.resultCard('なぜあなたはこのフェーズにいるのか', d.why);
-
-        // --- ヘルパー: <li> を小カードに整形 ---
-        function itemsToCards(html, markType) {
-          const items = [];
-          html.replace(/<li>([\s\S]*?)<\/li>/g, (_, content) => { items.push(content); return ''; });
-          if (items.length === 0) return html;
-          return items.map((text, i) => {
-            let mark = '';
-            if (markType === 'ng') {
-              mark = '<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:rgba(231,76,60,0.15); color:#e74c3c; font-weight:700; font-size:0.78rem; flex-shrink:0;">✗</span>';
-            } else if (markType === 'check') {
-              mark = '<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:rgba(200,169,110,0.15); color:var(--gold); font-weight:700; font-size:0.85rem; flex-shrink:0;">✓</span>';
-            } else {
-              mark = '<span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:rgba(200,169,110,0.12); color:var(--gold); font-weight:700; font-size:0.78rem; flex-shrink:0;">' + (i+1) + '</span>';
-            }
-            return '<div style="display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--bg-elevated); border-radius:10px; margin-bottom:8px;">' +
-              mark +
-              '<span style="color:#f0f0f0; font-size:0.86rem; line-height:1.6; flex:1;">' + text + '</span>' +
-            '</div>';
-          }).join('');
+        // 一言メッセージ
+        var msg = '';
+        if (p.worry === 'lost' || p.history === 'beginner') {
+          msg = 'まず1つ、小さく始めよう。迷ってる間に1ヶ月が過ぎる。';
+        } else if (p.worry === 'plateau') {
+          msg = '努力は足りてる。足りてないのは"正しい方向"だけ。';
+        } else if (p.worry === 'looks') {
+          msg = '外見は、変えようと思えば今週中に変えられる。';
+        } else if (p.worry === 'communication') {
+          msg = '話せないのは性格じゃない。印象を整えれば、話す機会が増える。';
+        } else {
+          msg = 'あなたは既に動き始めてる。あとは優先順位を間違えないこと。';
         }
+        html += '<div class="result-highlight">' + msg + '</div>';
 
-        // Traps card（NG行動をカード化）
-        html += QuizEngine.resultCard(
-          'このフェーズで陥りがちな罠',
-          itemsToCards(d.traps, 'ng')
-        );
-
-        // Next phase conditions card（✓チェック付きカード）
-        const nextPhaseTitleMatch = d.nextPhase.match(/<strong>([^<]+)<\/strong>/);
-        const nextPhaseTitle = nextPhaseTitleMatch ? nextPhaseTitleMatch[1] : '次の段階へ進むための条件';
-        const nextPhaseBody = '<p style="color:#c0c0c0; font-size:0.82rem; margin-bottom:12px; line-height:1.6;">' + nextPhaseTitle + '</p>' +
-          itemsToCards(d.nextPhase, 'check');
-        html += QuizEngine.resultCard('次のステップへ進む条件', nextPhaseBody);
-
-        // 3 months future image card
-        html += QuizEngine.resultCard('3ヶ月後の変化イメージ', d.future);
-
-        // Gated section
-        html += QuizEngine.gatedBlock('あなた専用のロードマップ', d.gatedContent);
+        // あなたに最適な診断（メインの出力）
+        var recsHtml = '<p style="color:#ccc; font-size:0.84rem; margin-bottom:14px;">プロファイルから判断すると、次にやるべきはこの診断。タップしてすぐ受けよう。</p>';
+        result.recs.forEach(function(r, i) {
+          var rank = (i === 0 ? '最優先' : '次に');
+          recsHtml += ''
+            + '<a href="' + r.to + '" style="display:block; padding:16px 18px; background:var(--bg-elevated); border:1px solid var(--gold); border-radius:var(--radius-md); text-decoration:none; margin-bottom:10px;">'
+            +   '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">'
+            +     '<span style="color:var(--gold); font-size:1rem; font-weight:700;">'
+            +       '【' + rank + '】' + r.label
+            +     '</span>'
+            +     '<span style="color:var(--gold); font-size:0.78rem;">受ける →</span>'
+            +   '</div>'
+            +   '<div style="color:#e0e0e0; font-size:0.78rem; line-height:1.6;">' + r.reason + '</div>'
+            + '</a>';
+        });
+        html += QuizEngine.resultCard('あなたに最適な診断', recsHtml);
 
         return html;
       }

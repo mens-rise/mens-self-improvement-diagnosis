@@ -24,7 +24,7 @@ const CTA_SHEET_NAME = 'CTAクリック';
  * ▼ CTA装飾を本番デプロイしたタイミングで、ここを実際の日時に更新してください
  *   （JST・ISO 8601形式）
  */
-const CTA_V2_SINCE = '2099-12-31T00:00:00+09:00';  // 未リニューアル時はダミー未来日
+const CTA_V2_SINCE = '2026-04-23T03:00:00+09:00';  // CTA装飾リニューアル日時
 
 // CTAクリックシートのヘッダー
 const CTA_HEADERS = [

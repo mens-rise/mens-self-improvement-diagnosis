@@ -524,15 +524,38 @@ class QuizEngine {
       <div class="page-wrapper">
         ${HEADER_HTML}
         <main class="container result-section">
-          ${resultHTML}
-          <div class="cta-section" style="margin-top:48px;">
-            <div class="cta-education">
-              <h3 class="cta-education-title">${cta.title}</h3>
-              <p class="cta-education-body">${cta.body}</p>
+          <a href="#mainCta" class="result-peek-cta">
+            <span class="result-peek-accent"></span>
+            <svg class="result-peek-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z"/>
+            </svg>
+            <div class="result-peek-text">
+              <div class="result-peek-title">この結果を踏まえた個別アドバイスあり</div>
+              <div class="result-peek-sub">下までスクロールしてチェック</div>
             </div>
-            <a href="${CONFIG.CTA_URL}" class="cta-btn" id="ctaBtnMain" target="_blank" rel="noopener">
-              説明会の詳細をチェックする
-            </a>
+            <svg class="result-peek-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+          </a>
+
+          ${resultHTML}
+
+          <div class="cta-section" id="mainCta">
+            <div class="cta-card">
+              <div class="cta-card-glow"></div>
+              <div class="cta-card-inner">
+                <div class="cta-card-eyebrow">${cta.title}</div>
+                <h3 class="cta-card-title">
+                  あなた専用の男磨きロードマップが<br>
+                  <span class="cta-card-accent">明確になる無料の個別説明会</span>
+                </h3>
+                <p class="cta-card-body">${cta.body}</p>
+                <a href="${CONFIG.CTA_URL}" class="cta-btn cta-btn-large" id="ctaBtnMain" target="_blank" rel="noopener">
+                  <span class="cta-btn-arrow">▶</span>
+                  タップして詳細を確認する
+                </a>
+              </div>
+            </div>
             <a href="index.html" class="cta-btn-secondary">
               他の診断もやってみる
             </a>
@@ -540,6 +563,15 @@ class QuizEngine {
         </main>
         <footer class="footer">© Men's Rise</footer>
       </div>
+      <a href="${CONFIG.CTA_URL}" class="cta-sticky" id="ctaSticky" target="_blank" rel="noopener">
+        <svg class="cta-sticky-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span class="cta-sticky-text">あなた専用の無料個別説明会</span>
+        <svg class="cta-sticky-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
     `;
 
     // DOM描画後に結果タイプ名を抽出してデータベース保存
@@ -556,13 +588,45 @@ class QuizEngine {
     });
 
     // CTAボタン（説明会ページへのリンク）クリック計測
+    const self = this;
     const ctaBtn = document.getElementById('ctaBtnMain');
     if (ctaBtn) {
       ctaBtn.addEventListener('click', () => {
         MRDB.trackCtaClick({
           source: 'result',
-          diagnosisId: this.diagnosisId,
-          diagnosisName: this.title.replace(/<br\s*\/?>/gi, ' '),
+          diagnosisId: self.diagnosisId,
+          diagnosisName: self.title.replace(/<br\s*\/?>/gi, ' '),
+          url: CONFIG.CTA_URL
+        });
+      });
+    }
+
+    // スティッキーCTAの表示制御＋クリック計測
+    const sticky = document.getElementById('ctaSticky');
+    const mainCtaEl = document.getElementById('mainCta');
+    if (sticky && mainCtaEl) {
+      let shown = false;
+      const onScroll = () => {
+        if (!shown && window.scrollY > 200) {
+          sticky.classList.add('is-visible');
+          shown = true;
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) sticky.classList.add('is-hidden');
+          else sticky.classList.remove('is-hidden');
+        });
+      }, { threshold: 0.3 });
+      io.observe(mainCtaEl);
+
+      sticky.addEventListener('click', () => {
+        MRDB.trackCtaClick({
+          source: 'sticky',
+          diagnosisId: self.diagnosisId,
+          diagnosisName: self.title.replace(/<br\s*\/?>/gi, ' '),
           url: CONFIG.CTA_URL
         });
       });
