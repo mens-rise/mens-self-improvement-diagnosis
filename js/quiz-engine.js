@@ -526,15 +526,12 @@ class QuizEngine {
         <main class="container result-section">
           <a href="#mainCta" class="result-peek-cta">
             <span class="result-peek-accent"></span>
-            <svg class="result-peek-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z"/>
-            </svg>
             <div class="result-peek-text">
               <div class="result-peek-title">この結果を踏まえた個別アドバイスあり</div>
               <div class="result-peek-sub">下までスクロールしてチェック</div>
             </div>
             <svg class="result-peek-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 5v14M19 12l-7 7-7-7"/>
+              <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </a>
 
@@ -566,8 +563,12 @@ class QuizEngine {
       <a href="${CONFIG.CTA_URL}" class="cta-fab" id="ctaSticky" target="_blank" rel="noopener" aria-label="無料の個別説明会の詳細を見る">
         <span class="cta-fab-badge">無料</span>
         <span class="cta-fab-ring"></span>
-        <svg class="cta-fab-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="cta-fab-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span class="cta-fab-text">個別説明会を<br>チェック</span>
+        <svg class="cta-fab-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </a>
     `;

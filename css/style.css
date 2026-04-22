@@ -872,79 +872,55 @@ body {
   background: rgba(200,169,110,0.05);
 }
 
-/* ======== 冒頭チラ見せCTA（強化版） ======== */
+/* ======== 冒頭チラ見せCTA（シンプル版） ======== */
 .result-peek-cta {
-  position: relative;
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 18px 18px;
+  gap: 12px;
+  padding: 14px 16px;
   margin: 20px 0 28px;
-  background: linear-gradient(135deg, rgba(200,169,110,0.22) 0%, rgba(200,169,110,0.06) 100%);
-  border: 1.5px solid var(--gold);
-  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(200,169,110,0.12), rgba(200,169,110,0.04));
+  border: 1px solid rgba(200,169,110,0.4);
+  border-radius: 12px;
   text-decoration: none;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(200,169,110,0.18);
   transition: var(--transition);
-}
-.result-peek-cta::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-  animation: peekShimmer 3.5s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes peekShimmer {
-  0%   { left: -100%; }
-  60%  { left: 120%; }
-  100% { left: 120%; }
 }
 .result-peek-cta:active {
   transform: scale(0.98);
-  background: rgba(200,169,110,0.28);
+  background: rgba(200,169,110,0.18);
 }
 .result-peek-accent {
-  width: 4px;
-  height: 40px;
+  width: 3px;
+  height: 32px;
   background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
   border-radius: 2px;
   flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(200,169,110,0.5);
 }
 .result-peek-icon {
   color: var(--gold);
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
+  opacity: 0.9;
 }
-.result-peek-text { flex: 1; position: relative; z-index: 1; }
+.result-peek-text { flex: 1; }
 .result-peek-title {
-  font-size: 0.94rem;
-  font-weight: 800;
+  font-size: 0.85rem;
+  font-weight: 700;
   color: var(--gold);
-  line-height: 1.45;
-  letter-spacing: 0.01em;
+  line-height: 1.4;
 }
 .result-peek-sub {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
-  margin-top: 3px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 .result-peek-arrow {
   color: var(--gold);
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
   animation: peekBounce 1.6s ease-in-out infinite;
 }
 @keyframes peekBounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(4px); }
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(4px); }
 }
 
 /* ======== CTAカード（結果画面メイン） ======== */
@@ -1021,63 +997,80 @@ body {
   50%      { box-shadow: 0 8px 32px rgba(6,199,85,0.65); }
 }
 
-/* ======== FAB（右下の丸い追従CTA） ======== */
+/* ======== FAB（右下のピル型追従CTA） ======== */
 .cta-fab {
   position: fixed;
-  right: 18px;
-  bottom: 22px;
+  right: 14px;
+  bottom: 18px;
   z-index: 999;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--line-green), #04a546);
-  color: #fff;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 9px;
+  padding: 14px 18px 14px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--line-green), #04a546);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(6,199,85,0.5), 0 0 0 2px rgba(200,169,110,0.6);
-  transform: scale(0);
+  line-height: 1.25;
+  box-shadow: 0 8px 24px rgba(6,199,85,0.5), 0 0 0 2px rgba(200,169,110,0.55);
+  transform: translateY(140%);
   opacity: 0;
   transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
-.cta-fab.is-visible { transform: scale(1); opacity: 1; }
-.cta-fab.is-hidden  { transform: scale(0); opacity: 0; }
-.cta-fab:active     { transform: scale(0.92); }
+.cta-fab.is-visible { transform: translateY(0); opacity: 1; }
+.cta-fab.is-hidden  { transform: translateY(140%); opacity: 0; }
+.cta-fab:active     { transform: translateY(2px); }
 
-/* パルスリング（外側に拡散する光の輪） */
+/* パルスリング */
 .cta-fab-ring {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
+  border-radius: 999px;
   border: 2px solid var(--line-green);
   opacity: 0;
   pointer-events: none;
   animation: fabPulse 2s ease-out infinite;
 }
 @keyframes fabPulse {
-  0%   { transform: scale(1);   opacity: 0.7; }
-  100% { transform: scale(1.7); opacity: 0;   }
+  0%   { transform: scale(1);    opacity: 0.6; }
+  100% { transform: scale(1.15); opacity: 0;   }
 }
 
-/* 「無料」バッジ（右上に浮かぶゴールドの小バッジ） */
+/* 「無料」ゴールドバッジ（右上に浮かぶ） */
 .cta-fab-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -8px;
+  right: 12px;
   background: var(--gold);
   color: #111;
   font-size: 0.58rem;
   font-weight: 900;
-  padding: 3px 7px;
+  padding: 3px 8px;
   border-radius: 10px;
-  letter-spacing: 0.04em;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45);
   white-space: nowrap;
+  z-index: 2;
 }
 
-.cta-fab-icon { flex-shrink: 0; }
+.cta-fab-icon { flex-shrink: 0; opacity: 0.95; }
+.cta-fab-text {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+.cta-fab-arrow {
+  flex-shrink: 0;
+  animation: fabArrow 1.4s ease-in-out infinite;
+}
+@keyframes fabArrow {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(3px); }
+}
 
 /* ======== スタート画面 ======== */
 .start-section {

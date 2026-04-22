@@ -246,7 +246,7 @@
         html += '<div class="result-highlight">' + d.message + '</div>';
 
         // 最適な次の診断（メインアウトプット）
-        var recsHtml = '<p style="color:#ccc; font-size:0.84rem; margin-bottom:14px;">' + d.label + 'のあなたに一番効くのはこの診断。タップしてすぐ受けよう。</p>';
+        var recsHtml = '<p style="color:#ccc; font-size:0.84rem; margin-bottom:14px;">' + d.label + 'のあなたに必要なのは、この診断。タップしてすぐ受けよう。</p>';
         d.recs.forEach(function(r, i) {
           var rank = (d.recs.length > 1) ? (i === 0 ? '【最優先】' : '【次に】') : '【おすすめ】';
           recsHtml += ''
