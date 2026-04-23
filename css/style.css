@@ -969,7 +969,6 @@ body {
 }
 .cta-card-accent {
   color: var(--gold);
-  white-space: nowrap;
 }
 .cta-card-body {
   font-size: 0.82rem;

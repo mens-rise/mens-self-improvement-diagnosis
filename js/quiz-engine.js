@@ -543,8 +543,8 @@ class QuizEngine {
               <div class="cta-card-inner">
                 <div class="cta-card-eyebrow">${cta.title}</div>
                 <h3 class="cta-card-title">
-                  あなた専用の男磨きロードマップが<br>
-                  <span class="cta-card-accent">明確になる無料の個別説明会</span>
+                  <span class="cta-card-accent">あなた専用の男磨きロードマップ</span>が<br>
+                  明確になる無料の個別説明会
                 </h3>
                 <p class="cta-card-body">${cta.body}</p>
                 <a href="${CONFIG.CTA_URL}" class="cta-btn cta-btn-large" id="ctaBtnMain" target="_blank" rel="noopener">
